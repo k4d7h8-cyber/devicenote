@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 
 /// 기기 카테고리
-enum DeviceCategory { tv, washer, computer, refrigerator, aircon, etc }
+enum DeviceCategory { tv, washer, computer, refrigerator, aircon, car, etc }
 
 /// 기기 데이터 모델
 @immutable

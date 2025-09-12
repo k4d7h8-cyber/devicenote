@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:devicenote/features/device/add_device_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -60,7 +61,11 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const AddDevicePage()),
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );
