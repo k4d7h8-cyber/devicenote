@@ -1,20 +1,20 @@
 import 'dart:io';
 
-import 'package:devicenote/data/repositories/device_repository.dart';
-import 'package:devicenote/features/camera/camera_capture_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
-class AddDevicePage extends StatefulWidget {
-  final Device? existing;
-  const AddDevicePage({super.key, this.existing});
-
-  @override
-  State<AddDevicePage> createState() => _AddDevicePageState();
-}
+  Future<void> _capturePhoto() async {
+    try {
+      final path = await Navigator.of(context).push<String>(
+        MaterialPageRoute(builder: (_) => const CameraCapturePage()),
+      );
+      if (path == null) return;
+      setState(() => _photos.add(path));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('»çÁø ÀúÀå ½ÇÆĞ: $e')),
+      );
+    }
+  }
 
 class _AddDevicePageState extends State<AddDevicePage> {
   final _formKey = GlobalKey<FormState>();
@@ -114,7 +114,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     }
 
     final snack = const SnackBar(
-      content: Text('Saved.'),
+      content: Text('?€?¥ë˜?ˆìŠµ?ˆë‹¤.'),
       duration: Duration(seconds: 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snack);
@@ -127,18 +127,38 @@ class _AddDevicePageState extends State<AddDevicePage> {
   }
 
   Future<void> _capturePhoto() async {
-    final path = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (_) => const CameraCapturePage()),
-    );
-    if (path == null) return;
-    setState(() => _photos.add(path));
+    try {
+      final picker = ImagePicker();
+      final xfile = await picker.pickImage(source: ImageSource.camera);
+      if (xfile == null) return;
+
+      final appDir = await getApplicationDocumentsDirectory();
+      final photosDir = Directory('${appDir.path}/photos');
+      if (!await photosDir.exists()) {
+        await photosDir.create(recursive: true);
+      }
+      final ts = DateTime.now().millisecondsSinceEpoch;
+      final ext = xfile.path.split('.').last;
+      final fileName = 'photo_$ts.$ext';
+      final destPath = '${photosDir.path}/$fileName';
+      final saved = await File(xfile.path).copy(destPath);
+
+      setState(() {
+        _photos.add(saved.path);
+      });
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('?¬ì§„ ?€???¤íŒ¨: $e')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.existing == null ? 'Add Device' : 'Edit Device'),
+        title: const Text('Add Device'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -148,11 +168,11 @@ class _AddDevicePageState extends State<AddDevicePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // 1) Category
+                // 1) ì¹´í…Œê³ ë¦¬
                 DropdownButtonFormField<DeviceCategory>(
                   value: _category,
                   decoration: InputDecoration(
-                    labelText: _requiredLabel('Category'),
+                    labelText: _requiredLabel('ì¹´í…Œê³ ë¦¬ '),
                     border: const OutlineInputBorder(),
                   ),
                   items: DeviceCategory.values
@@ -162,70 +182,68 @@ class _AddDevicePageState extends State<AddDevicePage> {
                           ))
                       .toList(),
                   onChanged: (v) => setState(() => _category = v),
-                  validator: (v) => v == null ? 'Select a category' : null,
+                  validator: (v) => v == null ? 'ì¹´í…Œê³ ë¦¬???„ìˆ˜ ? íƒ?…ë‹ˆ??' : null,
                 ),
                 const SizedBox(height: 12),
                 // 2) Brand
                 TextFormField(
                   controller: _brandCtrl,
                   decoration: InputDecoration(
-                    labelText: _requiredLabel('Brand'),
+                    labelText: _requiredLabel('ë¸Œëœ??'),
                     border: const OutlineInputBorder(),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Brand is required';
+                    if (v == null || v.trim().isEmpty) return 'ë¸Œëœ?œëŠ” ?„ìˆ˜ ?…ë ¥?…ë‹ˆ??';
                     return null;
                   },
                 ),
                 const SizedBox(height: 12),
-                // 3) Name/Model name
+                // 3) ëª¨ë¸ëª?(ê¸°ì¡´ ?´ë¦„)
                 TextFormField(
                   controller: _nameCtrl,
                   decoration: InputDecoration(
-                    labelText: _requiredLabel('Model Name'),
+                    labelText: _requiredLabel('ëª¨ë¸ëª?'),
                     border: const OutlineInputBorder(),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Model name is required';
+                    if (v == null || v.trim().isEmpty) return 'ëª¨ë¸ëª…ì? ?„ìˆ˜ ?…ë ¥?…ë‹ˆ??';
                     return null;
                   },
                 ),
                 const SizedBox(height: 12),
-                // 4) Model number
+                // 4) ëª¨ë¸ë²ˆí˜¸ (ê¸°ì¡´ ëª¨ë¸)
                 TextFormField(
                   controller: _modelCtrl,
                   decoration: InputDecoration(
-                    labelText: _requiredLabel('Model No.'),
+                    labelText: _requiredLabel('ëª¨ë¸ë²ˆí˜¸ '),
                     border: const OutlineInputBorder(),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Model number is required';
+                    if (v == null || v.trim().isEmpty) return 'ëª¨ë¸ë²ˆí˜¸???„ìˆ˜ ?…ë ¥?…ë‹ˆ??';
                     return null;
                   },
                 ),
                 const SizedBox(height: 12),
-                // 5) Purchase date
                 TextFormField(
                   controller: _purchaseDateCtrl,
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: _requiredLabel('Purchase Date'),
-                    hintText: 'Pick a date',
+                    labelText: _requiredLabel('êµ¬ì…??'),
+                    hintText: '? ì§œ ? íƒ',
                     suffixIcon: const Icon(Icons.calendar_today),
                     border: const OutlineInputBorder(),
                   ),
                   onTap: _pickDate,
                   validator: (_) {
-                    if (_purchaseDate == null) return 'Pick a purchase date';
+                    if (_purchaseDate == null) return 'êµ¬ì…?¼ì? ?„ìˆ˜ ?…ë ¥?…ë‹ˆ??';
                     final now = DateTime.now();
                     if (_purchaseDate!.isAfter(DateTime(now.year, now.month, now.day))) {
-                      return 'Purchase date cannot be in the future';
+                      return 'êµ¬ì…?¼ì? ?¤ëŠ˜ ?´í›„ë¡?? íƒ?????†ìŠµ?ˆë‹¤.';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 12),
-                // 6) Warranty months
                 TextFormField(
                   controller: _warrantyCtrl,
                   keyboardType: TextInputType.number,
@@ -234,20 +252,19 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     LengthLimitingTextInputFormatter(3),
                   ],
                   decoration: InputDecoration(
-                    labelText: _requiredLabel('Warranty (months)'),
+                    labelText: _requiredLabel('ë³´ì¦ê¸°ê°„(??ê°œì›”) '),
                     hintText: '0 ~ 120',
                     border: const OutlineInputBorder(),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Warranty is required';
+                    if (v == null || v.trim().isEmpty) return 'ë³´ì¦ê¸°ê°„?€ ?„ìˆ˜ ?…ë ¥?…ë‹ˆ??';
                     final n = int.tryParse(v);
-                    if (n == null) return 'Enter digits only';
-                    if (n < 0 || n > 120) return 'Must be between 0 and 120';
+                    if (n == null) return '?«ìë§??…ë ¥?????ˆìŠµ?ˆë‹¤.';
+                    if (n < 0 || n > 120) return 'ë³´ì¦ê¸°ê°„?€ 0?ì„œ 120 ?¬ì´?¬ì•¼ ?©ë‹ˆ??';
                     return null;
                   },
                 ),
                 const SizedBox(height: 12),
-                // 7) AS contact
                 TextFormField(
                   controller: _phoneCtrl,
                   keyboardType: TextInputType.phone,
@@ -255,27 +272,27 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9-]')),
                   ],
                   decoration: const InputDecoration(
-                    labelText: 'Customer Center',
-                    hintText: 'e.g. 1588-0000, 010-1234-5678',
+                    labelText: 'ê³ ê°?¼í„°',
+                    hintText: '?? 1588-0000, 010-1234-5678',
                     border: OutlineInputBorder(),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return null; // optional
+                    if (v == null || v.trim().isEmpty) return null; // ? íƒ ?¬í•­
                     final ok = RegExp(r'^[0-9-]+$').hasMatch(v.trim());
-                    if (!ok) return 'Digits and - only';
+                    if (!ok) return '?«ì?€ - ë§??…ë ¥?????ˆìŠµ?ˆë‹¤.';
                     return null;
                   },
                 ),
                 const SizedBox(height: 20),
-                // Others: take photo and show list
-                Text('Others', style: Theme.of(context).textTheme.titleMedium),
+                // ê¸°í?: ?¬ì§„ ì´¬ì˜ ë°??€??
+                Text('ê¸°í?', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     ElevatedButton.icon(
                       onPressed: _capturePhoto,
                       icon: const Icon(Icons.photo_camera),
-                      label: const Text('Take Photo'),
+                      label: const Text('?¬ì§„ ì´¬ì˜'),
                     ),
                   ],
                 ),
@@ -301,6 +318,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
+                    // ?¼ìª½: ?€?? ?¤ë¥¸ìª? ì·¨ì†Œë¡??„ì¹˜ ?¤ì™‘
                     Expanded(
                       child: ElevatedButton(
                         onPressed: _onSave,
@@ -324,7 +342,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  String _categoryLabel(DeviceCategory c) {
+    String _categoryLabel(DeviceCategory c) {
     switch (c) {
       case DeviceCategory.tv:
         return 'TV';
@@ -343,4 +361,11 @@ class _AddDevicePageState extends State<AddDevicePage> {
     }
   }
 }
+
+
+
+
+
+
+
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:devicenote/features/device/add_device_page.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:devicenote/data/repositories/device_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,6 +11,13 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('DeviceNote'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => context.push('/settings'),
+            tooltip: '설정',
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -17,7 +26,7 @@ class HomePage extends StatelessWidget {
             children: [
               TextField(
                 decoration: InputDecoration(
-                  hintText: '검색창',
+                  hintText: '검색',
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -25,35 +34,29 @@ class HomePage extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
               ),
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.sort),
-                    const SizedBox(width: 8),
-                    DropdownButton<String>(
-                      hint: const Text('정렬 필터'),
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'latest',
-                          child: Text('최신순'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'name',
-                          child: Text('이름순'),
-                        ),
-                      ],
-                      onChanged: (_) {},
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 16),
-              const Expanded(
-                child: Center(
-                  child: Text('여기에 제품 리스트가 표시됩니다.'),
+              Expanded(
+                child: Consumer<DeviceRepository>(
+                  builder: (context, repo, _) {
+                    final items = repo.devices;
+                    if (items.isEmpty) {
+                      return const Center(child: Text('등록된 기기가 없습니다.'));
+                    }
+                    return ListView.separated(
+                      itemCount: items.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final d = items[index];
+                        final remain = repo.monthsRemaining(d);
+                        return ListTile(
+                          title: Text(d.name),
+                          subtitle: Text('${d.brand} • ${d.model}'),
+                          trailing: Text('D${remain == 0 ? '-day' : '-$remain m'}'),
+                          onTap: () => context.push('/device/${d.id}'),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],
@@ -61,13 +64,10 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const AddDevicePage()),
-          );
-        },
+        onPressed: () => context.push('/device/add'),
         child: const Icon(Icons.add),
       ),
     );
   }
 }
+
