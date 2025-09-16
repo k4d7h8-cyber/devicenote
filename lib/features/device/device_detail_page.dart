@@ -52,26 +52,44 @@ class DeviceDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _InfoCard(
-                title: '구입일',
-                value: dateFmt.format(device.purchaseDate),
-                icon: Icons.event,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: '보증개월',
-                value: device.warrantyMonths.toString(),
-                icon: Icons.verified_user,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: '카테고리',
+                            _InfoCard(
+                title: 'Category',
                 value: _categoryLabel(device.category),
                 icon: Icons.category,
               ),
               const SizedBox(height: 8),
               _InfoCard(
-                title: 'AS 연락처',
+                title: 'Brand',
+                value: device.brand,
+                icon: Icons.storefront,
+              ),
+              const SizedBox(height: 8),
+              _InfoCard(
+                title: 'Model Name',
+                value: device.name,
+                icon: Icons.devices,
+              ),
+              const SizedBox(height: 8),
+              _InfoCard(
+                title: 'Model No.',
+                value: device.model,
+                icon: Icons.confirmation_number,
+              ),
+              const SizedBox(height: 8),
+              _InfoCard(
+                title: 'Purchase Date',
+                value: dateFmt.format(device.purchaseDate),
+                icon: Icons.event,
+              ),
+              const SizedBox(height: 8),
+              _InfoCard(
+                title: 'Warranty (months)',
+                value: device.warrantyMonths.toString(),
+                icon: Icons.verified_user,
+              ),
+              const SizedBox(height: 8),
+              _InfoCard(
+                title: 'Customer Center',
                 value: device.asContact ?? '-',
                 icon: Icons.phone,
               ),
