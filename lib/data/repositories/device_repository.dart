@@ -63,9 +63,7 @@ class Device {
 class DeviceRepository extends ChangeNotifier {
   final List<Device> _devices = [];
 
-  DeviceRepository() {
-    _seed();
-  }
+  DeviceRepository();
 
   UnmodifiableListView<Device> get devices => UnmodifiableListView(_devices);
 
@@ -114,29 +112,5 @@ class DeviceRepository extends ChangeNotifier {
     return math.max(0, months);
   }
 
-  void _seed() {
-    final now = DateTime.now();
-    _devices.addAll([
-      Device(
-        id: 'seed-1',
-        name: '삼성 TV',
-        brand: 'Samsung',
-        model: 'Q80B',
-        category: DeviceCategory.tv,
-        purchaseDate: now.subtract(const Duration(days: 200)),
-        warrantyMonths: 24,
-        asContact: '1588-3366',
-      ),
-      Device(
-        id: 'seed-2',
-        name: '맥북 프로',
-        brand: 'Apple',
-        model: 'M1 Pro 14',
-        category: DeviceCategory.computer,
-        purchaseDate: now.subtract(const Duration(days: 420)),
-        warrantyMonths: 12,
-        asContact: '080-333-4000',
-      ),
-    ]);
-  }
+
 }

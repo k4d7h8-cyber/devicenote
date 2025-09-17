@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/features/camera/camera_capture_page.dart';
+import 'package:devicenote/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -95,7 +96,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
         category: _category!,
         purchaseDate: _purchaseDate!,
         warrantyMonths: warranty,
-        asContact: _phoneCtrl.text.trim().isEmpty ? null : _phoneCtrl.text.trim(),
+        asContact: _phoneCtrl.text.trim().isEmpty
+            ? null
+            : _phoneCtrl.text.trim(),
         imagePaths: List.unmodifiable(_photos),
       );
       repo.add(device);
@@ -107,7 +110,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
         category: _category!,
         purchaseDate: _purchaseDate!,
         warrantyMonths: warranty,
-        asContact: _phoneCtrl.text.trim().isEmpty ? null : _phoneCtrl.text.trim(),
+        asContact: _phoneCtrl.text.trim().isEmpty
+            ? null
+            : _phoneCtrl.text.trim(),
         imagePaths: List.unmodifiable(_photos),
       );
       repo.update(updated);
@@ -136,191 +141,224 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.existing == null ? 'Add Device' : 'Edit Device'),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // 1) Category
-                DropdownButtonFormField<DeviceCategory>(
-                  value: _category,
-                  decoration: InputDecoration(
-                    labelText: _requiredLabel('Category'),
-                    border: const OutlineInputBorder(),
+    final isEditing = widget.existing != null;
+    return ResponsiveScaffold(
+      appBar: AppBar(title: Text(isEditing ? 'Edit Device' : 'Add Device')),
+      builder: (context, layout) {
+        final fullWidth = layout.columnWidth(span: layout.columns);
+        final twoSpanWidth = layout.columnWidth(span: 2);
+        final singleWidth = layout.columnWidth();
+        const double fieldSpacing = 12;
+
+        return Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Wrap(
+                spacing: layout.gutter,
+                runSpacing: fieldSpacing,
+                children: [
+                  SizedBox(
+                    width: fullWidth,
+                    child: DropdownButtonFormField<DeviceCategory>(
+                      value: _category,
+                      decoration: InputDecoration(
+                        labelText: _requiredLabel('Category'),
+                        border: const OutlineInputBorder(),
+                      ),
+                      items: DeviceCategory.values
+                          .map(
+                            (c) => DropdownMenuItem(
+                              value: c,
+                              child: Text(_categoryLabel(c)),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) => setState(() => _category = value),
+                      validator: (value) =>
+                          value == null ? 'Category is required' : null,
+                    ),
                   ),
-                  items: DeviceCategory.values
-                      .map((c) => DropdownMenuItem(
-                            value: c,
-                            child: Text(_categoryLabel(c)),
-                          ))
+                  SizedBox(
+                    width: fullWidth,
+                    child: TextFormField(
+                      controller: _nameCtrl,
+                      decoration: InputDecoration(
+                        labelText: _requiredLabel('Model Name'),
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return 'Model name is required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: singleWidth,
+                    child: TextFormField(
+                      controller: _brandCtrl,
+                      decoration: InputDecoration(
+                        labelText: _requiredLabel('Brand'),
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return 'Brand is required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: singleWidth,
+                    child: TextFormField(
+                      controller: _modelCtrl,
+                      decoration: InputDecoration(
+                        labelText: _requiredLabel('Model No.'),
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return 'Model number is required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: singleWidth,
+                    child: TextFormField(
+                      controller: _purchaseDateCtrl,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        labelText: _requiredLabel('Purchase Date'),
+                        hintText: 'Pick a date',
+                        suffixIcon: const Icon(Icons.calendar_today),
+                        border: const OutlineInputBorder(),
+                      ),
+                      onTap: _pickDate,
+                      validator: (_) {
+                        if (_purchaseDate == null) {
+                          return 'Pick a purchase date';
+                        }
+                        final now = DateTime.now();
+                        if (_purchaseDate!.isAfter(
+                          DateTime(now.year, now.month, now.day),
+                        )) {
+                          return 'Purchase date cannot be in the future';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: singleWidth,
+                    child: TextFormField(
+                      controller: _warrantyCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(3),
+                      ],
+                      decoration: InputDecoration(
+                        labelText: _requiredLabel('Warranty (months)'),
+                        hintText: '0 ~ 120',
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return 'Warranty is required';
+                        }
+                        final n = int.tryParse(v);
+                        if (n == null) return 'Enter digits only';
+                        if (n < 0 || n > 120) {
+                          return 'Must be between 0 and 120';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: twoSpanWidth,
+                    child: TextFormField(
+                      controller: _phoneCtrl,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9-]')),
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Customer Center',
+                        hintText: 'e.g. 1588-0000, 010-1234-5678',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) return null;
+                        final ok = RegExp(r'^[0-9-]+$').hasMatch(v.trim());
+                        if (!ok) return 'Digits and - only';
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text('Others', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: _capturePhoto,
+                    icon: const Icon(Icons.photo_camera),
+                    label: const Text('Take Photo'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              if (_photos.isNotEmpty)
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: _photos
+                      .map(
+                        (p) => InputChip(
+                          avatar: const Icon(Icons.image, size: 18),
+                          label: SizedBox(
+                            width: 160,
+                            child: Text(
+                              p.split(Platform.pathSeparator).last,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          onDeleted: () => setState(() => _photos.remove(p)),
+                        ),
+                      )
                       .toList(),
-                  onChanged: (v) => setState(() => _category = v),
-                  validator: (v) => v == null ? 'Select a category' : null,
                 ),
-                const SizedBox(height: 12),
-                // 2) Brand
-                TextFormField(
-                  controller: _brandCtrl,
-                  decoration: InputDecoration(
-                    labelText: _requiredLabel('Brand'),
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Brand is required';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                // 3) Name/Model name
-                TextFormField(
-                  controller: _nameCtrl,
-                  decoration: InputDecoration(
-                    labelText: _requiredLabel('Model Name'),
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Model name is required';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                // 4) Model number
-                TextFormField(
-                  controller: _modelCtrl,
-                  decoration: InputDecoration(
-                    labelText: _requiredLabel('Model No.'),
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Model number is required';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                // 5) Purchase date
-                TextFormField(
-                  controller: _purchaseDateCtrl,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: _requiredLabel('Purchase Date'),
-                    hintText: 'Pick a date',
-                    suffixIcon: const Icon(Icons.calendar_today),
-                    border: const OutlineInputBorder(),
-                  ),
-                  onTap: _pickDate,
-                  validator: (_) {
-                    if (_purchaseDate == null) return 'Pick a purchase date';
-                    final now = DateTime.now();
-                    if (_purchaseDate!.isAfter(DateTime(now.year, now.month, now.day))) {
-                      return 'Purchase date cannot be in the future';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                // 6) Warranty months
-                TextFormField(
-                  controller: _warrantyCtrl,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(3),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: _requiredLabel('Warranty (months)'),
-                    hintText: '0 ~ 120',
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Warranty is required';
-                    final n = int.tryParse(v);
-                    if (n == null) return 'Enter digits only';
-                    if (n < 0 || n > 120) return 'Must be between 0 and 120';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                // 7) AS contact
-                TextFormField(
-                  controller: _phoneCtrl,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9-]')),
-                  ],
-                  decoration: const InputDecoration(
-                    labelText: 'Customer Center',
-                    hintText: 'e.g. 1588-0000, 010-1234-5678',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return null; // optional
-                    final ok = RegExp(r'^[0-9-]+$').hasMatch(v.trim());
-                    if (!ok) return 'Digits and - only';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                // Others: take photo and show list
-                Text('Others', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: _capturePhoto,
-                      icon: const Icon(Icons.photo_camera),
-                      label: const Text('Take Photo'),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _onSave,
+                      child: const Text('Save'),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                if (_photos.isNotEmpty)
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: _photos
-                        .map((p) => InputChip(
-                              avatar: const Icon(Icons.image, size: 18),
-                              label: SizedBox(
-                                width: 160,
-                                child: Text(
-                                  p.split(Platform.pathSeparator).last,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              onDeleted: () => setState(() => _photos.remove(p)),
-                            ))
-                        .toList(),
                   ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _onSave,
-                        child: const Text('Save'),
-                      ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _onCancel,
+                      child: const Text('Cancel'),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: _onCancel,
-                        child: const Text('Cancel'),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -343,4 +381,3 @@ class _AddDevicePageState extends State<AddDevicePage> {
     }
   }
 }
-

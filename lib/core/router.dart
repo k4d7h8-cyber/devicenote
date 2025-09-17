@@ -1,3 +1,4 @@
+import 'package:devicenote/responsive_layout.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -19,11 +20,11 @@ class _BootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ResponsiveScaffold(
       appBar: AppBar(title: const Text('DeviceNote')),
-      body: const Center(
+      builder: (context, layout) => const Center(
         child: Text(
-          '1단계 준비 완료!\n다음 단계에서 UI(홈/등록/상세/설정)를 만듭니다.',
+          '1단계 준비 완료!\n다음 단계에서 UI(홈/등록/상세/설정)를 만들 예정입니다.',
           textAlign: TextAlign.center,
         ),
       ),

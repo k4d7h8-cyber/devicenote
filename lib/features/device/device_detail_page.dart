@@ -1,9 +1,9 @@
+import 'package:devicenote/data/repositories/device_repository.dart';
+import 'package:devicenote/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import 'package:devicenote/data/repositories/device_repository.dart';
 
 class DeviceDetailPage extends StatelessWidget {
   final String id;
@@ -15,15 +15,16 @@ class DeviceDetailPage extends StatelessWidget {
     final device = repo.findById(id);
 
     if (device == null) {
-      return Scaffold(
+      return ResponsiveScaffold(
         appBar: AppBar(title: const Text('상세')),
-        body: const Center(child: Text('기기를 찾을 수 없습니다.')),
+        builder: (context, layout) =>
+            const Center(child: Text('기기를 찾을 수 없습니다.')),
       );
     }
 
     final dateFmt = DateFormat('yyyy-MM-dd');
 
-    return Scaffold(
+    return ResponsiveScaffold(
       appBar: AppBar(
         title: Text(device.name),
         actions: [
@@ -46,77 +47,80 @@ class DeviceDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-                            _InfoCard(
-                title: 'Category',
-                value: _categoryLabel(device.category),
-                icon: Icons.category,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: 'Brand',
-                value: device.brand,
-                icon: Icons.storefront,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: 'Model Name',
-                value: device.name,
-                icon: Icons.devices,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: 'Model No.',
-                value: device.model,
-                icon: Icons.confirmation_number,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: 'Purchase Date',
-                value: dateFmt.format(device.purchaseDate),
-                icon: Icons.event,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: 'Warranty (months)',
-                value: device.warrantyMonths.toString(),
-                icon: Icons.verified_user,
-              ),
-              const SizedBox(height: 8),
-              _InfoCard(
-                title: 'Customer Center',
-                value: device.asContact ?? '-',
-                icon: Icons.phone,
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => context.push('/device/${device.id}/edit'),
-                      icon: const Icon(Icons.edit),
-                      label: const Text('수정'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _confirmDelete(context, repo, device.id),
-                      icon: const Icon(Icons.delete_outline),
-                      label: const Text('삭제'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+      builder: (context, layout) {
+        final cardWidth = layout.columnWidth();
+        final cards = [
+          _InfoCard(
+            title: 'Category',
+            value: _categoryLabel(device.category),
+            icon: Icons.category,
           ),
-        ),
-      ),
+          _InfoCard(
+            title: 'Brand',
+            value: device.brand,
+            icon: Icons.storefront,
+          ),
+          _InfoCard(
+            title: 'Model Name',
+            value: device.name,
+            icon: Icons.devices,
+          ),
+          _InfoCard(
+            title: 'Model No.',
+            value: device.model,
+            icon: Icons.confirmation_number,
+          ),
+          _InfoCard(
+            title: 'Purchase Date',
+            value: dateFmt.format(device.purchaseDate),
+            icon: Icons.event,
+          ),
+          _InfoCard(
+            title: 'Warranty (months)',
+            value: device.warrantyMonths.toString(),
+            icon: Icons.verified_user,
+          ),
+          _InfoCard(
+            title: 'Customer Center',
+            value: device.asContact ?? '-',
+            icon: Icons.phone,
+          ),
+        ];
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Wrap(
+              spacing: layout.gutter,
+              runSpacing: layout.gutter,
+              children: [
+                for (final card in cards)
+                  SizedBox(width: cardWidth, child: card),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => context.push('/device/${device.id}/edit'),
+                    icon: const Icon(Icons.edit),
+                    label: const Text('수정'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _confirmDelete(context, repo, device.id),
+                    icon: const Icon(Icons.delete_outline),
+                    label: const Text('삭제'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -129,7 +133,7 @@ class DeviceDetailPage extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('삭제하시겠어요?'),
-        content: const Text('이 동작은 되돌릴 수 없습니다.'),
+        content: const Text('해당 작업은 되돌릴 수 없습니다.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -172,7 +176,11 @@ class _InfoCard extends StatelessWidget {
   final String title;
   final String value;
   final IconData icon;
-  const _InfoCard({required this.title, required this.value, required this.icon});
+  const _InfoCard({
+    required this.title,
+    required this.value,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -199,4 +207,3 @@ class _InfoCard extends StatelessWidget {
     );
   }
 }
-

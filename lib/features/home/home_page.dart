@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:devicenote/data/repositories/device_repository.dart';
+import 'package:devicenote/responsive_layout.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ResponsiveScaffold(
       appBar: AppBar(
         title: const Text('DeviceNote'),
         actions: [
@@ -19,55 +20,117 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/device/add'),
+        child: const Icon(Icons.add),
+      ),
+      builder: (context, layout) {
+        final repo = context.watch<DeviceRepository>();
+        final items = repo.devices;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                hintText: '검색',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+              ),
+            ),
+            const SizedBox(height: 16),
+            if (items.isEmpty)
+              Container(
+                height: 200,
+                alignment: Alignment.center,
+                child: const Text('등록된 기기가 없습니다.'),
+              )
+            else
+              Wrap(
+                spacing: layout.gutter,
+                runSpacing: layout.gutter,
+                children: [
+                  for (final device in items)
+                    SizedBox(
+                      width: layout.columnWidth(),
+                      child: _DeviceCard(
+                        device: device,
+                        monthsRemaining: repo.monthsRemaining(device),
+                        onTap: () => context.push('/device/${device.id}'),
+                      ),
+                    ),
+                ],
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _DeviceCard extends StatelessWidget {
+  const _DeviceCard({
+    required this.device,
+    required this.monthsRemaining,
+    required this.onTap,
+  });
+
+  final Device device;
+  final int monthsRemaining;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final remainLabel = monthsRemaining == 0 ? 'D-day' : 'D-$monthsRemaining m';
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                decoration: InputDecoration(
-                  hintText: '검색',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+              Row(
+                children: [
+                  Icon(Icons.devices, color: theme.colorScheme.primary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      device.name,
+                      style: theme.textTheme.titleMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                ),
+                ],
               ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: Consumer<DeviceRepository>(
-                  builder: (context, repo, _) {
-                    final items = repo.devices;
-                    if (items.isEmpty) {
-                      return const Center(child: Text('등록된 기기가 없습니다.'));
-                    }
-                    return ListView.separated(
-                      itemCount: items.length,
-                      separatorBuilder: (_, __) => const Divider(height: 1),
-                      itemBuilder: (context, index) {
-                        final d = items[index];
-                        final remain = repo.monthsRemaining(d);
-                        return ListTile(
-                          title: Text(d.name),
-                          subtitle: Text('${d.brand} • ${d.model}'),
-                          trailing: Text('D${remain == 0 ? '-day' : '-$remain m'}'),
-                          onTap: () => context.push('/device/${d.id}'),
-                        );
-                      },
-                    );
-                  },
+              const SizedBox(height: 8),
+              Text(
+                '${device.brand} · ${device.model}',
+                style: theme.textTheme.bodyMedium,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  remainLabel,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/device/add'),
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
-
