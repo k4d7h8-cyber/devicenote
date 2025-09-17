@@ -7,8 +7,10 @@ plugins {
 
 android {
     namespace = "com.example.devicenote"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // CameraX plugin requires API level 35
+    compileSdk = 35
+    // CameraX plugin needs specific NDK for native bindings
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -24,10 +26,14 @@ android {
         applicationId = "com.example.devicenote"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        // CameraX plugin needs min SDK 23 or higher
+        minSdk = 23
+        // Align target SDK with API level 35 requirements
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Enable multidex to satisfy dependency method references
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -42,3 +48,4 @@ android {
 flutter {
     source = "../.."
 }
+
