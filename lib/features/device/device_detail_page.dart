@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/responsive_layout.dart';
+import 'package:devicenote/services/notifications/notification_controller.dart';
+import 'package:devicenote/core/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
@@ -16,16 +18,23 @@ class DeviceDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final repo = context.watch<DeviceRepository>();
     final device = repo.findById(id);
+    final notifications = context.watch<NotificationController>();
 
     if (device == null) {
       return ResponsiveScaffold(
-        appBar: AppBar(title: const Text('상세')),
+        appBar: AppBar(title: const Text('Device Detail')),
         builder: (context, layout) =>
-            const Center(child: Text('기기를 찾을 수 없습니다.')),
+            const Center(child: Text('Device not found.')),
       );
     }
 
     final dateFmt = DateFormat('yyyy-MM-dd');
+    final notificationPreference = notifications.devicePreference(device.id);
+    final warrantyExpiry = DateUtilsX.addMonths(
+      device.purchaseDate,
+      device.warrantyMonths,
+    );
+    final expiryLabel = dateFmt.format(warrantyExpiry);
 
     return ResponsiveScaffold(
       appBar: AppBar(
@@ -33,20 +42,18 @@ class DeviceDetailPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: '수정',
+            tooltip: 'Edit',
             onPressed: () => context.push('/device/${device.id}/edit'),
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
-            tooltip: '삭제',
-            onPressed: () => _confirmDelete(context, repo, device.id),
-          ),
-          IconButton(
-            icon: const Icon(Icons.file_download_outlined),
-            tooltip: '엑셀 내보내기',
-            onPressed: () {
-              // TODO: Implement Excel export
-            },
+            tooltip: 'Delete',
+            onPressed: () => _confirmDelete(
+              context,
+              repo,
+              context.read<NotificationController>(),
+              device.id,
+            ),
           ),
         ],
       ),
@@ -102,21 +109,45 @@ class DeviceDetailPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
+            Card(
+              child: SwitchListTile.adaptive(
+                title: const Text('Warranty notifications'),
+                subtitle: Text(
+                  notifications.notificationsEnabled
+                      ? 'Reminders will be sent until $expiryLabel.'
+                      : 'Turn on notifications in Settings to receive reminders.',
+                ),
+                value: notificationPreference,
+                onChanged: (value) async {
+                  await notifications.setDevicePreference(
+                    context: context,
+                    device: device,
+                    enabled: value,
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () => context.push('/device/${device.id}/edit'),
                     icon: const Icon(Icons.edit),
-                    label: const Text('수정'),
+                    label: const Text('Edit'),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () => _confirmDelete(context, repo, device.id),
+                    onPressed: () => _confirmDelete(
+                      context,
+                      repo,
+                      context.read<NotificationController>(),
+                      device.id,
+                    ),
                     icon: const Icon(Icons.delete_outline),
-                    label: const Text('삭제'),
+                    label: const Text('Delete'),
                   ),
                 ),
               ],
@@ -139,6 +170,7 @@ class DeviceDetailPage extends StatelessWidget {
   Future<void> _confirmDelete(
     BuildContext context,
     DeviceRepository repo,
+    NotificationController notifications,
     String id,
   ) async {
     final yes = await showDialog<bool>(
@@ -159,8 +191,11 @@ class DeviceDetailPage extends StatelessWidget {
       ),
     );
     if (yes == true) {
+      if (!context.mounted) return;
+      final navigator = Navigator.of(context);
+      await notifications.onDeviceRemoved(id);
       repo.remove(id);
-      if (context.mounted) context.pop();
+      if (navigator.mounted) navigator.pop();
     }
   }
 
@@ -169,17 +204,17 @@ class DeviceDetailPage extends StatelessWidget {
       case DeviceCategory.tv:
         return 'TV';
       case DeviceCategory.washer:
-        return '세탁기';
+        return 'Washer';
       case DeviceCategory.computer:
-        return '컴퓨터';
+        return 'Computer';
       case DeviceCategory.refrigerator:
-        return '냉장고';
+        return 'Refrigerator';
       case DeviceCategory.aircon:
-        return '에어컨';
+        return 'Air conditioner';
       case DeviceCategory.car:
-        return '자동차';
+        return 'Car';
       case DeviceCategory.etc:
-        return '기타';
+        return 'Others';
     }
   }
 }

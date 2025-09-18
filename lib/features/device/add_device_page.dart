@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/features/camera/camera_capture_page.dart';
 import 'package:devicenote/responsive_layout.dart';
+import 'package:devicenote/services/notifications/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -84,6 +87,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final repo = context.read<DeviceRepository>();
+    final notifications = context.read<NotificationController>();
     final warranty = int.parse(_warrantyCtrl.text);
 
     if (widget.existing == null) {
@@ -102,6 +106,8 @@ class _AddDevicePageState extends State<AddDevicePage> {
         imagePaths: List.unmodifiable(_photos),
       );
       repo.add(device);
+      await notifications.onDeviceSaved(device);
+      if (!mounted) return;
     } else {
       final updated = widget.existing!.copyWith(
         name: _nameCtrl.text.trim(),
@@ -116,6 +122,8 @@ class _AddDevicePageState extends State<AddDevicePage> {
         imagePaths: List.unmodifiable(_photos),
       );
       repo.update(updated);
+      await notifications.onDeviceSaved(updated);
+      if (!mounted) return;
     }
 
     final snack = const SnackBar(
@@ -135,8 +143,61 @@ class _AddDevicePageState extends State<AddDevicePage> {
     final path = await Navigator.of(context).push<String>(
       MaterialPageRoute(builder: (_) => const CameraCapturePage()),
     );
-    if (path == null) return;
-    setState(() => _photos.add(path));
+    if (path == null || !mounted) return;
+    setState(() {
+      if (!_photos.contains(path)) {
+        _photos.add(path);
+      }
+    });
+  }
+
+  Future<void> _pickFromGallery() async {
+    final picker = ImagePicker();
+    try {
+      var selections = await picker.pickMultiImage();
+      if (selections.isEmpty) {
+        final single = await picker.pickImage(source: ImageSource.gallery);
+        if (single == null) return;
+        selections = [single];
+      }
+
+      final photosDir = await _ensurePhotosDirectory();
+      final added = <String>[];
+
+      for (final file in selections) {
+        final saved = await _savePickedImage(file, photosDir);
+        if (!_photos.contains(saved)) {
+          added.add(saved);
+        }
+      }
+
+      if (added.isEmpty || !mounted) return;
+      setState(() => _photos.addAll(added));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to pick images: $e')));
+    }
+  }
+
+  Future<Directory> _ensurePhotosDirectory() async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final photosDir = Directory('${appDir.path}/photos');
+    if (!await photosDir.exists()) {
+      await photosDir.create(recursive: true);
+    }
+    return photosDir;
+  }
+
+  Future<String> _savePickedImage(XFile file, Directory targetDir) async {
+    final extIndex = file.name.lastIndexOf('.');
+    final ext = extIndex >= 0 ? file.name.substring(extIndex) : '';
+    final filename =
+        'gallery_${DateTime.now().millisecondsSinceEpoch}_${const Uuid().v4()}$ext';
+    final destination = File('${targetDir.path}/$filename');
+    final saved = await File(file.path).copy(destination.path);
+    return saved.path;
   }
 
   @override
@@ -307,12 +368,19 @@ class _AddDevicePageState extends State<AddDevicePage> {
               const SizedBox(height: 20),
               Text('Others', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
-              Row(
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
                 children: [
                   ElevatedButton.icon(
                     onPressed: _capturePhoto,
                     icon: const Icon(Icons.photo_camera),
                     label: const Text('Take Photo'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: _pickFromGallery,
+                    icon: const Icon(Icons.photo_library),
+                    label: const Text('Select from Gallery'),
                   ),
                 ],
               ),

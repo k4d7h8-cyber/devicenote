@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
           children: [
             TextField(
               decoration: InputDecoration(
-                hintText: '검색',
+                hintText: 'Search',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
               Container(
                 height: 200,
                 alignment: Alignment.center,
-                child: const Text('등록된 기기가 없습니다.'),
+                child: const Text('No registered devices'),
               )
             else
               Wrap(
