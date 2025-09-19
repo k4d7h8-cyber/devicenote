@@ -1,5 +1,6 @@
 import 'package:devicenote/core/utils/date_utils.dart';
 import 'package:devicenote/data/repositories/device_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -31,6 +32,16 @@ class LocalNotificationService implements NotificationService {
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
   bool _initialized = false;
 
+  static const WindowsInitializationSettings _windowsInitSettings =
+      WindowsInitializationSettings(
+        appName: 'DeviceNote',
+        appUserModelId: 'DeviceNote.DeviceNote.Desktop',
+        guid: 'b36d9e42-894e-4d4a-9a79-3fd0f7639aaa',
+      );
+
+  static const WindowsNotificationDetails _windowsNotificationDetails =
+      WindowsNotificationDetails();
+
   static const _channelId = 'warranty_alerts';
   static const _channelName = 'Warranty Alerts';
   static const _channelDescription =
@@ -55,9 +66,10 @@ class LocalNotificationService implements NotificationService {
 
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosInit = DarwinInitializationSettings();
-    const initSettings = InitializationSettings(
+    final initSettings = InitializationSettings(
       android: androidInit,
       iOS: iosInit,
+      windows: _resolveWindowsInitializationSettings(),
     );
 
     await _plugin.initialize(initSettings);
@@ -119,6 +131,7 @@ class LocalNotificationService implements NotificationService {
       final details = NotificationDetails(
         android: _androidDetails,
         iOS: _iosDetails,
+        windows: _resolveWindowsNotificationDetails(),
       );
 
       await _plugin.zonedSchedule(
@@ -155,6 +168,18 @@ class LocalNotificationService implements NotificationService {
       await cancelWarrantyAlerts(device.id, daysBefore);
       await scheduleWarrantyAlerts(device, daysBefore, timeOfDay);
     }
+  }
+
+  WindowsInitializationSettings? _resolveWindowsInitializationSettings() {
+    if (kIsWeb) return null;
+    if (defaultTargetPlatform != TargetPlatform.windows) return null;
+    return _windowsInitSettings;
+  }
+
+  WindowsNotificationDetails? _resolveWindowsNotificationDetails() {
+    if (kIsWeb) return null;
+    if (defaultTargetPlatform != TargetPlatform.windows) return null;
+    return _windowsNotificationDetails;
   }
 
   DateTime _targetDate(DateTime expiry, int daysBefore, TimeOfDay time) {

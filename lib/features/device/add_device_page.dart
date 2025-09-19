@@ -5,6 +5,7 @@ import 'package:devicenote/features/camera/camera_capture_page.dart';
 import 'package:devicenote/responsive_layout.dart';
 import 'package:devicenote/services/notifications/notification_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -126,9 +127,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
       if (!mounted) return;
     }
 
-    final snack = const SnackBar(
-      content: Text('Saved.'),
-      duration: Duration(seconds: 1),
+    final snack = SnackBar(
+      content: Text(AppLocalizations.of(context)!.addDeviceSavedMessage),
+      duration: const Duration(seconds: 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snack);
     await Future.delayed(const Duration(milliseconds: 1100));
@@ -175,9 +176,15 @@ class _AddDevicePageState extends State<AddDevicePage> {
       setState(() => _photos.addAll(added));
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to pick images: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(
+              context,
+            )!.addDevicePickImagesError(e.toString()),
+          ),
+        ),
+      );
     }
   }
 
@@ -203,8 +210,13 @@ class _AddDevicePageState extends State<AddDevicePage> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.existing != null;
+    final l10n = AppLocalizations.of(context)!;
     return ResponsiveScaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit Device' : 'Add Device')),
+      appBar: AppBar(
+        title: Text(
+          isEditing ? l10n.addDeviceEditTitle : l10n.addDeviceCreateTitle,
+        ),
+      ),
       builder: (context, layout) {
         final fullWidth = layout.columnWidth(span: layout.columns);
         final twoSpanWidth = layout.columnWidth(span: 2);
@@ -225,20 +237,20 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: DropdownButtonFormField<DeviceCategory>(
                       value: _category,
                       decoration: InputDecoration(
-                        labelText: _requiredLabel('Category'),
+                        labelText: _requiredLabel(l10n.addDeviceCategoryLabel),
                         border: const OutlineInputBorder(),
                       ),
                       items: DeviceCategory.values
                           .map(
                             (c) => DropdownMenuItem(
                               value: c,
-                              child: Text(_categoryLabel(c)),
+                              child: Text(_categoryLabel(l10n, c)),
                             ),
                           )
                           .toList(),
                       onChanged: (value) => setState(() => _category = value),
                       validator: (value) =>
-                          value == null ? 'Category is required' : null,
+                          value == null ? l10n.addDeviceCategoryRequired : null,
                     ),
                   ),
                   SizedBox(
@@ -246,12 +258,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: TextFormField(
                       controller: _nameCtrl,
                       decoration: InputDecoration(
-                        labelText: _requiredLabel('Model Name'),
+                        labelText: _requiredLabel(l10n.addDeviceModelNameLabel),
                         border: const OutlineInputBorder(),
                       ),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
-                          return 'Model name is required';
+                          return l10n.addDeviceModelNameRequired;
                         }
                         return null;
                       },
@@ -262,12 +274,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: TextFormField(
                       controller: _brandCtrl,
                       decoration: InputDecoration(
-                        labelText: _requiredLabel('Brand'),
+                        labelText: _requiredLabel(l10n.addDeviceBrandLabel),
                         border: const OutlineInputBorder(),
                       ),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
-                          return 'Brand is required';
+                          return l10n.addDeviceBrandRequired;
                         }
                         return null;
                       },
@@ -278,12 +290,14 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: TextFormField(
                       controller: _modelCtrl,
                       decoration: InputDecoration(
-                        labelText: _requiredLabel('Model No.'),
+                        labelText: _requiredLabel(
+                          l10n.addDeviceModelNumberLabel,
+                        ),
                         border: const OutlineInputBorder(),
                       ),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
-                          return 'Model number is required';
+                          return l10n.addDeviceModelNumberRequired;
                         }
                         return null;
                       },
@@ -295,21 +309,23 @@ class _AddDevicePageState extends State<AddDevicePage> {
                       controller: _purchaseDateCtrl,
                       readOnly: true,
                       decoration: InputDecoration(
-                        labelText: _requiredLabel('Purchase Date'),
-                        hintText: 'Pick a date',
+                        labelText: _requiredLabel(
+                          l10n.addDevicePurchaseDateLabel,
+                        ),
+                        hintText: l10n.addDevicePurchaseDateHint,
                         suffixIcon: const Icon(Icons.calendar_today),
                         border: const OutlineInputBorder(),
                       ),
                       onTap: _pickDate,
                       validator: (_) {
                         if (_purchaseDate == null) {
-                          return 'Pick a purchase date';
+                          return l10n.addDevicePurchaseDateRequired;
                         }
                         final now = DateTime.now();
                         if (_purchaseDate!.isAfter(
                           DateTime(now.year, now.month, now.day),
                         )) {
-                          return 'Purchase date cannot be in the future';
+                          return l10n.addDevicePurchaseDateFutureError;
                         }
                         return null;
                       },
@@ -325,18 +341,18 @@ class _AddDevicePageState extends State<AddDevicePage> {
                         LengthLimitingTextInputFormatter(3),
                       ],
                       decoration: InputDecoration(
-                        labelText: _requiredLabel('Warranty (months)'),
-                        hintText: '0 ~ 120',
+                        labelText: _requiredLabel(l10n.addDeviceWarrantyLabel),
+                        hintText: l10n.addDeviceWarrantyHint,
                         border: const OutlineInputBorder(),
                       ),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
-                          return 'Warranty is required';
+                          return l10n.addDeviceWarrantyRequired;
                         }
                         final n = int.tryParse(v);
-                        if (n == null) return 'Enter digits only';
+                        if (n == null) return l10n.addDeviceDigitsOnly;
                         if (n < 0 || n > 120) {
-                          return 'Must be between 0 and 120';
+                          return l10n.addDeviceWarrantyRange;
                         }
                         return null;
                       },
@@ -350,15 +366,15 @@ class _AddDevicePageState extends State<AddDevicePage> {
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9-]')),
                       ],
-                      decoration: const InputDecoration(
-                        labelText: 'Customer Center',
-                        hintText: 'e.g. 1588-0000, 010-1234-5678',
+                      decoration: InputDecoration(
+                        labelText: l10n.addDeviceCustomerCenterLabel,
+                        hintText: l10n.addDeviceCustomerCenterHint,
                         border: OutlineInputBorder(),
                       ),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) return null;
                         final ok = RegExp(r'^[0-9-]+$').hasMatch(v.trim());
-                        if (!ok) return 'Digits and - only';
+                        if (!ok) return l10n.addDeviceCustomerCenterInvalid;
                         return null;
                       },
                     ),
@@ -366,7 +382,10 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 ],
               ),
               const SizedBox(height: 20),
-              Text('Others', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                l10n.addDeviceOthersSectionTitle,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 12,
@@ -375,12 +394,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   ElevatedButton.icon(
                     onPressed: _capturePhoto,
                     icon: const Icon(Icons.photo_camera),
-                    label: const Text('Take Photo'),
+                    label: Text(l10n.addDeviceTakePhoto),
                   ),
                   ElevatedButton.icon(
                     onPressed: _pickFromGallery,
                     icon: const Icon(Icons.photo_library),
-                    label: const Text('Select from Gallery'),
+                    label: Text(l10n.addDeviceSelectFromGallery),
                   ),
                 ],
               ),
@@ -411,14 +430,14 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: _onSave,
-                      child: const Text('Save'),
+                      child: Text(l10n.commonSave),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: _onCancel,
-                      child: const Text('Cancel'),
+                      child: Text(l10n.commonCancel),
                     ),
                   ),
                 ],
@@ -430,22 +449,22 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  String _categoryLabel(DeviceCategory c) {
+  String _categoryLabel(AppLocalizations l10n, DeviceCategory c) {
     switch (c) {
       case DeviceCategory.tv:
-        return 'TV';
+        return l10n.categoryTv;
       case DeviceCategory.washer:
-        return 'Washer';
+        return l10n.categoryWasher;
       case DeviceCategory.computer:
-        return 'Computer';
+        return l10n.categoryComputer;
       case DeviceCategory.refrigerator:
-        return 'Refrigerator';
+        return l10n.categoryRefrigerator;
       case DeviceCategory.aircon:
-        return 'Air conditioner';
+        return l10n.categoryAirConditioner;
       case DeviceCategory.car:
-        return 'Car';
+        return l10n.categoryCar;
       case DeviceCategory.etc:
-        return 'Others';
+        return l10n.categoryOthers;
     }
   }
 }

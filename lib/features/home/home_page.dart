@@ -1,6 +1,7 @@
 import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/responsive_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -9,14 +10,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ResponsiveScaffold(
       appBar: AppBar(
-        title: const Text('DeviceNote'),
+        title: Text(l10n.appTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () => context.push('/settings'),
-            tooltip: '설정',
+            tooltip: l10n.homeSettingsTooltip,
           ),
         ],
       ),
@@ -33,7 +35,7 @@ class HomePage extends StatelessWidget {
           children: [
             TextField(
               decoration: InputDecoration(
-                hintText: 'Search',
+                hintText: l10n.homeSearchHint,
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -46,7 +48,7 @@ class HomePage extends StatelessWidget {
               Container(
                 height: 200,
                 alignment: Alignment.center,
-                child: const Text('No registered devices'),
+                child: Text(l10n.homeNoDevices),
               )
             else
               Wrap(
@@ -112,7 +114,7 @@ class _DeviceCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '${device.brand} · ${device.model}',
+                '${device.brand} - ${device.model}',
                 style: theme.textTheme.bodyMedium,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

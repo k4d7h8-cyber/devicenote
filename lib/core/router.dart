@@ -1,5 +1,6 @@
 import 'package:devicenote/responsive_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:devicenote/l10n/app_localizations.dart';
 
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -14,19 +15,16 @@ class AppRouter {
   }
 }
 
-/// 1단계 확인용 임시 화면 (2단계에서 홈/등록/상세/설정으로 교체)
 class _BootPage extends StatelessWidget {
   const _BootPage();
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ResponsiveScaffold(
-      appBar: AppBar(title: const Text('DeviceNote')),
-      builder: (context, layout) => const Center(
-        child: Text(
-          '1단계 준비 완료!\n다음 단계에서 UI(홈/등록/상세/설정)를 만들 예정입니다.',
-          textAlign: TextAlign.center,
-        ),
+      appBar: AppBar(title: Text(l10n.appTitle)),
+      builder: (context, layout) => Center(
+        child: Text(l10n.bootPlaceholderMessage, textAlign: TextAlign.center),
       ),
     );
   }

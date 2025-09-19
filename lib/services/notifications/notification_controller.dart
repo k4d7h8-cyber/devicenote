@@ -3,6 +3,7 @@ import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/services/notifications/notification_preferences.dart';
 import 'package:devicenote/services/notifications/notification_service.dart';
 import 'package:flutter/material.dart';
+import 'package:devicenote/l10n/app_localizations.dart';
 
 class NotificationController extends ChangeNotifier {
   NotificationController({
@@ -46,6 +47,7 @@ class NotificationController extends ChangeNotifier {
     }
 
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     if (enabled) {
       final granted = await _ensurePermission(context, messenger);
@@ -56,7 +58,7 @@ class NotificationController extends ChangeNotifier {
       await _preferences.setNotificationsEnabled(true);
       await _rescheduleAll();
       messenger.showSnackBar(
-        const SnackBar(content: Text('Warranty notifications enabled.')),
+        SnackBar(content: Text(l10n.notificationsGlobalEnabled)),
       );
     } else {
       _notificationsEnabled = false;
@@ -65,7 +67,7 @@ class NotificationController extends ChangeNotifier {
         await _service.cancelWarrantyAlerts(id, _alertOffsets);
       }
       messenger.showSnackBar(
-        const SnackBar(content: Text('Warranty notifications disabled.')),
+        SnackBar(content: Text(l10n.notificationsGlobalDisabled)),
       );
     }
 
@@ -78,6 +80,7 @@ class NotificationController extends ChangeNotifier {
     required bool enabled,
   }) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     if (enabled) {
       _enabledDeviceIds.add(device.id);
@@ -89,11 +92,7 @@ class NotificationController extends ChangeNotifier {
     if (!_notificationsEnabled) {
       if (enabled) {
         messenger.showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Enable notifications in Settings to schedule alerts.',
-            ),
-          ),
+          SnackBar(content: Text(l10n.notificationsEnableInSettings)),
         );
       }
       notifyListeners();
@@ -106,15 +105,15 @@ class NotificationController extends ChangeNotifier {
         SnackBar(
           content: Text(
             scheduled
-                ? 'Warranty reminders scheduled.'
-                : 'Warranty period already ended.',
+                ? l10n.notificationsDeviceScheduled
+                : l10n.notificationsDeviceExpired,
           ),
         ),
       );
     } else {
       await _service.cancelWarrantyAlerts(device.id, _alertOffsets);
       messenger.showSnackBar(
-        const SnackBar(content: Text('Warranty reminders cancelled.')),
+        SnackBar(content: Text(l10n.notificationsDeviceCancelled)),
       );
     }
 
@@ -189,21 +188,21 @@ class NotificationController extends ChangeNotifier {
   ) async {
     if (_permissionGranted) return true;
 
+    final l10n = AppLocalizations.of(context)!;
+
     final consent = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Allow notifications?'),
-        content: const Text(
-          'Enable push notifications to receive warranty reminders for your devices.',
-        ),
+        title: Text(l10n.notificationsPermissionTitle),
+        content: Text(l10n.notificationsPermissionDescription),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Not now'),
+            child: Text(l10n.notificationsPermissionNotNow),
           ),
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Allow'),
+            child: Text(l10n.notificationsPermissionAllow),
           ),
         ],
       ),
@@ -218,7 +217,7 @@ class NotificationController extends ChangeNotifier {
 
     if (!granted) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('Notification permission denied.')),
+        SnackBar(content: Text(l10n.notificationsPermissionDenied)),
       );
     }
 

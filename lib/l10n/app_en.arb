@@ -1,0 +1,129 @@
+{
+  "@@locale": "en",
+  "appTitle": "DeviceNote",
+  "bootPlaceholderMessage": "Setup phase complete. Replace this screen with actual routes.",
+  "homeSettingsTooltip": "Settings",
+  "homeSearchHint": "Search",
+  "homeNoDevices": "No registered devices",
+  "homeAddDeviceTooltip": "Add device",
+  "homeDDayLabel": "D-day",
+  "homeDdayMonthsLabel": "D-{months} m",
+  "@homeDdayMonthsLabel": {
+    "description": "Remaining months label (e.g., D-3 m).",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTitle": "Settings",
+  "settingsNotificationsToggleTitle": "Enable notifications",
+  "settingsNotificationsToggleEnabled": "Warranty reminders will follow your preferences.",
+  "settingsNotificationsToggleDisabled": "Turn on to receive reminders before warranties expire.",
+  "settingsReminderTimeLabel": "Reminder time",
+  "settingsLanguageTitle": "Language",
+  "settingsLanguagePickerTitle": "Choose language",
+  "settingsBackupSectionTitle": "Backup & Restore",
+  "settingsVersionValue": "{version}",
+  "@settingsVersionValue": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "languageEnglish": "English",
+  "languageKorean": "Korean",
+  "commonBackup": "Backup",
+  "commonRestore": "Restore",
+  "commonVersion": "Version",
+  "commonSave": "Save",
+  "commonCancel": "Cancel",
+  "commonDelete": "Delete",
+  "commonEdit": "Edit",
+  "addDeviceSavedMessage": "Saved.",
+  "addDevicePickImagesError": "Failed to pick images: {error}",
+  "@addDevicePickImagesError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addDeviceEditTitle": "Edit device",
+  "addDeviceCreateTitle": "Add device",
+  "addDeviceCategoryLabel": "Category",
+  "addDeviceCategoryRequired": "Category is required",
+  "addDeviceModelNameLabel": "Model name",
+  "addDeviceModelNameRequired": "Model name is required",
+  "addDeviceBrandLabel": "Brand",
+  "addDeviceBrandRequired": "Brand is required",
+  "addDeviceModelNumberLabel": "Model number",
+  "addDeviceModelNumberRequired": "Model number is required",
+  "addDevicePurchaseDateLabel": "Purchase date",
+  "addDevicePurchaseDateHint": "Pick a date",
+  "addDevicePurchaseDateRequired": "Pick a purchase date",
+  "addDevicePurchaseDateFutureError": "Purchase date cannot be in the future",
+  "addDeviceWarrantyLabel": "Warranty (months)",
+  "addDeviceWarrantyHint": "0 ~ 120",
+  "addDeviceWarrantyRequired": "Warranty is required",
+  "addDeviceDigitsOnly": "Enter digits only",
+  "addDeviceWarrantyRange": "Must be between 0 and 120",
+  "addDeviceCustomerCenterLabel": "Customer center",
+  "addDeviceCustomerCenterHint": "e.g. 1588-0000, 010-1234-5678",
+  "addDeviceCustomerCenterInvalid": "Digits and - only",
+  "addDeviceOthersSectionTitle": "Others",
+  "addDeviceTakePhoto": "Take photo",
+  "addDeviceSelectFromGallery": "Select from gallery",
+  "categoryTv": "TV",
+  "categoryWasher": "Washer",
+  "categoryComputer": "Computer",
+  "categoryRefrigerator": "Refrigerator",
+  "categoryAirConditioner": "Air conditioner",
+  "categoryCar": "Car",
+  "categoryOthers": "Others",
+  "deviceDetailTitle": "Device detail",
+  "deviceDetailNotFound": "Device not found.",
+  "deviceDetailCategoryLabel": "Category",
+  "deviceDetailBrandLabel": "Brand",
+  "deviceDetailModelNameLabel": "Model name",
+  "deviceDetailModelNumberLabel": "Model number",
+  "deviceDetailPurchaseDateLabel": "Purchase date",
+  "deviceDetailWarrantyLabel": "Warranty (months)",
+  "deviceDetailCustomerCenterLabel": "Customer center",
+  "deviceDetailNoContact": "-",
+  "deviceDetailNotificationsTitle": "Warranty notifications",
+  "deviceDetailNotificationsEnabled": "Reminders will be sent until {expiry}.",
+  "@deviceDetailNotificationsEnabled": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailNotificationsDisabled": "Turn on notifications in Settings to receive reminders.",
+  "deviceDetailPhotosSectionTitle": "Photos",
+  "deviceDetailDeleteDialogTitle": "Delete this device?",
+  "deviceDetailDeleteDialogMessage": "This action cannot be undone.",
+  "notificationsGlobalEnabled": "Warranty notifications enabled.",
+  "notificationsGlobalDisabled": "Warranty notifications disabled.",
+  "notificationsEnableInSettings": "Enable notifications in Settings to schedule alerts.",
+  "notificationsDeviceScheduled": "Warranty reminders scheduled.",
+  "notificationsDeviceExpired": "Warranty period already ended.",
+  "notificationsDeviceCancelled": "Warranty reminders cancelled.",
+  "notificationsPermissionTitle": "Allow notifications?",
+  "notificationsPermissionDescription": "Enable push notifications to receive warranty reminders for your devices.",
+  "notificationsPermissionNotNow": "Not now",
+  "notificationsPermissionAllow": "Allow",
+  "notificationsPermissionDenied": "Notification permission denied.",
+  "cameraCaptureFailed": "Failed to capture photo: {error}",
+  "@cameraCaptureFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cameraTitle": "Camera",
+  "cameraInitializationFailed": "Failed to initialize the camera."
+}

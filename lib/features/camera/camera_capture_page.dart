@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CameraCapturePage extends StatefulWidget {
@@ -45,48 +46,60 @@ class _CameraCapturePageState extends State<CameraCapturePage> {
   }
 
   Future<void> _onTakePicture() async {
+    final l10n = AppLocalizations.of(context)!;
     try {
-      final c = _controller;
-      if (c == null || !c.value.isInitialized || c.value.isTakingPicture) return;
+      final controller = _controller;
+      if (controller == null ||
+          !controller.value.isInitialized ||
+          controller.value.isTakingPicture) {
+        return;
+      }
 
-      final xfile = await c.takePicture();
+      final capture = await controller.takePicture();
       final appDir = await getApplicationDocumentsDirectory();
       final photosDir = Directory('${appDir.path}/photos');
       if (!await photosDir.exists()) {
         await photosDir.create(recursive: true);
       }
-      final ts = DateTime.now().millisecondsSinceEpoch;
-      final ext = xfile.path.split('.').last;
-      final destPath = '${photosDir.path}/photo_$ts.$ext';
-      final saved = await File(xfile.path).copy(destPath);
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final ext = capture.path.split('.').last;
+      final destPath = '${photosDir.path}/photo_$timestamp.$ext';
+      final saved = await File(capture.path).copy(destPath);
 
       if (!mounted) return;
       Navigator.of(context).pop<String>(saved.path);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('촬영 실패: $e')),
+        SnackBar(content: Text(l10n.cameraCaptureFailed(e.toString()))),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('카메라')),
+      appBar: AppBar(title: Text(l10n.cameraTitle)),
       backgroundColor: Colors.black,
       body: FutureBuilder<void>(
         future: _initFuture,
-        builder: (context, snap) {
-          if (snap.connectionState != ConnectionState.done) {
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (_controller == null || !_controller!.value.isInitialized) {
-            return const Center(child: Text('카메라 초기화 실패', style: TextStyle(color: Colors.white)));
+          final controller = _controller;
+          if (controller == null || !controller.value.isInitialized) {
+            return Center(
+              child: Text(
+                l10n.cameraInitializationFailed,
+                style: const TextStyle(color: Colors.white),
+              ),
+            );
           }
           return Stack(
             children: [
-              Center(child: CameraPreview(_controller!)),
+              Center(child: CameraPreview(controller)),
               Positioned(
                 left: 0,
                 right: 0,
@@ -109,4 +122,3 @@ class _CameraCapturePageState extends State<CameraCapturePage> {
     );
   }
 }
-
