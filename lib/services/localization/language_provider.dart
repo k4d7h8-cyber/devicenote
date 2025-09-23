@@ -1,10 +1,15 @@
-﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Holds the currently selected language code for the application.
-/// Defaults to English (`en`).
-final languageCodeProvider = StateProvider<String>((ref) => 'en');
+import 'localization_controller.dart';
 
-/// Updates the global language code.
-void setLanguageCode(WidgetRef ref, String languageCode) {
-  ref.read(languageCodeProvider.notifier).state = languageCode;
+/// Holds the currently selected [Locale] for the application.
+/// Defaults to [LocalizationController.fallbackLocale].
+final appLocaleProvider = StateProvider<Locale>(
+  (ref) => LocalizationController.fallbackLocale,
+);
+
+/// Updates the global app locale.
+void setAppLocale(WidgetRef ref, Locale locale) {
+  ref.read(appLocaleProvider.notifier).state = locale;
 }

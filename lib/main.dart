@@ -1,9 +1,13 @@
-﻿import 'package:flutter/material.dart';
+import 'package:devicenote/l10n/app_localizations.dart';
+import 'package:devicenote/services/localization/language_provider.dart';
+import 'package:devicenote/services/localization/localization_controller.dart';
+import 'package:devicenote/services/notifications/notification_controller.dart';
+import 'package:devicenote/services/notifications/notification_preferences.dart';
+import 'package:devicenote/services/notifications/notification_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:go_router/go_router.dart';
-import 'package:devicenote/l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:devicenote/services/localization/localization_controller.dart';
 import 'package:provider/provider.dart';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
@@ -11,10 +15,6 @@ import 'package:devicenote/features/device/add_device_page.dart';
 import 'package:devicenote/features/device/device_detail_page.dart';
 import 'package:devicenote/features/home/home_page.dart';
 import 'package:devicenote/features/settings/settings_page.dart';
-import 'package:devicenote/services/notifications/notification_controller.dart';
-import 'package:devicenote/services/notifications/notification_preferences.dart';
-import 'package:devicenote/services/notifications/notification_service.dart';
-import 'package:devicenote/services/localization/language_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +25,9 @@ Future<void> main() async {
 
   runApp(
     riverpod.ProviderScope(
+      overrides: [
+        appLocaleProvider.overrideWith((ref) => localizationController.locale),
+      ],
       child: DeviceNoteApp(
         preferences: preferences,
         localizationController: localizationController,
@@ -99,8 +102,7 @@ class DeviceNoteApp extends StatelessWidget {
       ],
       child: riverpod.Consumer(
         builder: (context, ref, _) {
-          final localeCode = ref.watch(languageCodeProvider);
-          final locale = Locale(localeCode);
+          final locale = ref.watch(appLocaleProvider);
 
           return MaterialApp.router(
             onGenerateTitle: (context) =>

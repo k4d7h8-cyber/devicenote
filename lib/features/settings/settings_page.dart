@@ -1,17 +1,35 @@
+﻿import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:devicenote/responsive_layout.dart';
+import 'package:devicenote/services/localization/language_provider.dart';
 import 'package:devicenote/services/localization/localization_controller.dart';
 import 'package:devicenote/services/notifications/notification_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:devicenote/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:provider/provider.dart';
 
-class SettingsPage extends StatelessWidget {
+const Map<String, String> _languageDisplayNames = {
+  'bn': 'Bengali',
+  'en': 'English',
+  'es': 'Spanish',
+  'es-MX': 'Spanish (Mexico)',
+  'ha': 'Hausa',
+  'hi': 'Hindi',
+  'id': 'Indonesian',
+  'ko': 'Korean',
+  'pt': 'Portuguese',
+  'pt-BR': 'Portuguese (Brazil)',
+  'ru': 'Russian',
+  'ur': 'Urdu',
+  'zh': 'Chinese',
+  'zh-Hans': 'Chinese (Simplified)',
+};
+
+class SettingsPage extends riverpod.ConsumerWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, riverpod.WidgetRef ref) {
     final notifications = context.watch<NotificationController>();
-    final localization = context.watch<LocalizationController>();
     final l10n = AppLocalizations.of(context)!;
 
     return ResponsiveScaffold(
@@ -24,7 +42,8 @@ class SettingsPage extends StatelessWidget {
         final timeLabel = MaterialLocalizations.of(
           context,
         ).formatTimeOfDay(notifications.notificationTime);
-        final languageLabel = _languageLabel(l10n, localization.locale);
+        final selectedLocale = ref.watch(appLocaleProvider);
+        final languageLabel = _languageLabel(l10n, selectedLocale);
 
         return Wrap(
           spacing: layout.gutter,
@@ -74,7 +93,7 @@ class SettingsPage extends StatelessWidget {
                       leading: const Icon(Icons.language),
                       title: Text(l10n.settingsLanguageTitle),
                       subtitle: Text(languageLabel),
-                      onTap: () => _showLanguagePicker(context),
+                      onTap: () => _showLanguageDialog(context, ref),
                     ),
                   ],
                 ),
@@ -136,52 +155,59 @@ class SettingsPage extends StatelessWidget {
       },
     );
   }
+}
 
-  String _languageLabel(AppLocalizations l10n, Locale locale) {
-    switch (locale.languageCode) {
-      case 'ko':
-        return l10n.languageKorean;
-      case 'en':
-      default:
-        return l10n.languageEnglish;
-    }
+String _languageLabel(AppLocalizations l10n, Locale locale) {
+  final tag = locale.toLanguageTag();
+  switch (tag) {
+    case 'en':
+      return l10n.languageEnglish;
+    case 'ko':
+      return l10n.languageKorean;
+    default:
+      return _languageDisplayNames[tag] ?? locale.languageCode;
   }
+}
 
-  Future<void> _showLanguagePicker(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
-    final controller = context.read<LocalizationController>();
-    final locales = LocalizationController.supportedLocales;
-    await showModalBottomSheet<void>(
-      context: context,
-      builder: (sheetContext) {
-        final selected = controller.locale;
-        return SafeArea(
+Future<void> _showLanguageDialog(
+  BuildContext context,
+  riverpod.WidgetRef ref,
+) async {
+  final controller = context.read<LocalizationController>();
+  final locales = AppLocalizations.supportedLocales;
+  final selected = ref.read(appLocaleProvider);
+
+  await showDialog<void>(
+    context: context,
+    builder: (dialogContext) {
+      final l10n = AppLocalizations.of(dialogContext)!;
+      return AlertDialog(
+        title: Text(l10n.settingsLanguagePickerTitle),
+        content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  l10n.settingsLanguagePickerTitle,
-                  style: Theme.of(sheetContext).textTheme.titleMedium,
-                ),
-              ),
               for (final locale in locales)
-                RadioListTile<Locale>(
-                  value: locale,
-                  groupValue: selected,
+                ListTile(
                   title: Text(_languageLabel(l10n, locale)),
-                  onChanged: (value) {
-                    if (value == null) return;
-                    controller.setLocale(value);
-                    Navigator.of(sheetContext).pop();
+                  trailing: selected == locale ? const Icon(Icons.check) : null,
+                  selected: selected == locale,
+                  onTap: () async {
+                    if (selected == locale) {
+                      Navigator.of(dialogContext).pop();
+                      return;
+                    }
+                    final navigator = Navigator.of(dialogContext);
+                    ref.read(appLocaleProvider.notifier).state = locale;
+                    navigator.pop();
+                    await controller.setLocale(locale);
                   },
                 ),
             ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
 }
