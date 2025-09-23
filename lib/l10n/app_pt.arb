@@ -1,0 +1,137 @@
+﻿{
+  "@@locale": "pt",
+  "appTitle": "DeviceNote",
+  "bootPlaceholderMessage": "Fase de configuração concluída. Substitua esta tela por rotas reais.",
+  "homeSettingsTooltip": "Configurações",
+  "homeSearchHint": "Pesquisar",
+  "homeNoDevices": "Nenhum dispositivo registrado",
+  "homeAddDeviceTooltip": "Adicionar dispositivo",
+  "homeDDayLabel": "Contagem regressiva",
+  "homeDdayMonthsLabel": "Faltam {months} meses",
+  "@homeDdayMonthsLabel": {
+    "description": "Remaining months label (e.g., D-3 m).",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTitle": "Configurações",
+  "settingsNotificationsToggleTitle": "Ativar notificações",
+  "settingsNotificationsToggleEnabled": "Os lembretes de garantia seguirão suas preferências.",
+  "settingsNotificationsToggleDisabled": "Ative para receber lembretes antes que as garantias expirem.",
+  "settingsReminderTimeLabel": "Hora do lembrete",
+  "settingsLanguageTitle": "Idioma",
+  "settingsLanguagePickerTitle": "Escolher idioma",
+  "settingsBackupSectionTitle": "Backup e Restauração",
+  "settingsVersionValue": "{version}",
+  "@settingsVersionValue": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "languageEnglish": "Inglês",
+  "languageKorean": "Coreano",
+  "commonBackup": "Backup",
+  "commonRestore": "Restaurar",
+  "commonVersion": "Versão",
+  "commonSave": "Salvar",
+  "commonCancel": "Cancelar",
+  "commonDelete": "Excluir",
+  "commonEdit": "Editar",
+  "addDeviceSavedMessage": "Salvo.",
+  "addDevicePickImagesError": "Falha ao selecionar imagens: {error}",
+  "@addDevicePickImagesError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addDeviceEditTitle": "Editar dispositivo",
+  "addDeviceCreateTitle": "Adicionar dispositivo",
+  "addDeviceCategoryLabel": "Categoria",
+  "addDeviceCategoryRequired": "A categoria é obrigatória",
+  "addDeviceModelNameLabel": "Nome do modelo",
+  "addDeviceModelNameRequired": "O nome do modelo é obrigatório",
+  "addDeviceBrandLabel": "Marca",
+  "addDeviceBrandRequired": "A marca é obrigatória",
+  "addDeviceModelNumberLabel": "Número do modelo",
+  "addDeviceModelNumberRequired": "O número do modelo é obrigatório",
+  "addDevicePurchaseDateLabel": "Data da compra",
+  "addDevicePurchaseDateHint": "Selecione uma data",
+  "addDevicePurchaseDateRequired": "Selecione uma data de compra",
+  "addDevicePurchaseDateFutureError": "A data da compra não pode ser no futuro",
+  "addDeviceWarrantyLabel": "Garantia (meses)",
+  "addDeviceWarrantyHint": "0 ~ 120",
+  "addDeviceWarrantyRequired": "A garantia é obrigatória",
+  "addDeviceDigitsOnly": "Insira apenas dígitos",
+  "addDeviceWarrantyRange": "Deve estar entre 0 e 120",
+  "addDeviceCustomerCenterLabel": "Central de atendimento",
+  "addDeviceCustomerCenterHint": "ex: 1588-0000, 010-1234-5678",
+  "addDeviceCustomerCenterInvalid": "Apenas dígitos e -",
+  "addDeviceOthersSectionTitle": "Outros",
+  "addDeviceTakePhoto": "Tirar foto",
+  "addDeviceSelectFromGallery": "Selecionar da galeria",
+  "categoryTv": "TV",
+  "categoryWasher": "Máquina de lavar",
+  "categoryComputer": "Computador",
+  "categoryRefrigerator": "Geladeira",
+  "categoryAirConditioner": "Ar condicionado",
+  "categoryCar": "Carro",
+  "categoryOthers": "Outros",
+  "deviceDetailTitle": "Detalhes do dispositivo",
+  "deviceDetailNotFound": "Dispositivo não encontrado.",
+  "deviceDetailCategoryLabel": "Categoria",
+  "deviceDetailBrandLabel": "Marca",
+  "deviceDetailModelNameLabel": "Nome do modelo",
+  "deviceDetailModelNumberLabel": "Número do modelo",
+  "deviceDetailPurchaseDateLabel": "Data da compra",
+  "deviceDetailWarrantyLabel": "Garantia (meses)",
+  "deviceDetailCustomerCenterLabel": "Central de atendimento",
+  "deviceDetailNoContact": "Nenhuma central de atendimento registrada.",
+  "deviceDetailCallButton": "Ligar para {number}",
+  "@deviceDetailCallButton": {
+    "description": "Label for the button that starts a phone call to the customer center.",
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "deviceDetailCallError": "Não foi possível abrir o discador do telefone.",
+  "deviceDetailNotificationsTitle": "Notificações de garantia",
+  "deviceDetailNotificationsEnabled": "Os lembretes serão enviados até {expiry}.",
+  "@deviceDetailNotificationsEnabled": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailNotificationsDisabled": "Ative as notificações em Configurações para receber lembretes.",
+  "deviceDetailPhotosSectionTitle": "Fotos",
+  "deviceDetailDeleteDialogTitle": "Excluir este dispositivo?",
+  "deviceDetailDeleteDialogMessage": "Esta ação não pode ser desfeita.",
+  "notificationsGlobalEnabled": "Notificações de garantia ativadas.",
+  "notificationsGlobalDisabled": "Notificações de garantia desativadas.",
+  "notificationsEnableInSettings": "Ative as notificações em Configurações para agendar alertas.",
+  "notificationsDeviceScheduled": "Lembretes de garantia agendados.",
+  "notificationsDeviceExpired": "O período de garantia já terminou.",
+  "notificationsDeviceCancelled": "Lembretes de garantia cancelados.",
+  "notificationsPermissionTitle": "Permitir notificações?",
+  "notificationsPermissionDescription": "Ative as notificações push para receber lembretes de garantia para seus dispositivos.",
+  "notificationsPermissionNotNow": "Agora não",
+  "notificationsPermissionAllow": "Permitir",
+  "notificationsPermissionDenied": "Permissão de notificação negada.",
+  "cameraCaptureFailed": "Falha ao capturar a foto: {error}",
+  "@cameraCaptureFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cameraTitle": "Câmera",
+  "cameraInitializationFailed": "Falha ao inicializar a câmera."
+}

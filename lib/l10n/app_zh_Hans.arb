@@ -1,0 +1,137 @@
+{
+  "@@locale": "zh_Hans",
+  "appTitle": "设备记录",
+  "bootPlaceholderMessage": "设置阶段完成。用实际路由替换此屏幕。",
+  "homeSettingsTooltip": "设置",
+  "homeSearchHint": "搜索",
+  "homeNoDevices": "无注册设备",
+  "homeAddDeviceTooltip": "添加设备",
+  "homeDDayLabel": "倒计时",
+  "homeDdayMonthsLabel": "D-{months} 个月",
+  "@homeDdayMonthsLabel": {
+    "description": "Remaining months label (e.g., D-3 m).",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTitle": "设置",
+  "settingsNotificationsToggleTitle": "启用通知",
+  "settingsNotificationsToggleEnabled": "保修提醒将遵循您的偏好。",
+  "settingsNotificationsToggleDisabled": "开启以在保修期满前接收提醒。",
+  "settingsReminderTimeLabel": "提醒时间",
+  "settingsLanguageTitle": "语言",
+  "settingsLanguagePickerTitle": "选择语言",
+  "settingsBackupSectionTitle": "备份与恢复",
+  "settingsVersionValue": "{version}",
+  "@settingsVersionValue": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "languageEnglish": "英语",
+  "languageKorean": "韩语",
+  "commonBackup": "备份",
+  "commonRestore": "恢复",
+  "commonVersion": "版本",
+  "commonSave": "保存",
+  "commonCancel": "取消",
+  "commonDelete": "删除",
+  "commonEdit": "编辑",
+  "addDeviceSavedMessage": "已保存。",
+  "addDevicePickImagesError": "选择图片失败：{error}",
+  "@addDevicePickImagesError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addDeviceEditTitle": "编辑设备",
+  "addDeviceCreateTitle": "添加设备",
+  "addDeviceCategoryLabel": "类别",
+  "addDeviceCategoryRequired": "类别是必填项",
+  "addDeviceModelNameLabel": "型号名称",
+  "addDeviceModelNameRequired": "型号名称是必填项",
+  "addDeviceBrandLabel": "品牌",
+  "addDeviceBrandRequired": "品牌是必填项",
+  "addDeviceModelNumberLabel": "型号",
+  "addDeviceModelNumberRequired": "型号是必填项",
+  "addDevicePurchaseDateLabel": "购买日期",
+  "addDevicePurchaseDateHint": "选择日期",
+  "addDevicePurchaseDateRequired": "选择一个购买日期",
+  "addDevicePurchaseDateFutureError": "购买日期不能在将来",
+  "addDeviceWarrantyLabel": "保修期（月）",
+  "addDeviceWarrantyHint": "0 ~ 120",
+  "addDeviceWarrantyRequired": "保修期是必填项",
+  "addDeviceDigitsOnly": "仅输入数字",
+  "addDeviceWarrantyRange": "必须在 0 到 120 之间",
+  "addDeviceCustomerCenterLabel": "客户服务中心",
+  "addDeviceCustomerCenterHint": "例如 1588-0000, 010-1234-5678",
+  "addDeviceCustomerCenterInvalid": "仅限数字和-",
+  "addDeviceOthersSectionTitle": "其他",
+  "addDeviceTakePhoto": "拍照",
+  "addDeviceSelectFromGallery": "从相册选择",
+  "categoryTv": "电视",
+  "categoryWasher": "洗衣机",
+  "categoryComputer": "电脑",
+  "categoryRefrigerator": "冰箱",
+  "categoryAirConditioner": "空调",
+  "categoryCar": "汽车",
+  "categoryOthers": "其他",
+  "deviceDetailTitle": "设备详情",
+  "deviceDetailNotFound": "未找到设备。",
+  "deviceDetailCategoryLabel": "类别",
+  "deviceDetailBrandLabel": "品牌",
+  "deviceDetailModelNameLabel": "型号名称",
+  "deviceDetailModelNumberLabel": "型号",
+  "deviceDetailPurchaseDateLabel": "购买日期",
+  "deviceDetailWarrantyLabel": "保修期（月）",
+  "deviceDetailCustomerCenterLabel": "客户服务中心",
+  "deviceDetailNoContact": "未注册客户服务中心。",
+  "deviceDetailCallButton": "致电 {number}",
+  "@deviceDetailCallButton": {
+    "description": "Label for the button that starts a phone call to the customer center.",
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "deviceDetailCallError": "无法打开电话拨号器。",
+  "deviceDetailNotificationsTitle": "保修通知",
+  "deviceDetailNotificationsEnabled": "提醒将发送至 {expiry}。",
+  "@deviceDetailNotificationsEnabled": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailNotificationsDisabled": "在“设置”中开启通知以接收提醒。",
+  "deviceDetailPhotosSectionTitle": "照片",
+  "deviceDetailDeleteDialogTitle": "删除此设备？",
+  "deviceDetailDeleteDialogMessage": "此操作无法撤销。",
+  "notificationsGlobalEnabled": "保修通知已启用。",
+  "notificationsGlobalDisabled": "保修通知已禁用。",
+  "notificationsEnableInSettings": "在“设置”中启用通知以安排提醒。",
+  "notificationsDeviceScheduled": "保修提醒已安排。",
+  "notificationsDeviceExpired": "保修期已结束。",
+  "notificationsDeviceCancelled": "保修提醒已取消。",
+  "notificationsPermissionTitle": "允许通知？",
+  "notificationsPermissionDescription": "启用推送通知以接收您的设备保修提醒。",
+  "notificationsPermissionNotNow": "暂时不要",
+  "notificationsPermissionAllow": "允许",
+  "notificationsPermissionDenied": "通知权限被拒绝。",
+  "cameraCaptureFailed": "拍照失败：{error}",
+  "@cameraCaptureFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cameraTitle": "相机",
+  "cameraInitializationFailed": "相机初始化失败。"
+}

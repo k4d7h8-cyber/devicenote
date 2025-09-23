@@ -1,0 +1,137 @@
+{
+  "@@locale": "ur",
+  "appTitle": "ڈيوائس نوٹ",
+  "bootPlaceholderMessage": "سیٹ اپ مرحلہ مکمل ہو گیا۔ اسکرین کو اصل روٹس سے تبدیل کریں۔",
+  "homeSettingsTooltip": "سیٹنگز",
+  "homeSearchHint": "تلاش",
+  "homeNoDevices": "کوئی رجسٹرڈ ڈیوائس نہیں",
+  "homeAddDeviceTooltip": "ڈیوائس شامل کریں",
+  "homeDDayLabel": "D-day",
+  "homeDdayMonthsLabel": "D-{months} ماہ",
+  "@homeDdayMonthsLabel": {
+    "description": "Remaining months label (e.g., D-3 m).",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTitle": "سیٹنگز",
+  "settingsNotificationsToggleTitle": "اطلاعات فعال کریں",
+  "settingsNotificationsToggleEnabled": "وارنٹی یاددہانی آپ کی ترجیحات پر عمل کریں گی۔",
+  "settingsNotificationsToggleDisabled": "وارنٹی ختم ہونے سے پہلے یاددہانی حاصل کرنے کے لیے آن کریں۔",
+  "settingsReminderTimeLabel": "یاددہانی کا وقت",
+  "settingsLanguageTitle": "زبان",
+  "settingsLanguagePickerTitle": "زبان منتخب کریں",
+  "settingsBackupSectionTitle": "بیک اپ اور بحالی",
+  "settingsVersionValue": "{version}",
+  "@settingsVersionValue": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "languageEnglish": "انگریزی",
+  "languageKorean": "کورین",
+  "commonBackup": "بیک اپ",
+  "commonRestore": "بحال کریں",
+  "commonVersion": "ورژن",
+  "commonSave": "محفوظ کریں",
+  "commonCancel": "منسوخ کریں",
+  "commonDelete": "حذف کریں",
+  "commonEdit": "ترمیم کریں",
+  "addDeviceSavedMessage": "محفوظ ہو گیا۔",
+  "addDevicePickImagesError": "تصاویر منتخب کرنے میں ناکام: {error}",
+  "@addDevicePickImagesError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addDeviceEditTitle": "ڈیوائس میں ترمیم کریں",
+  "addDeviceCreateTitle": "ڈیوائس شامل کریں",
+  "addDeviceCategoryLabel": "زمرہ",
+  "addDeviceCategoryRequired": "زمرہ درکار ہے",
+  "addDeviceModelNameLabel": "ماڈل کا نام",
+  "addDeviceModelNameRequired": "ماڈل کا نام درکار ہے",
+  "addDeviceBrandLabel": "برانڈ",
+  "addDeviceBrandRequired": "برانڈ درکار ہے",
+  "addDeviceModelNumberLabel": "ماڈل نمبر",
+  "addDeviceModelNumberRequired": "ماڈل نمبر درکار ہے",
+  "addDevicePurchaseDateLabel": "خریداری کی تاریخ",
+  "addDevicePurchaseDateHint": "ایک تاریخ منتخب کریں",
+  "addDevicePurchaseDateRequired": "خریداری کی تاریخ منتخب کریں",
+  "addDevicePurchaseDateFutureError": "خریداری کی تاریخ مستقبل میں نہیں ہو سکتی",
+  "addDeviceWarrantyLabel": "وارنٹی (ماہ)",
+  "addDeviceWarrantyHint": "0 ~ 120",
+  "addDeviceWarrantyRequired": "وارنٹی درکار ہے",
+  "addDeviceDigitsOnly": "صرف ہندسے درج کریں",
+  "addDeviceWarrantyRange": "0 اور 120 کے درمیان ہونا چاہیے",
+  "addDeviceCustomerCenterLabel": "کسٹمر سینٹر",
+  "addDeviceCustomerCenterHint": "جیسے 1588-0000, 010-1234-5678",
+  "addDeviceCustomerCenterInvalid": "صرف ہندسے اور -",
+  "addDeviceOthersSectionTitle": "دیگر",
+  "addDeviceTakePhoto": "تصویر کھینچیں",
+  "addDeviceSelectFromGallery": "گیلری سے منتخب کریں",
+  "categoryTv": "ٹی وی",
+  "categoryWasher": "واشر",
+  "categoryComputer": "کمپیوٹر",
+  "categoryRefrigerator": "ریفریجریٹر",
+  "categoryAirConditioner": "ایئر کنڈیشنر",
+  "categoryCar": "کار",
+  "categoryOthers": "دیگر",
+  "deviceDetailTitle": "ڈیوائس کی تفصیل",
+  "deviceDetailNotFound": "ڈیوائس نہیں ملا۔",
+  "deviceDetailCategoryLabel": "زمرہ",
+  "deviceDetailBrandLabel": "برانڈ",
+  "deviceDetailModelNameLabel": "ماڈل کا نام",
+  "deviceDetailModelNumberLabel": "ماڈل نمبر",
+  "deviceDetailPurchaseDateLabel": "خریداری کی تاریخ",
+  "deviceDetailWarrantyLabel": "وارنٹی (ماہ)",
+  "deviceDetailCustomerCenterLabel": "کسٹمر سینٹر",
+  "deviceDetailNoContact": "کوئی کسٹمر سینٹر رجسٹرڈ نہیں ہے۔",
+  "deviceDetailCallButton": "کال کریں {number}",
+  "@deviceDetailCallButton": {
+    "description": "Label for the button that starts a phone call to the customer center.",
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "deviceDetailCallError": "فون ڈائلر کھولنے میں ناکام۔",
+  "deviceDetailNotificationsTitle": "وارنٹی کی اطلاعات",
+  "deviceDetailNotificationsEnabled": "یاددہانی {expiry} تک بھیجی جائیں گی۔",
+  "@deviceDetailNotificationsEnabled": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailNotificationsDisabled": "یاددہانی حاصل کرنے کے لیے سیٹنگز میں اطلاعات آن کریں۔",
+  "deviceDetailPhotosSectionTitle": "تصاویر",
+  "deviceDetailDeleteDialogTitle": "اس ڈیوائس کو حذف کریں؟",
+  "deviceDetailDeleteDialogMessage": "اس کارروائی کو کالعدم نہیں کیا جا سکتا۔",
+  "notificationsGlobalEnabled": "وارنٹی کی اطلاعات فعال ہیں۔",
+  "notificationsGlobalDisabled": "وارنٹی کی اطلاعات غیر فعال ہیں۔",
+  "notificationsEnableInSettings": "الرٹس کا شیڈول کرنے کے لیے سیٹنگز میں اطلاعات فعال کریں۔",
+  "notificationsDeviceScheduled": "وارنٹی یاددہانی شیڈول کی گئی ہیں۔",
+  "notificationsDeviceExpired": "وارنٹی کی مدت پہلے ہی ختم ہو چکی ہے۔",
+  "notificationsDeviceCancelled": "وارنٹی یاددہانی منسوخ کر دی گئی ہیں۔",
+  "notificationsPermissionTitle": "اطلاعات کی اجازت دیں؟",
+  "notificationsPermissionDescription": "اپنے ڈیوائسز کے لیے وارنٹی یاددہانی حاصل کرنے کے لیے پش اطلاعات فعال کریں۔",
+  "notificationsPermissionNotNow": "ابھی نہیں",
+  "notificationsPermissionAllow": "اجازت دیں",
+  "notificationsPermissionDenied": "اطلاع کی اجازت مسترد کر دی گئی۔",
+  "cameraCaptureFailed": "تصویر لینے میں ناکام: {error}",
+  "@cameraCaptureFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cameraTitle": "کیمرہ",
+  "cameraInitializationFailed": "کیمرہ کو شروع کرنے میں ناکام۔"
+}

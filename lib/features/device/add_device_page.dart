@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/features/camera/camera_capture_page.dart';
+import 'package:devicenote/core/utils/date_utils.dart';
 import 'package:devicenote/responsive_layout.dart';
 import 'package:devicenote/services/notifications/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -35,7 +35,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
   DateTime? _purchaseDate;
   final List<String> _photos = [];
 
-  final _dateFmt = DateFormat('yyyy-MM-dd');
+  String? _lastLocaleName;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
       _modelCtrl.text = d.model;
       _category = d.category;
       _purchaseDate = d.purchaseDate;
-      _purchaseDateCtrl.text = _dateFmt.format(d.purchaseDate);
+      _purchaseDateCtrl.text = DateUtilsX.formatForLocale(d.purchaseDate);
       _warrantyCtrl.text = d.warrantyMonths.toString();
       _phoneCtrl.text = d.asContact ?? '';
       _photos.addAll(d.imagePaths);
@@ -65,23 +65,50 @@ class _AddDevicePageState extends State<AddDevicePage> {
     super.dispose();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final localeName = AppLocalizations.of(context)?.localeName;
+    if (localeName == null) {
+      return;
+    }
+    if (_lastLocaleName == localeName) {
+      return;
+    }
+    if (_purchaseDate != null) {
+      _purchaseDateCtrl.text =
+          DateUtilsX.formatForLocale(_purchaseDate!, locale: localeName);
+    }
+    _lastLocaleName = localeName;
+  }
+
   String _requiredLabel(String base) => '$base*';
 
   Future<void> _pickDate() async {
-    final now = DateTime.now();
-    final initial = _purchaseDate ?? now;
+    final nowLocal = DateTime.now();
+    final initialUtc = _purchaseDate ?? DateUtilsX.normalizeToUtcDate(nowLocal);
+    final initialLocal = initialUtc.toLocal();
     final picked = await showDatePicker(
       context: context,
-      initialDate: initial.isAfter(now) ? now : initial,
+      initialDate: initialLocal.isAfter(nowLocal) ? nowLocal : initialLocal,
       firstDate: DateTime(2000),
-      lastDate: DateTime(now.year, now.month, now.day),
+      lastDate: DateTime(nowLocal.year, nowLocal.month, nowLocal.day),
+      locale: const Locale('en'),
     );
-    if (picked != null) {
-      setState(() {
-        _purchaseDate = picked;
-        _purchaseDateCtrl.text = _dateFmt.format(picked);
-      });
+    if (picked == null) {
+      return;
     }
+    if (!mounted) return;
+    final localeName = AppLocalizations.of(context)?.localeName;
+    final normalized = DateUtilsX.normalizeToUtcDate(picked);
+    setState(() {
+      _purchaseDate = normalized;
+      _purchaseDateCtrl.text = DateUtilsX.formatForLocale(
+        normalized,
+        locale: localeName,
+      );
+      _lastLocaleName = localeName;
+    });
   }
 
   Future<void> _onSave() async {
@@ -99,7 +126,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         brand: _brandCtrl.text.trim(),
         model: _modelCtrl.text.trim(),
         category: _category!,
-        purchaseDate: _purchaseDate!,
+        purchaseDate: DateUtilsX.normalizeToUtcDate(_purchaseDate!),
         warrantyMonths: warranty,
         asContact: _phoneCtrl.text.trim().isEmpty
             ? null
@@ -115,7 +142,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         brand: _brandCtrl.text.trim(),
         model: _modelCtrl.text.trim(),
         category: _category!,
-        purchaseDate: _purchaseDate!,
+        purchaseDate: DateUtilsX.normalizeToUtcDate(_purchaseDate!),
         warrantyMonths: warranty,
         asContact: _phoneCtrl.text.trim().isEmpty
             ? null
@@ -201,7 +228,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     final extIndex = file.name.lastIndexOf('.');
     final ext = extIndex >= 0 ? file.name.substring(extIndex) : '';
     final filename =
-        'gallery_${DateTime.now().millisecondsSinceEpoch}_${const Uuid().v4()}$ext';
+        'gallery_${DateTime.now().toUtc().millisecondsSinceEpoch}_${const Uuid().v4()}$ext';
     final destination = File('${targetDir.path}/$filename');
     final saved = await File(file.path).copy(destination.path);
     return saved.path;
@@ -321,10 +348,13 @@ class _AddDevicePageState extends State<AddDevicePage> {
                         if (_purchaseDate == null) {
                           return l10n.addDevicePurchaseDateRequired;
                         }
-                        final now = DateTime.now();
-                        if (_purchaseDate!.isAfter(
-                          DateTime(now.year, now.month, now.day),
-                        )) {
+                        final nowUtc = DateTime.now().toUtc();
+                        final todayUtc = DateTime.utc(
+                          nowUtc.year,
+                          nowUtc.month,
+                          nowUtc.day,
+                        );
+                        if (_purchaseDate!.isAfter(todayUtc)) {
                           return l10n.addDevicePurchaseDateFutureError;
                         }
                         return null;

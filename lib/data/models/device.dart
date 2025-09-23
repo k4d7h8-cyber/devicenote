@@ -1,5 +1,4 @@
-// 최소 정의: Hive 애너테이션 전부 제거!
-import 'package:uuid/uuid.dart';
+﻿import 'package:uuid/uuid.dart';
 import 'package:devicenote/core/utils/date_utils.dart';
 import 'package:devicenote/data/models/enums.dart';
 import 'package:devicenote/data/models/as_contact.dart';
@@ -25,15 +24,18 @@ class Device {
     required this.brand,
     required this.model,
     required this.category,
-    required this.purchaseDate,
-    required this.warrantyExpiresAt,
+    required DateTime purchaseDate,
+    required DateTime warrantyExpiresAt,
     this.asContact,
     this.photos = const [],
     this.receipts = const [],
     this.notes,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    required DateTime createdAt,
+    required DateTime updatedAt,
+  })  : purchaseDate = DateUtilsX.normalizeToUtcDate(purchaseDate),
+        warrantyExpiresAt = DateUtilsX.normalizeToUtcDate(warrantyExpiresAt),
+        createdAt = createdAt.toUtc(),
+        updatedAt = updatedAt.toUtc();
 
   factory Device.createWithMonths({
     String? id,
@@ -48,15 +50,16 @@ class Device {
     List<String> receipts = const [],
     String? notes,
   }) {
-    final now = DateTime.now();
-    final expires = DateUtilsX.addMonths(purchaseDate, warrantyMonths);
+    final normalizedPurchase = DateUtilsX.normalizeToUtcDate(purchaseDate);
+    final now = DateTime.now().toUtc();
+    final expires = DateUtilsX.addMonths(normalizedPurchase, warrantyMonths);
     return Device(
       id: id ?? const Uuid().v4(),
       name: name,
       brand: brand,
       model: model,
       category: category,
-      purchaseDate: purchaseDate,
+      purchaseDate: normalizedPurchase,
       warrantyExpiresAt: expires,
       asContact: asContact,
       photos: photos,
@@ -88,18 +91,23 @@ class Device {
       brand: brand ?? this.brand,
       model: model ?? this.model,
       category: category ?? this.category,
-      purchaseDate: purchaseDate ?? this.purchaseDate,
-      warrantyExpiresAt: warrantyExpiresAt ?? this.warrantyExpiresAt,
+      purchaseDate: purchaseDate != null
+          ? DateUtilsX.normalizeToUtcDate(purchaseDate)
+          : this.purchaseDate,
+      warrantyExpiresAt: warrantyExpiresAt != null
+          ? DateUtilsX.normalizeToUtcDate(warrantyExpiresAt)
+          : this.warrantyExpiresAt,
       asContact: asContact ?? this.asContact,
       photos: photos ?? this.photos,
       receipts: receipts ?? this.receipts,
       notes: notes ?? this.notes,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
+      createdAt: (createdAt ?? this.createdAt).toUtc(),
+      updatedAt: (updatedAt ?? this.updatedAt).toUtc(),
     );
   }
 
-  int get daysUntilExpire => DateUtilsX.daysLeft(DateTime.now(), warrantyExpiresAt);
+  int get daysUntilExpire =>
+      DateUtilsX.daysLeft(DateTime.now().toUtc(), warrantyExpiresAt);
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -107,21 +115,41 @@ class Device {
         'brand': brand,
         'model': model,
         'category': category.name,
-        'purchaseDate': DateUtilsX.formatYMD(purchaseDate),
-        'warrantyExpiresAt': DateUtilsX.formatYMD(warrantyExpiresAt),
+        'purchaseDate': purchaseDate.toUtc().toIso8601String(),
+        'warrantyExpiresAt': warrantyExpiresAt.toUtc().toIso8601String(),
         'asContact': asContact?.toMap(),
         'photos': photos,
         'receipts': receipts,
         'notes': notes,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
+        'createdAt': createdAt.toUtc().toIso8601String(),
+        'updatedAt': updatedAt.toUtc().toIso8601String(),
       };
 
   factory Device.fromMap(Map<String, dynamic> map) {
-    final purchase = DateTime.tryParse(map['purchaseDate'] ?? '') ??
-        DateTime.fromMillisecondsSinceEpoch(0);
-    final expire = DateTime.tryParse(map['warrantyExpiresAt'] ?? '') ??
-        DateTime.fromMillisecondsSinceEpoch(0);
+    DateTime parseDate(String? value) {
+      if (value == null || value.isEmpty) {
+        return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+      }
+      final parsed = DateTime.tryParse(value);
+      if (parsed == null) {
+        return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+      }
+      return DateUtilsX.normalizeToUtcDate(parsed);
+    }
+
+    DateTime parseTimestamp(String? value) {
+      if (value == null || value.isEmpty) {
+        return DateTime.now().toUtc();
+      }
+      final parsed = DateTime.tryParse(value);
+      if (parsed == null) {
+        return DateTime.now().toUtc();
+      }
+      return parsed.toUtc();
+    }
+
+    final purchase = parseDate(map['purchaseDate'] as String?);
+    final expire = parseDate(map['warrantyExpiresAt'] as String?);
 
     return Device(
       id: map['id'] as String,
@@ -140,8 +168,8 @@ class Device {
       photos: (map['photos'] as List?)?.cast<String>() ?? const [],
       receipts: (map['receipts'] as List?)?.cast<String>() ?? const [],
       notes: map['notes'] as String?,
-      createdAt: DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
-      updatedAt: DateTime.tryParse(map['updatedAt'] ?? '') ?? DateTime.now(),
+      createdAt: parseTimestamp(map['createdAt'] as String?),
+      updatedAt: parseTimestamp(map['updatedAt'] as String?),
     );
   }
 }

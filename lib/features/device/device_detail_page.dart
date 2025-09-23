@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
 
@@ -10,9 +10,8 @@ import 'package:devicenote/core/utils/date_utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
-
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:provider/provider.dart';
 
@@ -26,6 +25,7 @@ class DeviceDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final localeName = l10n.localeName;
     final repo = context.watch<DeviceRepository>();
 
     final device = repo.findById(id);
@@ -41,17 +41,17 @@ class DeviceDetailPage extends StatelessWidget {
       );
     }
 
-    final dateFmt = DateFormat('yyyy-MM-dd');
-
     final notificationPreference = notifications.devicePreference(device.id);
 
     final warrantyExpiry = DateUtilsX.addMonths(
       device.purchaseDate,
-
       device.warrantyMonths,
     );
 
-    final expiryLabel = dateFmt.format(warrantyExpiry);
+    final expiryLabel = DateUtilsX.formatForLocale(
+      warrantyExpiry,
+      locale: localeName,
+    );
 
     return ResponsiveScaffold(
       appBar: AppBar(
@@ -86,6 +86,10 @@ class DeviceDetailPage extends StatelessWidget {
 
       builder: (context, layout) {
         final cardWidth = layout.columnWidth();
+
+        final customerCenter = device.asContact?.trim() ?? '';
+        final hasCustomerCenter = customerCenter.isNotEmpty;
+
 
         final cards = [
           _InfoCard(
@@ -123,7 +127,10 @@ class DeviceDetailPage extends StatelessWidget {
           _InfoCard(
             title: l10n.deviceDetailPurchaseDateLabel,
 
-            value: dateFmt.format(device.purchaseDate),
+            value: DateUtilsX.formatForLocale(
+              device.purchaseDate,
+              locale: localeName,
+            ),
 
             icon: Icons.event,
           ),
@@ -139,7 +146,9 @@ class DeviceDetailPage extends StatelessWidget {
           _InfoCard(
             title: l10n.deviceDetailCustomerCenterLabel,
 
-            value: device.asContact ?? l10n.deviceDetailNoContact,
+            value: hasCustomerCenter
+                ? customerCenter
+                : l10n.deviceDetailNoContact,
 
             icon: Icons.phone,
           ),
@@ -158,6 +167,23 @@ class DeviceDetailPage extends StatelessWidget {
                 for (final card in cards)
                   SizedBox(width: cardWidth, child: card),
               ],
+            ),
+
+            const SizedBox(height: 16),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: FilledButton.icon(
+                onPressed: hasCustomerCenter
+                    ? () => _callCustomerCenter(context, customerCenter)
+                    : null,
+                icon: const Icon(Icons.call),
+                label: Text(
+                  hasCustomerCenter
+                      ? l10n.deviceDetailCallButton(customerCenter)
+                      : l10n.deviceDetailNoContact,
+                ),
+              ),
             ),
 
             const SizedBox(height: 24),
@@ -240,6 +266,31 @@ class DeviceDetailPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _callCustomerCenter(
+    BuildContext context,
+    String rawNumber,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final sanitized = rawNumber.replaceAll(RegExp(r'[^0-9+]'), '');
+    if (sanitized.isEmpty) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.deviceDetailCallError)),
+      );
+      return;
+    }
+    final uri = Uri(scheme: 'tel', path: sanitized);
+    final launched = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!launched) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.deviceDetailCallError)),
+      );
+    }
   }
 
   Future<void> _confirmDelete(

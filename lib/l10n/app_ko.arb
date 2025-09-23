@@ -91,7 +91,15 @@
   "deviceDetailPurchaseDateLabel": "???",
   "deviceDetailWarrantyLabel": "?? (??)",
   "deviceDetailCustomerCenterLabel": "????",
-  "deviceDetailNoContact": "-",
+  "deviceDetailNoContact": "등록된 고객센터가 없습니다.",
+  "deviceDetailCallButton": "{number}로 전화하기",
+  "@deviceDetailCallButton": {
+    "description": "고객센터 전화번호로 바로 전화하는 버튼 문구.",
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "deviceDetailCallError": "전화 앱을 실행할 수 없습니다.",
   "deviceDetailNotificationsTitle": "?? ??",
   "deviceDetailNotificationsEnabled": "{expiry}?? ??? ?????.",
   "@deviceDetailNotificationsEnabled": {

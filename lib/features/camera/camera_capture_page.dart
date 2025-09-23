@@ -61,7 +61,7 @@ class _CameraCapturePageState extends State<CameraCapturePage> {
       if (!await photosDir.exists()) {
         await photosDir.create(recursive: true);
       }
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
       final ext = capture.path.split('.').last;
       final destPath = '${photosDir.path}/photo_$timestamp.$ext';
       final saved = await File(capture.path).copy(destPath);

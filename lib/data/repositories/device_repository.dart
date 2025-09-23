@@ -1,14 +1,14 @@
-import 'dart:collection';
+﻿import 'dart:collection';
 import 'dart:math' as math;
+import 'package:devicenote/core/utils/date_utils.dart';
 import 'package:flutter/foundation.dart';
 
-/// 기기 카테고리
+/// Device category metadata stored in memory.
 enum DeviceCategory { tv, washer, computer, refrigerator, aircon, car, etc }
 
-/// 기기 데이터 모델
 @immutable
 class Device {
-  final String id; // uuid 또는 고유 문자열
+  final String id;
   final String name;
   final String brand;
   final String model;
@@ -19,18 +19,18 @@ class Device {
   final List<String> imagePaths;
   final List<String> receiptPaths;
 
-  const Device({
+  Device({
     required this.id,
     required this.name,
     required this.brand,
     required this.model,
     required this.category,
-    required this.purchaseDate,
+    required DateTime purchaseDate,
     required this.warrantyMonths,
     this.asContact,
     this.imagePaths = const [],
     this.receiptPaths = const [],
-  });
+  }) : purchaseDate = DateUtilsX.normalizeToUtcDate(purchaseDate);
 
   Device copyWith({
     String? id,
@@ -50,7 +50,8 @@ class Device {
       brand: brand ?? this.brand,
       model: model ?? this.model,
       category: category ?? this.category,
-      purchaseDate: purchaseDate ?? this.purchaseDate,
+      purchaseDate:
+          purchaseDate != null ? DateUtilsX.normalizeToUtcDate(purchaseDate) : this.purchaseDate,
       warrantyMonths: warrantyMonths ?? this.warrantyMonths,
       asContact: asContact ?? this.asContact,
       imagePaths: imagePaths ?? this.imagePaths,
@@ -59,7 +60,6 @@ class Device {
   }
 }
 
-/// 인메모리 리포지토리: CRUD + 시드 데이터
 class DeviceRepository extends ChangeNotifier {
   final List<Device> _devices = [];
 
@@ -93,24 +93,21 @@ class DeviceRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 남은 보증기간(개월)
   int monthsRemaining(Device device, {DateTime? asOf}) {
-    final now = asOf ?? DateTime.now();
-    final elapsed = _monthsBetween(device.purchaseDate, now);
+    final nowUtc = (asOf ?? DateTime.now()).toUtc();
+    final elapsed = _monthsBetween(device.purchaseDate, nowUtc);
     final remaining = device.warrantyMonths - elapsed;
     return math.max(0, remaining);
   }
 
-  // start ~ end 사이 경과 개월 수 (일자 보정)
   int _monthsBetween(DateTime start, DateTime end) {
-    if (end.isBefore(start)) return 0;
-    int months = (end.year - start.year) * 12 + (end.month - start.month);
-    // 구매일의 '일'을 기준으로 아직 한 달이 안 지났다면 -1
-    if (end.day < start.day) {
+    final startUtc = start.toUtc();
+    final endUtc = end.toUtc();
+    if (endUtc.isBefore(startUtc)) return 0;
+    int months = (endUtc.year - startUtc.year) * 12 + (endUtc.month - startUtc.month);
+    if (endUtc.day < startUtc.day) {
       months -= 1;
     }
     return math.max(0, months);
   }
-
-
 }

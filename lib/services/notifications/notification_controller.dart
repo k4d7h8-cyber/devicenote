@@ -144,16 +144,16 @@ class NotificationController extends ChangeNotifier {
   }
 
   Future<bool> _scheduleDevice(Device device) async {
-    final expiry = DateUtilsX.addMonths(
+    final expiryUtc = DateUtilsX.addMonths(
       device.purchaseDate,
       device.warrantyMonths,
-    );
-    final now = DateTime.now();
+    ).toUtc();
+    final now = DateTime.now().toUtc();
     final hasUpcoming = _alertOffsets.any((offset) {
-      final target = DateTime(
-        expiry.year,
-        expiry.month,
-        expiry.day,
+      final target = DateTime.utc(
+        expiryUtc.year,
+        expiryUtc.month,
+        expiryUtc.day,
         _notificationTime.hour,
         _notificationTime.minute,
       ).subtract(Duration(days: offset));

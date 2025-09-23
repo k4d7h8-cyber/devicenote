@@ -1,0 +1,137 @@
+﻿{
+  "@@locale": "es",
+  "appTitle": "DeviceNote",
+  "bootPlaceholderMessage": "Fase de configuración completa. Reemplace esta pantalla con rutas reales.",
+  "homeSettingsTooltip": "Configuración",
+  "homeSearchHint": "Buscar",
+  "homeNoDevices": "No hay dispositivos registrados",
+  "homeAddDeviceTooltip": "Agregar dispositivo",
+  "homeDDayLabel": "D-día",
+  "homeDdayMonthsLabel": "D-{months} m",
+  "@homeDdayMonthsLabel": {
+    "description": "Remaining months label (e.g., D-3 m).",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTitle": "Configuración",
+  "settingsNotificationsToggleTitle": "Habilitar notificaciones",
+  "settingsNotificationsToggleEnabled": "Los recordatorios de garantía seguirán sus preferencias.",
+  "settingsNotificationsToggleDisabled": "Active para recibir recordatorios antes de que caduquen las garantías.",
+  "settingsReminderTimeLabel": "Hora del recordatorio",
+  "settingsLanguageTitle": "Idioma",
+  "settingsLanguagePickerTitle": "Elegir idioma",
+  "settingsBackupSectionTitle": "Copia de seguridad y Restauración",
+  "settingsVersionValue": "{version}",
+  "@settingsVersionValue": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "languageEnglish": "Inglés",
+  "languageKorean": "Coreano",
+  "commonBackup": "Copia de seguridad",
+  "commonRestore": "Restaurar",
+  "commonVersion": "Versión",
+  "commonSave": "Guardar",
+  "commonCancel": "Cancelar",
+  "commonDelete": "Eliminar",
+  "commonEdit": "Editar",
+  "addDeviceSavedMessage": "Guardado.",
+  "addDevicePickImagesError": "Error al seleccionar imágenes: {error}",
+  "@addDevicePickImagesError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addDeviceEditTitle": "Editar dispositivo",
+  "addDeviceCreateTitle": "Agregar dispositivo",
+  "addDeviceCategoryLabel": "Categoría",
+  "addDeviceCategoryRequired": "Categoría es requerida",
+  "addDeviceModelNameLabel": "Nombre del modelo",
+  "addDeviceModelNameRequired": "Nombre del modelo es requerido",
+  "addDeviceBrandLabel": "Marca",
+  "addDeviceBrandRequired": "Marca es requerida",
+  "addDeviceModelNumberLabel": "Número de modelo",
+  "addDeviceModelNumberRequired": "Número de modelo es requerido",
+  "addDevicePurchaseDateLabel": "Fecha de compra",
+  "addDevicePurchaseDateHint": "Seleccionar una fecha",
+  "addDevicePurchaseDateRequired": "Seleccionar una fecha de compra",
+  "addDevicePurchaseDateFutureError": "La fecha de compra no puede ser en el futuro",
+  "addDeviceWarrantyLabel": "Garantía (meses)",
+  "addDeviceWarrantyHint": "0 ~ 120",
+  "addDeviceWarrantyRequired": "Garantía es requerida",
+  "addDeviceDigitsOnly": "Solo ingresar dígitos",
+  "addDeviceWarrantyRange": "Debe estar entre 0 y 120",
+  "addDeviceCustomerCenterLabel": "Centro de atención al cliente",
+  "addDeviceCustomerCenterHint": "e.g. 1588-0000, 010-1234-5678",
+  "addDeviceCustomerCenterInvalid": "Solo dígitos y -",
+  "addDeviceOthersSectionTitle": "Otros",
+  "addDeviceTakePhoto": "Tomar foto",
+  "addDeviceSelectFromGallery": "Seleccionar de la galería",
+  "categoryTv": "TV",
+  "categoryWasher": "Lavadora",
+  "categoryComputer": "Computadora",
+  "categoryRefrigerator": "Refrigerador",
+  "categoryAirConditioner": "Aire acondicionado",
+  "categoryCar": "Coche",
+  "categoryOthers": "Otros",
+  "deviceDetailTitle": "Detalle del dispositivo",
+  "deviceDetailNotFound": "Dispositivo no encontrado.",
+  "deviceDetailCategoryLabel": "Categoría",
+  "deviceDetailBrandLabel": "Marca",
+  "deviceDetailModelNameLabel": "Nombre del modelo",
+  "deviceDetailModelNumberLabel": "Número de modelo",
+  "deviceDetailPurchaseDateLabel": "Fecha de compra",
+  "deviceDetailWarrantyLabel": "Garantía (meses)",
+  "deviceDetailCustomerCenterLabel": "Centro de atención al cliente",
+  "deviceDetailNoContact": "No se registró ningún centro de atención al cliente.",
+  "deviceDetailCallButton": "Llamar a {number}",
+  "@deviceDetailCallButton": {
+    "description": "Label for the button that starts a phone call to the customer center.",
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "deviceDetailCallError": "No se puede abrir el marcador del teléfono.",
+  "deviceDetailNotificationsTitle": "Notificaciones de garantía",
+  "deviceDetailNotificationsEnabled": "Los recordatorios se enviarán hasta {expiry}.",
+  "@deviceDetailNotificationsEnabled": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailNotificationsDisabled": "Active las notificaciones en Configuración para recibir recordatorios.",
+  "deviceDetailPhotosSectionTitle": "Fotos",
+  "deviceDetailDeleteDialogTitle": "¿Eliminar este dispositivo?",
+  "deviceDetailDeleteDialogMessage": "Esta acción no se puede deshacer.",
+  "notificationsGlobalEnabled": "Notificaciones de garantía habilitadas.",
+  "notificationsGlobalDisabled": "Notificaciones de garantía deshabilitadas.",
+  "notificationsEnableInSettings": "Habilite las notificaciones en Configuración para programar alertas.",
+  "notificationsDeviceScheduled": "Recordatorios de garantía programados.",
+  "notificationsDeviceExpired": "El período de garantía ya ha finalizado.",
+  "notificationsDeviceCancelled": "Recordatorios de garantía cancelados.",
+  "notificationsPermissionTitle": "¿Permitir notificaciones?",
+  "notificationsPermissionDescription": "Habilite las notificaciones push para recibir recordatorios de garantía para sus dispositivos.",
+  "notificationsPermissionNotNow": "Ahora no",
+  "notificationsPermissionAllow": "Permitir",
+  "notificationsPermissionDenied": "Permiso de notificación denegado.",
+  "cameraCaptureFailed": "Error al capturar la foto: {error}",
+  "@cameraCaptureFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cameraTitle": "Cámara",
+  "cameraInitializationFailed": "Error al inicializar la cámara."
+}

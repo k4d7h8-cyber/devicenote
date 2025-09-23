@@ -68,16 +68,16 @@ class DeviceAdapter extends TypeAdapter<Device> {
     final brand = reader.readString();
     final model = reader.readString();
     final category = DeviceCategory.values[reader.readByte()];
-    final purchaseDate = DateTime.fromMillisecondsSinceEpoch(reader.readInt());
-    final warrantyExpiresAt = DateTime.fromMillisecondsSinceEpoch(reader.readInt());
+    final purchaseDate = DateTime.fromMillisecondsSinceEpoch(reader.readInt(), isUtc: true);
+    final warrantyExpiresAt = DateTime.fromMillisecondsSinceEpoch(reader.readInt(), isUtc: true);
     final hasAs = reader.readBool();
     final asContact = hasAs ? (reader.read() as AsContact) : null;
     final photos = reader.readList().cast<String>();
     final receipts = reader.readList().cast<String>();
     final hasNotes = reader.readBool();
     final notes = hasNotes ? reader.readString() : null;
-    final createdAt = DateTime.fromMillisecondsSinceEpoch(reader.readInt());
-    final updatedAt = DateTime.fromMillisecondsSinceEpoch(reader.readInt());
+    final createdAt = DateTime.fromMillisecondsSinceEpoch(reader.readInt(), isUtc: true);
+    final updatedAt = DateTime.fromMillisecondsSinceEpoch(reader.readInt(), isUtc: true);
 
     return Device(
       id: id,
@@ -104,8 +104,8 @@ class DeviceAdapter extends TypeAdapter<Device> {
       ..writeString(obj.brand)
       ..writeString(obj.model)
       ..writeByte(obj.category.index)
-      ..writeInt(obj.purchaseDate.millisecondsSinceEpoch)
-      ..writeInt(obj.warrantyExpiresAt.millisecondsSinceEpoch)
+      ..writeInt(obj.purchaseDate.toUtc().millisecondsSinceEpoch)
+      ..writeInt(obj.warrantyExpiresAt.toUtc().millisecondsSinceEpoch)
       ..writeBool(obj.asContact != null);
     if (obj.asContact != null) {
       writer.write(obj.asContact!);
@@ -118,7 +118,7 @@ class DeviceAdapter extends TypeAdapter<Device> {
       writer.writeString(obj.notes!);
     }
     writer
-      ..writeInt(obj.createdAt.millisecondsSinceEpoch)
-      ..writeInt(obj.updatedAt.millisecondsSinceEpoch);
+      ..writeInt(obj.createdAt.toUtc().millisecondsSinceEpoch)
+      ..writeInt(obj.updatedAt.toUtc().millisecondsSinceEpoch);
   }
 }

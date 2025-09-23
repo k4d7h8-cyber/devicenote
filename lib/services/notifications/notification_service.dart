@@ -29,7 +29,6 @@ class LocalNotificationService implements NotificationService {
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
-  final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
   bool _initialized = false;
 
   static const WindowsInitializationSettings _windowsInitSettings =
@@ -115,19 +114,19 @@ class LocalNotificationService implements NotificationService {
   ) async {
     await initialize();
 
-    final expiry = DateUtilsX.addMonths(
+    final expiryUtc = DateUtilsX.addMonths(
       device.purchaseDate,
       device.warrantyMonths,
-    );
+    ).toUtc();
 
     for (final days in daysBefore) {
-      final trigger = _targetDate(expiry, days, timeOfDay);
-      if (trigger.isBefore(DateTime.now())) {
+      final triggerUtc = _targetDate(expiryUtc, days, timeOfDay);
+      if (triggerUtc.isBefore(DateTime.now().toUtc())) {
         await _plugin.cancel(_notificationId(device.id, days));
         continue;
       }
 
-      final tzDateTime = tz.TZDateTime.from(trigger, tz.local);
+      final tzDateTime = tz.TZDateTime.from(triggerUtc, tz.local);
       final details = NotificationDetails(
         android: _androidDetails,
         iOS: _iosDetails,
@@ -137,7 +136,7 @@ class LocalNotificationService implements NotificationService {
       await _plugin.zonedSchedule(
         _notificationId(device.id, days),
         'Warranty reminder',
-        _buildMessage(device.name, expiry, days),
+        _buildMessage(device.name, expiryUtc, days),
         tzDateTime,
         details,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -182,9 +181,9 @@ class LocalNotificationService implements NotificationService {
     return _windowsNotificationDetails;
   }
 
-  DateTime _targetDate(DateTime expiry, int daysBefore, TimeOfDay time) {
-    final date = expiry.subtract(Duration(days: daysBefore));
-    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
+  DateTime _targetDate(DateTime expiryUtc, int daysBefore, TimeOfDay time) {
+    final date = expiryUtc.subtract(Duration(days: daysBefore));
+    return DateTime.utc(date.year, date.month, date.day, time.hour, time.minute);
   }
 
   int _notificationId(String deviceId, int daysBefore) {
@@ -197,14 +196,14 @@ class LocalNotificationService implements NotificationService {
   }
 
   String _buildMessage(String deviceName, DateTime expiry, int daysBefore) {
-    final expiryLabel = _dateFormat.format(expiry);
+    final expiryLabel = DateFormat.yMd(Intl.getCurrentLocale()).format(expiry.toLocal());
     if (daysBefore >= 30) {
-      return '등록하신 $deviceName의 보증 기간이 한 달 후인 $expiryLabel에 만료될 예정입니다. 만료 전 이상 유무를 점검하세요.';
+      return 'The warranty for $deviceName expires in one month on $expiryLabel. Please check for any issues before it ends.';
     }
     if (daysBefore >= 7) {
-      return '등록하신 $deviceName의 보증 기간이 곧 만료됩니다. 보증 기간은 $expiryLabel까지입니다.';
+      return 'The warranty for $deviceName is ending soon. Coverage lasts until $expiryLabel.';
     }
-    return '오늘부로 $deviceName의 보증 기간이 만료되었습니다. 이제 유상 수리로 전환됩니다.';
+    return 'The warranty for $deviceName ends today. Future repairs will be charged.';
   }
 
   Future<String> _safeLocalTimezone() async {

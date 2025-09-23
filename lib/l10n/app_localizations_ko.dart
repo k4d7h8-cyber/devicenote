@@ -222,7 +222,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get deviceDetailCustomerCenterLabel => '????';
 
   @override
-  String get deviceDetailNoContact => '-';
+  String get deviceDetailNoContact => '등록된 고객센터가 없습니다.';
+
+  @override
+  String deviceDetailCallButton(Object number) {
+    return '$number로 전화하기';
+  }
+
+  @override
+  String get deviceDetailCallError => '전화 앱을 실행할 수 없습니다.';
 
   @override
   String get deviceDetailNotificationsTitle => '?? ??';

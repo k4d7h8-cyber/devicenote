@@ -1,0 +1,137 @@
+{
+  "@@locale": "hi",
+  "appTitle": "डिवाइस नोट",
+  "bootPlaceholderMessage": "सेटअप चरण पूरा हो गया है। इस स्क्रीन को वास्तविक मार्गों से बदलें।",
+  "homeSettingsTooltip": "सेटिंग्स",
+  "homeSearchHint": "खोज",
+  "homeNoDevices": "कोई पंजीकृत डिवाइस नहीं",
+  "homeAddDeviceTooltip": "डिवाइस जोड़ें",
+  "homeDDayLabel": "डी-डे",
+  "homeDdayMonthsLabel": "डी-{months} महीने",
+  "@homeDdayMonthsLabel": {
+    "description": "Remaining months label (e.g., D-3 m).",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTitle": "सेटिंग्स",
+  "settingsNotificationsToggleTitle": "सूचनाएं सक्षम करें",
+  "settingsNotificationsToggleEnabled": "वारंटी अनुस्मारक आपकी प्राथमिकताओं का पालन करेंगे।",
+  "settingsNotificationsToggleDisabled": "वारंटी समाप्त होने से पहले अनुस्मारक प्राप्त करने के लिए चालू करें।",
+  "settingsReminderTimeLabel": "अनुस्मारक समय",
+  "settingsLanguageTitle": "भाषा",
+  "settingsLanguagePickerTitle": "भाषा चुनें",
+  "settingsBackupSectionTitle": "बैकअप और पुनर्स्थापना",
+  "settingsVersionValue": "{version}",
+  "@settingsVersionValue": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "languageEnglish": "अंग्रेज़ी",
+  "languageKorean": "कोरियाई",
+  "commonBackup": "बैकअप",
+  "commonRestore": "पुनर्स्थापना",
+  "commonVersion": "संस्करण",
+  "commonSave": "सहेजें",
+  "commonCancel": "रद्द करें",
+  "commonDelete": "मिटाएँ",
+  "commonEdit": "संपादित करें",
+  "addDeviceSavedMessage": "सहेजा गया।",
+  "addDevicePickImagesError": "छवियां चुनने में विफल: {error}",
+  "@addDevicePickImagesError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addDeviceEditTitle": "डिवाइस संपादित करें",
+  "addDeviceCreateTitle": "डिवाइस जोड़ें",
+  "addDeviceCategoryLabel": "श्रेणी",
+  "addDeviceCategoryRequired": "श्रेणी आवश्यक है",
+  "addDeviceModelNameLabel": "मॉडल नाम",
+  "addDeviceModelNameRequired": "मॉडल नाम आवश्यक है",
+  "addDeviceBrandLabel": "ब्रांड",
+  "addDeviceBrandRequired": "ब्रांड आवश्यक है",
+  "addDeviceModelNumberLabel": "मॉडल संख्या",
+  "addDeviceModelNumberRequired": "मॉडल संख्या आवश्यक है",
+  "addDevicePurchaseDateLabel": "खरीद की तारीख",
+  "addDevicePurchaseDateHint": "एक तिथि चुनें",
+  "addDevicePurchaseDateRequired": "खरीद की तारीख चुनें",
+  "addDevicePurchaseDateFutureError": "खरीद की तारीख भविष्य में नहीं हो सकती",
+  "addDeviceWarrantyLabel": "वारंटी (महीने)",
+  "addDeviceWarrantyHint": "0 ~ 120",
+  "addDeviceWarrantyRequired": "वारंटी आवश्यक है",
+  "addDeviceDigitsOnly": "केवल अंक दर्ज करें",
+  "addDeviceWarrantyRange": "0 से 120 के बीच होना चाहिए",
+  "addDeviceCustomerCenterLabel": "ग्राहक केंद्र",
+  "addDeviceCustomerCenterHint": "उदा. 1588-0000, 010-1234-5678",
+  "addDeviceCustomerCenterInvalid": "केवल अंक और -",
+  "addDeviceOthersSectionTitle": "अन्य",
+  "addDeviceTakePhoto": "फोटो लें",
+  "addDeviceSelectFromGallery": "गैलरी से चुनें",
+  "categoryTv": "टीवी",
+  "categoryWasher": "वाशर",
+  "categoryComputer": "कंप्यूटर",
+  "categoryRefrigerator": "रेफ्रिजरेटर",
+  "categoryAirConditioner": "एयर कंडीशनर",
+  "categoryCar": "कार",
+  "categoryOthers": "अन्य",
+  "deviceDetailTitle": "डिवाइस विवरण",
+  "deviceDetailNotFound": "डिवाइस नहीं मिला।",
+  "deviceDetailCategoryLabel": "श्रेणी",
+  "deviceDetailBrandLabel": "ब्रांड",
+  "deviceDetailModelNameLabel": "मॉडल नाम",
+  "deviceDetailModelNumberLabel": "मॉडल संख्या",
+  "deviceDetailPurchaseDateLabel": "खरीद की तारीख",
+  "deviceDetailWarrantyLabel": "वारंटी (महीने)",
+  "deviceDetailCustomerCenterLabel": "ग्राहक केंद्र",
+  "deviceDetailNoContact": "कोई ग्राहक केंद्र पंजीकृत नहीं है।",
+  "deviceDetailCallButton": "कॉल करें {number}",
+  "@deviceDetailCallButton": {
+    "description": "Label for the button that starts a phone call to the customer center.",
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "deviceDetailCallError": "फ़ोन डायलर खोलने में असमर्थ।",
+  "deviceDetailNotificationsTitle": "वारंटी सूचनाएं",
+  "deviceDetailNotificationsEnabled": "अनुस्मारक {expiry} तक भेजे जाएंगे।",
+  "@deviceDetailNotificationsEnabled": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailNotificationsDisabled": "अनुस्मारक प्राप्त करने के लिए सेटिंग्स में सूचनाएं चालू करें।",
+  "deviceDetailPhotosSectionTitle": "तस्वीरें",
+  "deviceDetailDeleteDialogTitle": "इस डिवाइस को हटा दें?",
+  "deviceDetailDeleteDialogMessage": "यह कार्रवाई पूर्ववत नहीं की जा सकती।",
+  "notificationsGlobalEnabled": "वारंटी सूचनाएं सक्षम हैं।",
+  "notificationsGlobalDisabled": "वारंटी सूचनाएं अक्षम हैं।",
+  "notificationsEnableInSettings": "अलर्ट शेड्यूल करने के लिए सेटिंग्स में सूचनाएं सक्षम करें।",
+  "notificationsDeviceScheduled": "वारंटी अनुस्मारक निर्धारित हैं।",
+  "notificationsDeviceExpired": "वारंटी अवधि पहले ही समाप्त हो गई है।",
+  "notificationsDeviceCancelled": "वारंटी अनुस्मारक रद्द कर दिए गए हैं।",
+  "notificationsPermissionTitle": "सूचनाओं की अनुमति दें?",
+  "notificationsPermissionDescription": "अपने डिवाइस के लिए वारंटी अनुस्मारक प्राप्त करने के लिए पुश सूचनाएं सक्षम करें।",
+  "notificationsPermissionNotNow": "अभी नहीं",
+  "notificationsPermissionAllow": "अनुमति दें",
+  "notificationsPermissionDenied": "सूचना की अनुमति अस्वीकार कर दी गई।",
+  "cameraCaptureFailed": "फोटो लेने में विफल: {error}",
+  "@cameraCaptureFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cameraTitle": "कैमरा",
+  "cameraInitializationFailed": "कैमरा प्रारंभ करने में विफल।"
+}

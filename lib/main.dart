@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:go_router/go_router.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,6 +14,7 @@ import 'package:devicenote/features/settings/settings_page.dart';
 import 'package:devicenote/services/notifications/notification_controller.dart';
 import 'package:devicenote/services/notifications/notification_preferences.dart';
 import 'package:devicenote/services/notifications/notification_service.dart';
+import 'package:devicenote/services/localization/language_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,10 +24,12 @@ Future<void> main() async {
   await notificationService.initialize();
 
   runApp(
-    DeviceNoteApp(
-      preferences: preferences,
-      localizationController: localizationController,
-      notificationService: notificationService,
+    riverpod.ProviderScope(
+      child: DeviceNoteApp(
+        preferences: preferences,
+        localizationController: localizationController,
+        notificationService: notificationService,
+      ),
     ),
   );
 }
@@ -93,9 +97,11 @@ class DeviceNoteApp extends StatelessWidget {
           ),
         ),
       ],
-      child: Builder(
-        builder: (context) {
-          final locale = context.watch<LocalizationController>().locale;
+      child: riverpod.Consumer(
+        builder: (context, ref, _) {
+          final localeCode = ref.watch(languageCodeProvider);
+          final locale = Locale(localeCode);
+
           return MaterialApp.router(
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.appTitle,
