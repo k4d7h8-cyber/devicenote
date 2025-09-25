@@ -208,7 +208,8 @@ class LocalNotificationService implements NotificationService {
 
   Future<String> _safeLocalTimezone() async {
     try {
-      return await FlutterTimezone.getLocalTimezone();
+      final timezoneInfo = await FlutterTimezone.getLocalTimezone();
+      return timezoneInfo.identifier;
     } catch (_) {
       return tz.local.name;
     }
