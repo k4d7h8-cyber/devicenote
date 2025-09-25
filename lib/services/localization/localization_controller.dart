@@ -32,11 +32,14 @@ class LocalizationController extends ChangeNotifier {
   }
 
   Future<void> setLocale(Locale locale) async {
-    if (!isSupported(locale) || _isSameLocale(_locale, locale)) {
+    if (!isSupported(locale)) {
       return;
     }
-    _locale = locale;
-    await _preferences.setLocaleCode(locale.toLanguageTag());
+    final changed = !_isSameLocale(_locale, locale);
+    if (changed) {
+      _locale = locale;
+      await _preferences.setLocaleCode(locale.toLanguageTag());
+    }
     notifyListeners();
   }
 

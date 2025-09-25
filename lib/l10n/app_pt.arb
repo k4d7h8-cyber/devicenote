@@ -1,4 +1,4 @@
-﻿{
+{
   "@@locale": "pt",
   "appTitle": "DeviceNote",
   "bootPlaceholderMessage": "Fase de configuração concluída. Substitua esta tela por rotas reais.",
@@ -133,5 +133,39 @@
     }
   },
   "cameraTitle": "Câmera",
-  "cameraInitializationFailed": "Falha ao inicializar a câmera."
+  "cameraInitializationFailed": "Falha ao inicializar a câmera.",
+  "homeDeviceBrandModel": "{brand} - {model}",
+  "@homeDeviceBrandModel": {
+    "placeholders": {
+      "brand": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailPhotoCounter": "{current} / {total}",
+  "@deviceDetailPhotoCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsVersionPlaceholder": "TODO: version",
+  "languageBengali": "TODO: Bengali",
+  "languageSpanish": "TODO: Spanish",
+  "languageSpanishMexico": "TODO: Spanish (Mexico)",
+  "languageHindi": "TODO: Hindi",
+  "languageIndonesian": "TODO: Indonesian",
+  "languagePortuguese": "TODO: Portuguese",
+  "languagePortugueseBrazil": "TODO: Portuguese (Brazil)",
+  "languageRussian": "TODO: Russian",
+  "languageUrdu": "TODO: Urdu",
+  "languageChinese": "TODO: Chinese",
+  "languageChineseSimplified": "TODO: Chinese (Simplified)"
 }

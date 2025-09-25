@@ -646,6 +646,7 @@ class _FullScreenGalleryState extends State<_FullScreenGallery> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.black,
 
@@ -654,7 +655,12 @@ class _FullScreenGalleryState extends State<_FullScreenGallery> {
 
         foregroundColor: Colors.white,
 
-        title: Text('${_currentIndex + 1} / ${widget.photos.length}'),
+        title: Text(
+          l10n.deviceDetailPhotoCounter(
+            _currentIndex + 1,
+            widget.photos.length,
+          ),
+        ),
       ),
 
       body: PageView.builder(

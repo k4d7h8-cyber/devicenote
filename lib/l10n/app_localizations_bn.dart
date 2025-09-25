@@ -302,4 +302,50 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get cameraInitializationFailed => 'Failed to initialize the camera.';
+
+  @override
+  String homeDeviceBrandModel(String brand, String model) {
+    return '$brand - $model';
+  }
+
+  @override
+  String deviceDetailPhotoCounter(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get settingsVersionPlaceholder => 'TODO: version';
+
+  @override
+  String get languageBengali => 'TODO: Bengali';
+
+  @override
+  String get languageSpanish => 'TODO: Spanish';
+
+  @override
+  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+
+  @override
+  String get languageHindi => 'TODO: Hindi';
+
+  @override
+  String get languageIndonesian => 'TODO: Indonesian';
+
+  @override
+  String get languagePortuguese => 'TODO: Portuguese';
+
+  @override
+  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+
+  @override
+  String get languageRussian => 'TODO: Russian';
+
+  @override
+  String get languageUrdu => 'TODO: Urdu';
+
+  @override
+  String get languageChinese => 'TODO: Chinese';
+
+  @override
+  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
 }

@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/device/add'),
+        tooltip: l10n.homeAddDeviceTooltip,
         child: const Icon(Icons.add),
       ),
       builder: (context, layout) {
@@ -87,7 +88,10 @@ class _DeviceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final remainLabel = monthsRemaining == 0 ? 'D-day' : 'D-$monthsRemaining m';
+    final l10n = AppLocalizations.of(context)!;
+    final remainLabel = monthsRemaining == 0
+        ? l10n.homeDDayLabel
+        : l10n.homeDdayMonthsLabel(monthsRemaining);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -114,7 +118,7 @@ class _DeviceCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '${device.brand} - ${device.model}',
+                l10n.homeDeviceBrandModel(device.brand, device.model),
                 style: theme.textTheme.bodyMedium,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

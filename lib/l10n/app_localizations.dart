@@ -668,6 +668,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to initialize the camera.'**
   String get cameraInitializationFailed;
+
+  /// No description provided for @homeDeviceBrandModel.
+  ///
+  /// In en, this message translates to:
+  /// **'{brand} - {model}'**
+  String homeDeviceBrandModel(String brand, String model);
+
+  /// No description provided for @deviceDetailPhotoCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} / {total}'**
+  String deviceDetailPhotoCounter(int current, int total);
+
+  /// No description provided for @settingsVersionPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'1.0.0 (placeholder)'**
+  String get settingsVersionPlaceholder;
+
+  /// No description provided for @languageBengali.
+  ///
+  /// In en, this message translates to:
+  /// **'Bengali'**
+  String get languageBengali;
+
+  /// No description provided for @languageSpanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get languageSpanish;
+
+  /// No description provided for @languageSpanishMexico.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish (Mexico)'**
+  String get languageSpanishMexico;
+
+  /// No description provided for @languageHindi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hindi'**
+  String get languageHindi;
+
+  /// No description provided for @languageIndonesian.
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesian'**
+  String get languageIndonesian;
+
+  /// No description provided for @languagePortuguese.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get languagePortuguese;
+
+  /// No description provided for @languagePortugueseBrazil.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese (Brazil)'**
+  String get languagePortugueseBrazil;
+
+  /// No description provided for @languageRussian.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get languageRussian;
+
+  /// No description provided for @languageUrdu.
+  ///
+  /// In en, this message translates to:
+  /// **'Urdu'**
+  String get languageUrdu;
+
+  /// No description provided for @languageChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get languageChinese;
+
+  /// No description provided for @languageChineseSimplified.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese (Simplified)'**
+  String get languageChineseSimplified;
 }
 
 class _AppLocalizationsDelegate

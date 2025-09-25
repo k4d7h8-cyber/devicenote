@@ -7,23 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:provider/provider.dart';
 
-const Map<String, String> _languageDisplayNames = {
-  'bn': 'Bengali',
-  'en': 'English',
-  'es': 'Spanish',
-  'es-MX': 'Spanish (Mexico)',
-  'ha': 'Hausa',
-  'hi': 'Hindi',
-  'id': 'Indonesian',
-  'ko': 'Korean',
-  'pt': 'Portuguese',
-  'pt-BR': 'Portuguese (Brazil)',
-  'ru': 'Russian',
-  'ur': 'Urdu',
-  'zh': 'Chinese',
-  'zh-Hans': 'Chinese (Simplified)',
-};
-
 class SettingsPage extends riverpod.ConsumerWidget {
   const SettingsPage({super.key});
 
@@ -145,7 +128,9 @@ class SettingsPage extends riverpod.ConsumerWidget {
                   leading: const Icon(Icons.info_outline),
                   title: Text(l10n.commonVersion),
                   subtitle: Text(
-                    l10n.settingsVersionValue('1.0.0 (placeholder)'),
+                    l10n.settingsVersionValue(
+                      l10n.settingsVersionPlaceholder,
+                    ),
                   ),
                 ),
               ),
@@ -158,14 +143,35 @@ class SettingsPage extends riverpod.ConsumerWidget {
 }
 
 String _languageLabel(AppLocalizations l10n, Locale locale) {
-  final tag = locale.toLanguageTag();
-  switch (tag) {
+  switch (locale.toLanguageTag()) {
+    case 'bn':
+      return l10n.languageBengali;
     case 'en':
       return l10n.languageEnglish;
+    case 'es':
+      return l10n.languageSpanish;
+    case 'es-MX':
+      return l10n.languageSpanishMexico;
+    case 'hi':
+      return l10n.languageHindi;
+    case 'id':
+      return l10n.languageIndonesian;
     case 'ko':
       return l10n.languageKorean;
+    case 'pt':
+      return l10n.languagePortuguese;
+    case 'pt-BR':
+      return l10n.languagePortugueseBrazil;
+    case 'ru':
+      return l10n.languageRussian;
+    case 'ur':
+      return l10n.languageUrdu;
+    case 'zh':
+      return l10n.languageChinese;
+    case 'zh-Hans':
+      return l10n.languageChineseSimplified;
     default:
-      return _languageDisplayNames[tag] ?? locale.languageCode;
+      return locale.toLanguageTag();
   }
 }
 

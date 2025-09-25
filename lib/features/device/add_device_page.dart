@@ -93,7 +93,6 @@ class _AddDevicePageState extends State<AddDevicePage> {
       initialDate: initialLocal.isAfter(nowLocal) ? nowLocal : initialLocal,
       firstDate: DateTime(2000),
       lastDate: DateTime(nowLocal.year, nowLocal.month, nowLocal.day),
-      locale: const Locale('en'),
     );
     if (picked == null) {
       return;

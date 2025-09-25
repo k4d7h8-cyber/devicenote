@@ -302,4 +302,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cameraInitializationFailed => 'Failed to initialize the camera.';
+
+  @override
+  String homeDeviceBrandModel(String brand, String model) {
+    return '$brand - $model';
+  }
+
+  @override
+  String deviceDetailPhotoCounter(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get settingsVersionPlaceholder => '1.0.0 (placeholder)';
+
+  @override
+  String get languageBengali => 'Bengali';
+
+  @override
+  String get languageSpanish => 'Spanish';
+
+  @override
+  String get languageSpanishMexico => 'Spanish (Mexico)';
+
+  @override
+  String get languageHindi => 'Hindi';
+
+  @override
+  String get languageIndonesian => 'Indonesian';
+
+  @override
+  String get languagePortuguese => 'Portuguese';
+
+  @override
+  String get languagePortugueseBrazil => 'Portuguese (Brazil)';
+
+  @override
+  String get languageRussian => 'Russian';
+
+  @override
+  String get languageUrdu => 'Urdu';
+
+  @override
+  String get languageChinese => 'Chinese';
+
+  @override
+  String get languageChineseSimplified => 'Chinese (Simplified)';
 }

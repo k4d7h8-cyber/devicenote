@@ -133,5 +133,39 @@
     }
   },
   "cameraTitle": "Camera",
-  "cameraInitializationFailed": "Failed to initialize the camera."
+  "cameraInitializationFailed": "Failed to initialize the camera.",
+  "homeDeviceBrandModel": "{brand} - {model}",
+  "@homeDeviceBrandModel": {
+    "placeholders": {
+      "brand": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDetailPhotoCounter": "{current} / {total}",
+  "@deviceDetailPhotoCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsVersionPlaceholder": "1.0.0 (placeholder)",
+  "languageBengali": "Bengali",
+  "languageSpanish": "Spanish",
+  "languageSpanishMexico": "Spanish (Mexico)",
+  "languageHindi": "Hindi",
+  "languageIndonesian": "Indonesian",
+  "languagePortuguese": "Portuguese",
+  "languagePortugueseBrazil": "Portuguese (Brazil)",
+  "languageRussian": "Russian",
+  "languageUrdu": "Urdu",
+  "languageChinese": "Chinese",
+  "languageChineseSimplified": "Chinese (Simplified)"
 }
