@@ -9,23 +9,23 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
-  String get appTitle => 'DeviceNote';
+  String get appTitle => 'ডিভাইস নোট';
 
   @override
   String get bootPlaceholderMessage =>
       'Setup phase complete. Replace this screen with actual routes.';
 
   @override
-  String get homeSettingsTooltip => 'Settings';
+  String get homeSettingsTooltip => 'সেটিংস';
 
   @override
-  String get homeSearchHint => 'Search';
+  String get homeSearchHint => 'অনুসন্ধান করুন';
 
   @override
-  String get homeNoDevices => 'No registered devices';
+  String get homeNoDevices => 'কোনো ডিভাইস নিবন্ধিত নেই';
 
   @override
-  String get homeAddDeviceTooltip => 'Add device';
+  String get homeAddDeviceTooltip => 'ডিভাইস যোগ করুন';
 
   @override
   String get homeDDayLabel => 'D-day';
@@ -36,30 +36,30 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => 'সেটিংস';
 
   @override
-  String get settingsNotificationsToggleTitle => 'Enable notifications';
+  String get settingsNotificationsToggleTitle => 'নোটিফিকেশন সক্রিয় করুন';
 
   @override
   String get settingsNotificationsToggleEnabled =>
-      'Warranty reminders will follow your preferences.';
+      'গ্যারান্টির স্মরণ করিয়ে দেওয়া আপনার পছন্দ অনুসারে পাঠানো হবে।';
 
   @override
   String get settingsNotificationsToggleDisabled =>
-      'Turn on to receive reminders before warranties expire.';
+      'গ্যারান্টি শেষ হওয়ার আগে স্মরণ পেতে চালু করুন।';
 
   @override
-  String get settingsReminderTimeLabel => 'Reminder time';
+  String get settingsReminderTimeLabel => 'স্মরণ করিয়ে দেওয়ার সময়';
 
   @override
-  String get settingsLanguageTitle => 'Language';
+  String get settingsLanguageTitle => 'ভাষা';
 
   @override
-  String get settingsLanguagePickerTitle => 'Choose language';
+  String get settingsLanguagePickerTitle => 'ভাষা নির্বাচন করুন';
 
   @override
-  String get settingsBackupSectionTitle => 'Backup & Restore';
+  String get settingsBackupSectionTitle => 'ব্যাকআপ ও পুনরুদ্ধার';
 
   @override
   String settingsVersionValue(String version) {
@@ -73,25 +73,25 @@ class AppLocalizationsBn extends AppLocalizations {
   String get languageKorean => 'Korean';
 
   @override
-  String get commonBackup => 'Backup';
+  String get commonBackup => 'ব্যাকআপ';
 
   @override
-  String get commonRestore => 'Restore';
+  String get commonRestore => 'পুনরুদ্ধার';
 
   @override
-  String get commonVersion => 'Version';
+  String get commonVersion => 'সংস্করণ';
 
   @override
-  String get commonSave => 'Save';
+  String get commonSave => 'সংরক্ষণ করুন';
 
   @override
-  String get commonCancel => 'Cancel';
+  String get commonCancel => 'বাতিল করুন';
 
   @override
-  String get commonDelete => 'Delete';
+  String get commonDelete => 'মুছে ফেলুন';
 
   @override
-  String get commonEdit => 'Edit';
+  String get commonEdit => 'সম্পাদনা করুন';
 
   @override
   String get addDeviceSavedMessage => 'Saved.';
@@ -314,38 +314,38 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0 (প্লেসহোল্ডার)';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => 'বাংলা';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => 'স্প্যানিশ';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => 'স্প্যানিশ (মেক্সিকো)';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => 'হিন্দি';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => 'ইন্দোনেশীয়';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => 'পর্তুগিজ';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => 'পর্তুগিজ (ব্রাজিল)';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => 'রুশ';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => 'উর্দু';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => 'চীনা';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => 'চীনা (সরলীকৃত)';
 }

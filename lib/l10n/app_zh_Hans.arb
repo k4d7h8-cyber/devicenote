@@ -1,6 +1,6 @@
 {
   "@@locale": "zh_Hans",
-  "appTitle": "设备记录",
+  "appTitle": "设备笔记",
   "bootPlaceholderMessage": "设置阶段完成。用实际路由替换此屏幕。",
   "homeSettingsTooltip": "设置",
   "homeSearchHint": "搜索",
@@ -156,16 +156,16 @@
       }
     }
   },
-  "settingsVersionPlaceholder": "TODO: version",
-  "languageBengali": "TODO: Bengali",
-  "languageSpanish": "TODO: Spanish",
-  "languageSpanishMexico": "TODO: Spanish (Mexico)",
-  "languageHindi": "TODO: Hindi",
-  "languageIndonesian": "TODO: Indonesian",
-  "languagePortuguese": "TODO: Portuguese",
-  "languagePortugueseBrazil": "TODO: Portuguese (Brazil)",
-  "languageRussian": "TODO: Russian",
-  "languageUrdu": "TODO: Urdu",
-  "languageChinese": "TODO: Chinese",
-  "languageChineseSimplified": "TODO: Chinese (Simplified)"
+  "settingsVersionPlaceholder": "1.0.0（占位符）",
+  "languageBengali": "孟加拉语",
+  "languageSpanish": "西班牙语",
+  "languageSpanishMexico": "西班牙语（墨西哥）",
+  "languageHindi": "印地语",
+  "languageIndonesian": "印尼语",
+  "languagePortuguese": "葡萄牙语",
+  "languagePortugueseBrazil": "葡萄牙语（巴西）",
+  "languageRussian": "俄语",
+  "languageUrdu": "乌尔都语",
+  "languageChinese": "中文",
+  "languageChineseSimplified": "简体中文"
 }

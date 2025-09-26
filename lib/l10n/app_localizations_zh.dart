@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => '设备记录';
+  String get appTitle => '裝置筆記';
 
   @override
   String get bootPlaceholderMessage => '设置阶段完成。用实际路由替换此屏幕。';
@@ -307,40 +307,40 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0（預留文字）';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => '孟加拉語';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => '西班牙語';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => '西班牙語（墨西哥）';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => '印地語';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => '印尼語';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => '葡萄牙語';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => '葡萄牙語（巴西）';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => '俄語';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => '烏爾都語';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => '中文';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => '中文（簡體）';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -348,7 +348,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   AppLocalizationsZhHans() : super('zh_Hans');
 
   @override
-  String get appTitle => '设备记录';
+  String get appTitle => '设备笔记';
 
   @override
   String get bootPlaceholderMessage => '设置阶段完成。用实际路由替换此屏幕。';
@@ -646,38 +646,38 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0（占位符）';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => '孟加拉语';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => '西班牙语';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => '西班牙语（墨西哥）';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => '印地语';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => '印尼语';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => '葡萄牙语';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => '葡萄牙语（巴西）';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => '俄语';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => '乌尔都语';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => '中文';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => '简体中文';
 }

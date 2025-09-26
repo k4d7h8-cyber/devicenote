@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
 
@@ -59,14 +59,6 @@ class DeviceDetailPage extends StatelessWidget {
 
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
-
-            tooltip: l10n.commonEdit,
-
-            onPressed: () => context.push('/device/${device.id}/edit'),
-          ),
-
-          IconButton(
             icon: const Icon(Icons.delete_outline),
 
             tooltip: l10n.commonDelete,
@@ -89,7 +81,6 @@ class DeviceDetailPage extends StatelessWidget {
 
         final customerCenter = device.asContact?.trim() ?? '';
         final hasCustomerCenter = customerCenter.isNotEmpty;
-
 
         final cards = [
           _InfoCard(
@@ -282,10 +273,7 @@ class DeviceDetailPage extends StatelessWidget {
       return;
     }
     final uri = Uri(scheme: 'tel', path: sanitized);
-    final launched = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!launched) {
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.deviceDetailCallError)),

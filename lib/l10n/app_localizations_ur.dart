@@ -9,7 +9,7 @@ class AppLocalizationsUr extends AppLocalizations {
   AppLocalizationsUr([String locale = 'ur']) : super(locale);
 
   @override
-  String get appTitle => 'ڈيوائس نوٹ';
+  String get appTitle => 'ڈیوائس نوٹ';
 
   @override
   String get bootPlaceholderMessage =>
@@ -19,10 +19,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get homeSettingsTooltip => 'سیٹنگز';
 
   @override
-  String get homeSearchHint => 'تلاش';
+  String get homeSearchHint => 'تلاش کریں';
 
   @override
-  String get homeNoDevices => 'کوئی رجسٹرڈ ڈیوائس نہیں';
+  String get homeNoDevices => 'کوئی ڈیوائس رجسٹرڈ نہیں';
 
   @override
   String get homeAddDeviceTooltip => 'ڈیوائس شامل کریں';
@@ -39,18 +39,18 @@ class AppLocalizationsUr extends AppLocalizations {
   String get settingsTitle => 'سیٹنگز';
 
   @override
-  String get settingsNotificationsToggleTitle => 'اطلاعات فعال کریں';
+  String get settingsNotificationsToggleTitle => 'نوٹیفیکیشن فعال کریں';
 
   @override
   String get settingsNotificationsToggleEnabled =>
-      'وارنٹی یاددہانی آپ کی ترجیحات پر عمل کریں گی۔';
+      'وارنٹی یاد دہانیاں آپ کی ترجیحات کے مطابق بھیجی جائیں گی۔';
 
   @override
   String get settingsNotificationsToggleDisabled =>
-      'وارنٹی ختم ہونے سے پہلے یاددہانی حاصل کرنے کے لیے آن کریں۔';
+      'وارنٹی ختم ہونے سے پہلے یاد دہانیاں حاصل کرنے کے لیے اسے آن کریں۔';
 
   @override
-  String get settingsReminderTimeLabel => 'یاددہانی کا وقت';
+  String get settingsReminderTimeLabel => 'یاد دہانی کا وقت';
 
   @override
   String get settingsLanguageTitle => 'زبان';
@@ -318,38 +318,38 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0 (پلیس ہولڈر)';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => 'بنگالی';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => 'ہسپانوی';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => 'ہسپانوی (میکسیکو)';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => 'ہندی';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => 'انڈونیشیائی';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => 'پرتگالی';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => 'پرتگالی (برازیل)';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => 'روسی';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => 'اردو';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => 'چینی';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => 'چینی (آسان کردہ)';
 }

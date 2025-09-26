@@ -7,6 +7,7 @@ import 'package:devicenote/responsive_layout.dart';
 import 'package:devicenote/services/notifications/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
+import 'package:devicenote/l10n/app_localizations_extensions.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -76,8 +77,10 @@ class _AddDevicePageState extends State<AddDevicePage> {
       return;
     }
     if (_purchaseDate != null) {
-      _purchaseDateCtrl.text =
-          DateUtilsX.formatForLocale(_purchaseDate!, locale: localeName);
+      _purchaseDateCtrl.text = DateUtilsX.formatForLocale(
+        _purchaseDate!,
+        locale: localeName,
+      );
     }
     _lastLocaleName = localeName;
   }
@@ -88,11 +91,13 @@ class _AddDevicePageState extends State<AddDevicePage> {
     final nowLocal = DateTime.now();
     final initialUtc = _purchaseDate ?? DateUtilsX.normalizeToUtcDate(nowLocal);
     final initialLocal = initialUtc.toLocal();
+    final l10n = AppLocalizations.of(context)!;
     final picked = await showDatePicker(
       context: context,
       initialDate: initialLocal.isAfter(nowLocal) ? nowLocal : initialLocal,
       firstDate: DateTime(2000),
       lastDate: DateTime(nowLocal.year, nowLocal.month, nowLocal.day),
+      locale: l10n.locale,
     );
     if (picked == null) {
       return;

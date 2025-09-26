@@ -1,4 +1,5 @@
-﻿import 'package:devicenote/l10n/app_localizations.dart';
+import 'package:devicenote/l10n/app_localizations.dart';
+import 'package:devicenote/l10n/app_localizations_extensions.dart';
 import 'package:devicenote/responsive_layout.dart';
 import 'package:devicenote/services/localization/language_provider.dart';
 import 'package:devicenote/services/localization/localization_controller.dart';
@@ -65,6 +66,12 @@ class SettingsPage extends riverpod.ConsumerWidget {
                         final picked = await showTimePicker(
                           context: context,
                           initialTime: notifications.notificationTime,
+                          builder: (pickerContext, child) =>
+                              Localizations.override(
+                                context: pickerContext,
+                                locale: l10n.locale,
+                                child: child,
+                              ),
                         );
                         if (picked != null) {
                           await notifications.setNotificationTime(picked);
@@ -128,9 +135,7 @@ class SettingsPage extends riverpod.ConsumerWidget {
                   leading: const Icon(Icons.info_outline),
                   title: Text(l10n.commonVersion),
                   subtitle: Text(
-                    l10n.settingsVersionValue(
-                      l10n.settingsVersionPlaceholder,
-                    ),
+                    l10n.settingsVersionValue(l10n.settingsVersionPlaceholder),
                   ),
                 ),
               ),

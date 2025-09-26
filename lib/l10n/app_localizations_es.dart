@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'DeviceNote';
+  String get appTitle => 'Nota del Dispositivo';
 
   @override
   String get bootPlaceholderMessage =>
@@ -39,15 +39,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsTitle => 'Configuración';
 
   @override
-  String get settingsNotificationsToggleTitle => 'Habilitar notificaciones';
+  String get settingsNotificationsToggleTitle => 'Activar notificaciones';
 
   @override
   String get settingsNotificationsToggleEnabled =>
-      'Los recordatorios de garantía seguirán sus preferencias.';
+      'Los recordatorios de garantía seguirán tus preferencias.';
 
   @override
   String get settingsNotificationsToggleDisabled =>
-      'Active para recibir recordatorios antes de que caduquen las garantías.';
+      'Enciéndelas para recibir recordatorios antes de que venza la garantía.';
 
   @override
   String get settingsReminderTimeLabel => 'Hora del recordatorio';
@@ -59,7 +59,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsLanguagePickerTitle => 'Elegir idioma';
 
   @override
-  String get settingsBackupSectionTitle => 'Copia de seguridad y Restauración';
+  String get settingsBackupSectionTitle => 'Copia de seguridad y restauración';
 
   @override
   String settingsVersionValue(String version) {
@@ -323,40 +323,40 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0 (marcador provisional)';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => 'Bengalí';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => 'Español';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => 'Español (México)';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => 'Hindi';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => 'Indonesio';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => 'Portugués';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => 'Portugués (Brasil)';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => 'Ruso';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => 'Urdu';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => 'Chino';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => 'Chino (simplificado)';
 }
 
 /// The translations for Spanish Castilian, as used in Mexico (`es_MX`).
@@ -364,23 +364,23 @@ class AppLocalizationsEsMx extends AppLocalizationsEs {
   AppLocalizationsEsMx() : super('es_MX');
 
   @override
-  String get appTitle => 'DeviceNote';
+  String get appTitle => 'Nota del Dispositivo';
 
   @override
   String get bootPlaceholderMessage =>
       'Setup phase complete. Replace this screen with actual routes.';
 
   @override
-  String get homeSettingsTooltip => 'Settings';
+  String get homeSettingsTooltip => 'Configuración';
 
   @override
-  String get homeSearchHint => 'Search';
+  String get homeSearchHint => 'Buscar';
 
   @override
-  String get homeNoDevices => 'No registered devices';
+  String get homeNoDevices => 'No hay dispositivos registrados';
 
   @override
-  String get homeAddDeviceTooltip => 'Add device';
+  String get homeAddDeviceTooltip => 'Agregar dispositivo';
 
   @override
   String get homeDDayLabel => 'D-day';
@@ -391,30 +391,30 @@ class AppLocalizationsEsMx extends AppLocalizationsEs {
   }
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => 'Configuración';
 
   @override
-  String get settingsNotificationsToggleTitle => 'Enable notifications';
+  String get settingsNotificationsToggleTitle => 'Activar notificaciones';
 
   @override
   String get settingsNotificationsToggleEnabled =>
-      'Warranty reminders will follow your preferences.';
+      'Los recordatorios de garantía seguirán tus preferencias.';
 
   @override
   String get settingsNotificationsToggleDisabled =>
-      'Turn on to receive reminders before warranties expire.';
+      'Enciéndelas para recibir recordatorios antes de que venza la garantía.';
 
   @override
-  String get settingsReminderTimeLabel => 'Reminder time';
+  String get settingsReminderTimeLabel => 'Hora del recordatorio';
 
   @override
-  String get settingsLanguageTitle => 'Language';
+  String get settingsLanguageTitle => 'Idioma';
 
   @override
-  String get settingsLanguagePickerTitle => 'Choose language';
+  String get settingsLanguagePickerTitle => 'Elegir idioma';
 
   @override
-  String get settingsBackupSectionTitle => 'Backup & Restore';
+  String get settingsBackupSectionTitle => 'Copia de seguridad y restauración';
 
   @override
   String settingsVersionValue(String version) {
@@ -428,25 +428,25 @@ class AppLocalizationsEsMx extends AppLocalizationsEs {
   String get languageKorean => 'Korean';
 
   @override
-  String get commonBackup => 'Backup';
+  String get commonBackup => 'Copia de seguridad';
 
   @override
-  String get commonRestore => 'Restore';
+  String get commonRestore => 'Restaurar';
 
   @override
-  String get commonVersion => 'Version';
+  String get commonVersion => 'Versión';
 
   @override
-  String get commonSave => 'Save';
+  String get commonSave => 'Guardar';
 
   @override
-  String get commonCancel => 'Cancel';
+  String get commonCancel => 'Cancelar';
 
   @override
-  String get commonDelete => 'Delete';
+  String get commonDelete => 'Eliminar';
 
   @override
-  String get commonEdit => 'Edit';
+  String get commonEdit => 'Editar';
 
   @override
   String get addDeviceSavedMessage => 'Saved.';
@@ -669,38 +669,38 @@ class AppLocalizationsEsMx extends AppLocalizationsEs {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0 (marcador provisional)';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => 'Bengalí';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => 'Español';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => 'Español (México)';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => 'Hindi';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => 'Indonesio';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => 'Portugués';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => 'Portugués (Brasil)';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => 'Ruso';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => 'Urdu';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => 'Chino';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => 'Chino (simplificado)';
 }

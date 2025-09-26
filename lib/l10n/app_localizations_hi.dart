@@ -19,10 +19,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeSettingsTooltip => 'सेटिंग्स';
 
   @override
-  String get homeSearchHint => 'खोज';
+  String get homeSearchHint => 'खोजें';
 
   @override
-  String get homeNoDevices => 'कोई पंजीकृत डिवाइस नहीं';
+  String get homeNoDevices => 'कोई डिवाइस पंजीकृत नहीं है';
 
   @override
   String get homeAddDeviceTooltip => 'डिवाइस जोड़ें';
@@ -39,18 +39,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settingsTitle => 'सेटिंग्स';
 
   @override
-  String get settingsNotificationsToggleTitle => 'सूचनाएं सक्षम करें';
+  String get settingsNotificationsToggleTitle => 'नोटिफिकेशन सक्षम करें';
 
   @override
   String get settingsNotificationsToggleEnabled =>
-      'वारंटी अनुस्मारक आपकी प्राथमिकताओं का पालन करेंगे।';
+      'वारंटी रिमाइंडर आपकी प्राथमिकताओं के अनुसार भेजे जाएंगे।';
 
   @override
   String get settingsNotificationsToggleDisabled =>
-      'वारंटी समाप्त होने से पहले अनुस्मारक प्राप्त करने के लिए चालू करें।';
+      'वारंटी समाप्त होने से पहले रिमाइंडर पाने के लिए इसे चालू करें।';
 
   @override
-  String get settingsReminderTimeLabel => 'अनुस्मारक समय';
+  String get settingsReminderTimeLabel => 'रिमाइंडर समय';
 
   @override
   String get settingsLanguageTitle => 'भाषा';
@@ -76,7 +76,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get commonBackup => 'बैकअप';
 
   @override
-  String get commonRestore => 'पुनर्स्थापना';
+  String get commonRestore => 'पुनर्स्थापित करें';
 
   @override
   String get commonVersion => 'संस्करण';
@@ -88,7 +88,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get commonCancel => 'रद्द करें';
 
   @override
-  String get commonDelete => 'मिटाएँ';
+  String get commonDelete => 'हटाएं';
 
   @override
   String get commonEdit => 'संपादित करें';
@@ -318,38 +318,38 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0 (प्लेसहोल्डर)';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => 'बंगाली';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => 'स्पेनिश';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => 'स्पेनिश (मेक्सिको)';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => 'हिंदी';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => 'इंडोनेशियाई';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => 'पुर्तगाली';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => 'पुर्तगाली (ब्राज़ील)';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => 'रूसी';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => 'उर्दू';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => 'चीनी';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => 'चीनी (सरलीकृत)';
 }

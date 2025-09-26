@@ -9,57 +9,58 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'DeviceNote';
+  String get appTitle => 'Заметки об устройстве';
 
   @override
   String get bootPlaceholderMessage =>
-      'Setup phase complete. Replace this screen with actual routes.';
+      'Первоначальная настройка завершена. Замените этот экран реальными маршрутами.';
 
   @override
-  String get homeSettingsTooltip => 'Settings';
+  String get homeSettingsTooltip => 'Настройки';
 
   @override
-  String get homeSearchHint => 'Search';
+  String get homeSearchHint => 'Поиск';
 
   @override
-  String get homeNoDevices => 'No registered devices';
+  String get homeNoDevices => 'Зарегистрированных устройств нет';
 
   @override
-  String get homeAddDeviceTooltip => 'Add device';
+  String get homeAddDeviceTooltip => 'Добавить устройство';
 
   @override
-  String get homeDDayLabel => 'D-day';
+  String get homeDDayLabel => 'День D';
 
   @override
   String homeDdayMonthsLabel(int months) {
-    return 'D-$months m';
+    return 'D-$months мес.';
   }
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => 'Настройки';
 
   @override
-  String get settingsNotificationsToggleTitle => 'Enable notifications';
+  String get settingsNotificationsToggleTitle => 'Включить уведомления';
 
   @override
   String get settingsNotificationsToggleEnabled =>
-      'Warranty reminders will follow your preferences.';
+      'Напоминания о гарантии будут отправляться согласно вашим настройкам.';
 
   @override
   String get settingsNotificationsToggleDisabled =>
-      'Turn on to receive reminders before warranties expire.';
+      'Включите, чтобы получать напоминания до окончания срока гарантии.';
 
   @override
-  String get settingsReminderTimeLabel => 'Reminder time';
+  String get settingsReminderTimeLabel => 'Время напоминания';
 
   @override
-  String get settingsLanguageTitle => 'Language';
+  String get settingsLanguageTitle => 'Язык';
 
   @override
-  String get settingsLanguagePickerTitle => 'Choose language';
+  String get settingsLanguagePickerTitle => 'Выберите язык';
 
   @override
-  String get settingsBackupSectionTitle => 'Backup & Restore';
+  String get settingsBackupSectionTitle =>
+      'Резервное копирование и восстановление';
 
   @override
   String settingsVersionValue(String version) {
@@ -67,245 +68,249 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get languageEnglish => 'English';
+  String get languageEnglish => 'Английский';
 
   @override
-  String get languageKorean => 'Korean';
+  String get languageKorean => 'Корейский';
 
   @override
-  String get commonBackup => 'Backup';
+  String get commonBackup => 'Резервная копия';
 
   @override
-  String get commonRestore => 'Restore';
+  String get commonRestore => 'Восстановить';
 
   @override
-  String get commonVersion => 'Version';
+  String get commonVersion => 'Версия';
 
   @override
-  String get commonSave => 'Save';
+  String get commonSave => 'Сохранить';
 
   @override
-  String get commonCancel => 'Cancel';
+  String get commonCancel => 'Отмена';
 
   @override
-  String get commonDelete => 'Delete';
+  String get commonDelete => 'Удалить';
 
   @override
-  String get commonEdit => 'Edit';
+  String get commonEdit => 'Изменить';
 
   @override
-  String get addDeviceSavedMessage => 'Saved.';
+  String get addDeviceSavedMessage => 'Сохранено.';
 
   @override
   String addDevicePickImagesError(String error) {
-    return 'Failed to pick images: $error';
+    return 'Не удалось выбрать изображения: $error';
   }
 
   @override
-  String get addDeviceEditTitle => 'Edit device';
+  String get addDeviceEditTitle => 'Изменить устройство';
 
   @override
-  String get addDeviceCreateTitle => 'Add device';
+  String get addDeviceCreateTitle => 'Добавить устройство';
 
   @override
-  String get addDeviceCategoryLabel => 'Category';
+  String get addDeviceCategoryLabel => 'Категория';
 
   @override
-  String get addDeviceCategoryRequired => 'Category is required';
+  String get addDeviceCategoryRequired => 'Категория обязательна';
 
   @override
-  String get addDeviceModelNameLabel => 'Model name';
+  String get addDeviceModelNameLabel => 'Модель';
 
   @override
-  String get addDeviceModelNameRequired => 'Model name is required';
+  String get addDeviceModelNameRequired => 'Модель обязательна';
 
   @override
-  String get addDeviceBrandLabel => 'Brand';
+  String get addDeviceBrandLabel => 'Бренд';
 
   @override
-  String get addDeviceBrandRequired => 'Brand is required';
+  String get addDeviceBrandRequired => 'Бренд обязателен';
 
   @override
-  String get addDeviceModelNumberLabel => 'Model number';
+  String get addDeviceModelNumberLabel => 'Номер модели';
 
   @override
-  String get addDeviceModelNumberRequired => 'Model number is required';
+  String get addDeviceModelNumberRequired => 'Номер модели обязателен';
 
   @override
-  String get addDevicePurchaseDateLabel => 'Purchase date';
+  String get addDevicePurchaseDateLabel => 'Дата покупки';
 
   @override
-  String get addDevicePurchaseDateHint => 'Pick a date';
+  String get addDevicePurchaseDateHint => 'Выберите дату';
 
   @override
-  String get addDevicePurchaseDateRequired => 'Pick a purchase date';
+  String get addDevicePurchaseDateRequired => 'Укажите дату покупки';
 
   @override
   String get addDevicePurchaseDateFutureError =>
-      'Purchase date cannot be in the future';
+      'Дата покупки не может быть в будущем';
 
   @override
-  String get addDeviceWarrantyLabel => 'Warranty (months)';
+  String get addDeviceWarrantyLabel => 'Гарантия (в месяцах)';
 
   @override
   String get addDeviceWarrantyHint => '0 ~ 120';
 
   @override
-  String get addDeviceWarrantyRequired => 'Warranty is required';
+  String get addDeviceWarrantyRequired => 'Укажите срок гарантии';
 
   @override
-  String get addDeviceDigitsOnly => 'Enter digits only';
+  String get addDeviceDigitsOnly => 'Введите только цифры';
 
   @override
-  String get addDeviceWarrantyRange => 'Must be between 0 and 120';
+  String get addDeviceWarrantyRange => 'Значение должно быть от 0 до 120';
 
   @override
-  String get addDeviceCustomerCenterLabel => 'Customer center';
+  String get addDeviceCustomerCenterLabel => 'Служба поддержки';
 
   @override
-  String get addDeviceCustomerCenterHint => 'e.g. 1588-0000, 010-1234-5678';
+  String get addDeviceCustomerCenterHint => 'напр. 1588-0000, 010-1234-5678';
 
   @override
-  String get addDeviceCustomerCenterInvalid => 'Digits and - only';
+  String get addDeviceCustomerCenterInvalid => 'Допускаются только цифры и -';
 
   @override
-  String get addDeviceOthersSectionTitle => 'Others';
+  String get addDeviceOthersSectionTitle => 'Прочее';
 
   @override
-  String get addDeviceTakePhoto => 'Take photo';
+  String get addDeviceTakePhoto => 'Сделать фото';
 
   @override
-  String get addDeviceSelectFromGallery => 'Select from gallery';
+  String get addDeviceSelectFromGallery => 'Выбрать из галереи';
 
   @override
-  String get categoryTv => 'TV';
+  String get categoryTv => 'Телевизор';
 
   @override
-  String get categoryWasher => 'Washer';
+  String get categoryWasher => 'Стиральная машина';
 
   @override
-  String get categoryComputer => 'Computer';
+  String get categoryComputer => 'Компьютер';
 
   @override
-  String get categoryRefrigerator => 'Refrigerator';
+  String get categoryRefrigerator => 'Холодильник';
 
   @override
-  String get categoryAirConditioner => 'Air conditioner';
+  String get categoryAirConditioner => 'Кондиционер';
 
   @override
-  String get categoryCar => 'Car';
+  String get categoryCar => 'Автомобиль';
 
   @override
-  String get categoryOthers => 'Others';
+  String get categoryOthers => 'Другое';
 
   @override
-  String get deviceDetailTitle => 'Device detail';
+  String get deviceDetailTitle => 'Сведения об устройстве';
 
   @override
-  String get deviceDetailNotFound => 'Device not found.';
+  String get deviceDetailNotFound => 'Устройство не найдено.';
 
   @override
-  String get deviceDetailCategoryLabel => 'Category';
+  String get deviceDetailCategoryLabel => 'Категория';
 
   @override
-  String get deviceDetailBrandLabel => 'Brand';
+  String get deviceDetailBrandLabel => 'Бренд';
 
   @override
-  String get deviceDetailModelNameLabel => 'Model name';
+  String get deviceDetailModelNameLabel => 'Модель';
 
   @override
-  String get deviceDetailModelNumberLabel => 'Model number';
+  String get deviceDetailModelNumberLabel => 'Номер модели';
 
   @override
-  String get deviceDetailPurchaseDateLabel => 'Purchase date';
+  String get deviceDetailPurchaseDateLabel => 'Дата покупки';
 
   @override
-  String get deviceDetailWarrantyLabel => 'Warranty (months)';
+  String get deviceDetailWarrantyLabel => 'Гарантия (в месяцах)';
 
   @override
-  String get deviceDetailCustomerCenterLabel => 'Customer center';
+  String get deviceDetailCustomerCenterLabel => 'Служба поддержки';
 
   @override
-  String get deviceDetailNoContact => 'No customer center registered.';
+  String get deviceDetailNoContact => 'Служба поддержки не указана.';
 
   @override
   String deviceDetailCallButton(Object number) {
-    return 'Call $number';
+    return 'Позвонить по номеру $number';
   }
 
   @override
-  String get deviceDetailCallError => 'Unable to open the phone dialer.';
+  String get deviceDetailCallError =>
+      'Не удалось открыть приложение для звонков.';
 
   @override
-  String get deviceDetailNotificationsTitle => 'Warranty notifications';
+  String get deviceDetailNotificationsTitle => 'Уведомления о гарантии';
 
   @override
   String deviceDetailNotificationsEnabled(String expiry) {
-    return 'Reminders will be sent until $expiry.';
+    return 'Напоминания будут отправляться до $expiry.';
   }
 
   @override
   String get deviceDetailNotificationsDisabled =>
-      'Turn on notifications in Settings to receive reminders.';
+      'Включите уведомления в настройках, чтобы получать напоминания.';
 
   @override
-  String get deviceDetailPhotosSectionTitle => 'Photos';
+  String get deviceDetailPhotosSectionTitle => 'Фотографии';
 
   @override
-  String get deviceDetailDeleteDialogTitle => 'Delete this device?';
+  String get deviceDetailDeleteDialogTitle => 'Удалить это устройство?';
 
   @override
-  String get deviceDetailDeleteDialogMessage => 'This action cannot be undone.';
+  String get deviceDetailDeleteDialogMessage => 'Это действие нельзя отменить.';
 
   @override
-  String get notificationsGlobalEnabled => 'Warranty notifications enabled.';
+  String get notificationsGlobalEnabled => 'Уведомления о гарантии включены.';
 
   @override
-  String get notificationsGlobalDisabled => 'Warranty notifications disabled.';
+  String get notificationsGlobalDisabled => 'Уведомления о гарантии отключены.';
 
   @override
   String get notificationsEnableInSettings =>
-      'Enable notifications in Settings to schedule alerts.';
+      'Включите уведомления в настройках, чтобы запланировать напоминания.';
 
   @override
-  String get notificationsDeviceScheduled => 'Warranty reminders scheduled.';
+  String get notificationsDeviceScheduled =>
+      'Напоминания по гарантии запланированы.';
 
   @override
-  String get notificationsDeviceExpired => 'Warranty period already ended.';
+  String get notificationsDeviceExpired => 'Срок гарантии уже истёк.';
 
   @override
-  String get notificationsDeviceCancelled => 'Warranty reminders cancelled.';
+  String get notificationsDeviceCancelled =>
+      'Напоминания по гарантии отменены.';
 
   @override
-  String get notificationsPermissionTitle => 'Allow notifications?';
+  String get notificationsPermissionTitle => 'Разрешить уведомления?';
 
   @override
   String get notificationsPermissionDescription =>
-      'Enable push notifications to receive warranty reminders for your devices.';
+      'Включите push-уведомления, чтобы получать напоминания о гарантии ваших устройств.';
 
   @override
-  String get notificationsPermissionNotNow => 'Not now';
+  String get notificationsPermissionNotNow => 'Не сейчас';
 
   @override
-  String get notificationsPermissionAllow => 'Allow';
+  String get notificationsPermissionAllow => 'Разрешить';
 
   @override
-  String get notificationsPermissionDenied => 'Notification permission denied.';
+  String get notificationsPermissionDenied => 'Доступ к уведомлениям отклонён.';
 
   @override
   String cameraCaptureFailed(String error) {
-    return 'Failed to capture photo: $error';
+    return 'Не удалось сделать фото: $error';
   }
 
   @override
-  String get cameraTitle => 'Camera';
+  String get cameraTitle => 'Камера';
 
   @override
-  String get cameraInitializationFailed => 'Failed to initialize the camera.';
+  String get cameraInitializationFailed =>
+      'Не удалось инициализировать камеру.';
 
   @override
   String homeDeviceBrandModel(String brand, String model) {
-    return '$brand - $model';
+    return '$brand — $model';
   }
 
   @override
@@ -314,38 +319,38 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0 (заглушка)';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => 'Бенгальский';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => 'Испанский';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => 'Испанский (Мексика)';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => 'Хинди';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => 'Индонезийский';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => 'Португальский';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => 'Португальский (Бразилия)';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => 'Русский';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => 'Урду';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => 'Китайский';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => 'Китайский (упрощённый)';
 }

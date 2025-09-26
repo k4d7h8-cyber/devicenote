@@ -1,6 +1,6 @@
 {
   "@@locale": "es",
-  "appTitle": "DeviceNote",
+  "appTitle": "Nota del Dispositivo",
   "bootPlaceholderMessage": "Fase de configuración completa. Reemplace esta pantalla con rutas reales.",
   "homeSettingsTooltip": "Configuración",
   "homeSearchHint": "Buscar",
@@ -17,13 +17,13 @@
     }
   },
   "settingsTitle": "Configuración",
-  "settingsNotificationsToggleTitle": "Habilitar notificaciones",
-  "settingsNotificationsToggleEnabled": "Los recordatorios de garantía seguirán sus preferencias.",
-  "settingsNotificationsToggleDisabled": "Active para recibir recordatorios antes de que caduquen las garantías.",
+  "settingsNotificationsToggleTitle": "Activar notificaciones",
+  "settingsNotificationsToggleEnabled": "Los recordatorios de garantía seguirán tus preferencias.",
+  "settingsNotificationsToggleDisabled": "Enciéndelas para recibir recordatorios antes de que venza la garantía.",
   "settingsReminderTimeLabel": "Hora del recordatorio",
   "settingsLanguageTitle": "Idioma",
   "settingsLanguagePickerTitle": "Elegir idioma",
-  "settingsBackupSectionTitle": "Copia de seguridad y Restauración",
+  "settingsBackupSectionTitle": "Copia de seguridad y restauración",
   "settingsVersionValue": "{version}",
   "@settingsVersionValue": {
     "placeholders": {
@@ -156,16 +156,16 @@
       }
     }
   },
-  "settingsVersionPlaceholder": "TODO: version",
-  "languageBengali": "TODO: Bengali",
-  "languageSpanish": "TODO: Spanish",
-  "languageSpanishMexico": "TODO: Spanish (Mexico)",
-  "languageHindi": "TODO: Hindi",
-  "languageIndonesian": "TODO: Indonesian",
-  "languagePortuguese": "TODO: Portuguese",
-  "languagePortugueseBrazil": "TODO: Portuguese (Brazil)",
-  "languageRussian": "TODO: Russian",
-  "languageUrdu": "TODO: Urdu",
-  "languageChinese": "TODO: Chinese",
-  "languageChineseSimplified": "TODO: Chinese (Simplified)"
+  "settingsVersionPlaceholder": "1.0.0 (marcador provisional)",
+  "languageBengali": "Bengalí",
+  "languageSpanish": "Español",
+  "languageSpanishMexico": "Español (México)",
+  "languageHindi": "Hindi",
+  "languageIndonesian": "Indonesio",
+  "languagePortuguese": "Portugués",
+  "languagePortugueseBrazil": "Portugués (Brasil)",
+  "languageRussian": "Ruso",
+  "languageUrdu": "Urdu",
+  "languageChinese": "Chino",
+  "languageChineseSimplified": "Chino (simplificado)"
 }

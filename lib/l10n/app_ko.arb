@@ -1,6 +1,6 @@
 {
   "@@locale": "ko",
-  "appTitle": "기록 노트",
+  "appTitle": "기기 노트",
   "bootPlaceholderMessage": "설정 단계 완료. 이 화면을 실제 경로로 교체하세요.",
   "homeSettingsTooltip": "설정",
   "homeSearchHint": "검색",
@@ -156,16 +156,16 @@
       }
     }
   },
-  "settingsVersionPlaceholder": "TODO: version",
-  "languageBengali": "TODO: Bengali",
-  "languageSpanish": "TODO: Spanish",
-  "languageSpanishMexico": "TODO: Spanish (Mexico)",
-  "languageHindi": "TODO: Hindi",
-  "languageIndonesian": "TODO: Indonesian",
-  "languagePortuguese": "TODO: Portuguese",
-  "languagePortugueseBrazil": "TODO: Portuguese (Brazil)",
-  "languageRussian": "TODO: Russian",
-  "languageUrdu": "TODO: Urdu",
-  "languageChinese": "TODO: Chinese",
-  "languageChineseSimplified": "TODO: Chinese (Simplified)"
+  "settingsVersionPlaceholder": "1.0.0 (플레이스홀더)",
+  "languageBengali": "벵골어",
+  "languageSpanish": "스페인어",
+  "languageSpanishMexico": "스페인어(멕시코)",
+  "languageHindi": "힌디어",
+  "languageIndonesian": "인도네시아어",
+  "languagePortuguese": "포르투갈어",
+  "languagePortugueseBrazil": "포르투갈어(브라질)",
+  "languageRussian": "러시아어",
+  "languageUrdu": "우르두어",
+  "languageChinese": "중국어",
+  "languageChineseSimplified": "중국어(간체)"
 }

@@ -9,7 +9,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => '기록 노트';
+  String get appTitle => '기기 노트';
 
   @override
   String get bootPlaceholderMessage => '설정 단계 완료. 이 화면을 실제 경로로 교체하세요.';
@@ -308,38 +308,38 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get settingsVersionPlaceholder => 'TODO: version';
+  String get settingsVersionPlaceholder => '1.0.0 (플레이스홀더)';
 
   @override
-  String get languageBengali => 'TODO: Bengali';
+  String get languageBengali => '벵골어';
 
   @override
-  String get languageSpanish => 'TODO: Spanish';
+  String get languageSpanish => '스페인어';
 
   @override
-  String get languageSpanishMexico => 'TODO: Spanish (Mexico)';
+  String get languageSpanishMexico => '스페인어(멕시코)';
 
   @override
-  String get languageHindi => 'TODO: Hindi';
+  String get languageHindi => '힌디어';
 
   @override
-  String get languageIndonesian => 'TODO: Indonesian';
+  String get languageIndonesian => '인도네시아어';
 
   @override
-  String get languagePortuguese => 'TODO: Portuguese';
+  String get languagePortuguese => '포르투갈어';
 
   @override
-  String get languagePortugueseBrazil => 'TODO: Portuguese (Brazil)';
+  String get languagePortugueseBrazil => '포르투갈어(브라질)';
 
   @override
-  String get languageRussian => 'TODO: Russian';
+  String get languageRussian => '러시아어';
 
   @override
-  String get languageUrdu => 'TODO: Urdu';
+  String get languageUrdu => '우르두어';
 
   @override
-  String get languageChinese => 'TODO: Chinese';
+  String get languageChinese => '중국어';
 
   @override
-  String get languageChineseSimplified => 'TODO: Chinese (Simplified)';
+  String get languageChineseSimplified => '중국어(간체)';
 }
