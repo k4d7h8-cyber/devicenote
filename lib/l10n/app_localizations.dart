@@ -243,6 +243,66 @@ abstract class AppLocalizations {
   /// **'Restore'**
   String get commonRestore;
 
+  /// Shown after a backup file has been created successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup file {fileName} is ready to share.'**
+  String settingsBackupSuccess(String fileName);
+
+  /// No description provided for @settingsBackupFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create a backup. Please try again.'**
+  String get settingsBackupFailure;
+
+  /// No description provided for @settingsRestorePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a backup file'**
+  String get settingsRestorePickerTitle;
+
+  /// No description provided for @settingsRestoreInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected file is not a valid DeviceNote backup.'**
+  String get settingsRestoreInvalid;
+
+  /// No description provided for @settingsRestoreResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore complete. Added {added}, updated {updated}.'**
+  String settingsRestoreResult(int added, int updated);
+
+  /// No description provided for @settingsRestorePartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore partially completed. Added {added}, updated {updated}, failed {failed}.'**
+  String settingsRestorePartial(int added, int updated, int failed);
+
+  /// No description provided for @settingsRestoreFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore failed. Please try again.'**
+  String get settingsRestoreFailure;
+
+  /// No description provided for @settingsRestoreRestartPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart the app to apply the restored data.'**
+  String get settingsRestoreRestartPrompt;
+
+  /// No description provided for @settingsRestoreRestartNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart now'**
+  String get settingsRestoreRestartNow;
+
+  /// No description provided for @settingsRestoreLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get settingsRestoreLater;
+
   /// No description provided for @commonVersion.
   ///
   /// In en, this message translates to:

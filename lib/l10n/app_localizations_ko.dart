@@ -76,6 +76,45 @@ class AppLocalizationsKo extends AppLocalizations {
   String get commonRestore => '복원';
 
   @override
+  String settingsBackupSuccess(String fileName) {
+    return 'Backup file $fileName is ready to share.';
+  }
+
+  @override
+  String get settingsBackupFailure =>
+      'Could not create a backup. Please try again.';
+
+  @override
+  String get settingsRestorePickerTitle => 'Choose a backup file';
+
+  @override
+  String get settingsRestoreInvalid =>
+      'The selected file is not a valid DeviceNote backup.';
+
+  @override
+  String settingsRestoreResult(int added, int updated) {
+    return 'Restore complete. Added $added, updated $updated.';
+  }
+
+  @override
+  String settingsRestorePartial(int added, int updated, int failed) {
+    return 'Restore partially completed. Added $added, updated $updated, failed $failed.';
+  }
+
+  @override
+  String get settingsRestoreFailure => 'Restore failed. Please try again.';
+
+  @override
+  String get settingsRestoreRestartPrompt =>
+      'Restart the app to apply the restored data.';
+
+  @override
+  String get settingsRestoreRestartNow => 'Restart now';
+
+  @override
+  String get settingsRestoreLater => 'Later';
+
+  @override
   String get commonVersion => '버전';
 
   @override

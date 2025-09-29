@@ -1,15 +1,157 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:devicenote/data/repositories/backup_repository.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:devicenote/l10n/app_localizations_extensions.dart';
 import 'package:devicenote/responsive_layout.dart';
 import 'package:devicenote/services/localization/language_provider.dart';
 import 'package:devicenote/services/localization/localization_controller.dart';
 import 'package:devicenote/services/notifications/notification_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends riverpod.ConsumerWidget {
   const SettingsPage({super.key});
+
+  Future<void> _onBackupPressed(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      final backupRepository = BackupRepository();
+      final json = backupRepository.exportToJson();
+      final directory = await getApplicationDocumentsDirectory();
+      final timestamp = DateTime.now().toUtc().toIso8601String().replaceAll(
+        ':',
+        '-',
+      );
+      final fileName = 'devicenote_backup_$timestamp.json';
+      final file = File('${directory.path}/$fileName');
+      await file.writeAsString(json, flush: true);
+
+      final xFile = XFile(
+        file.path,
+        mimeType: 'application/json',
+        name: fileName,
+      );
+
+      await Share.shareXFiles([
+        xFile,
+      ], subject: l10n.settingsBackupSectionTitle);
+
+      if (!context.mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.settingsBackupSuccess(fileName))),
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.settingsBackupFailure)),
+      );
+    }
+  }
+
+  Future<void> _onRestorePressed(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+
+    FilePickerResult? result;
+    try {
+      result = await FilePicker.platform.pickFiles(
+        dialogTitle: l10n.settingsRestorePickerTitle,
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+        withData: true,
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.settingsRestoreFailure)),
+      );
+      return;
+    }
+
+    if (result == null || result.files.isEmpty) {
+      return;
+    }
+
+    try {
+      final file = result.files.first;
+      String jsonStr;
+
+      if (file.bytes != null && file.bytes!.isNotEmpty) {
+        jsonStr = utf8.decode(file.bytes!);
+      } else if (file.path != null) {
+        jsonStr = await File(file.path!).readAsString();
+      } else {
+        if (!context.mounted) return;
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.settingsRestoreFailure)),
+        );
+        return;
+      }
+
+      final backupRepository = BackupRepository();
+      final (added, updated, failed) = await backupRepository.importFromJson(
+        jsonStr,
+      );
+
+      if (!context.mounted) return;
+
+      if (failed == -1) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.settingsRestoreInvalid)),
+        );
+        return;
+      }
+
+      if (failed > 0) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(l10n.settingsRestorePartial(added, updated, failed)),
+          ),
+        );
+      } else {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.settingsRestoreResult(added, updated))),
+        );
+      }
+
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: Text(l10n.settingsBackupSectionTitle),
+            content: Text(l10n.settingsRestoreRestartPrompt),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(l10n.settingsRestoreLater),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  SystemNavigator.pop();
+                },
+                child: Text(l10n.settingsRestoreRestartNow),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.settingsRestoreFailure)),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, riverpod.WidgetRef ref) {
@@ -106,18 +248,14 @@ class SettingsPage extends riverpod.ConsumerWidget {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {
-                                // TODO: Implement backup logic
-                              },
+                              onPressed: () => _onBackupPressed(context),
                               child: Text(l10n.commonBackup),
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {
-                                // TODO: Implement restore logic
-                              },
+                              onPressed: () => _onRestorePressed(context),
                               child: Text(l10n.commonRestore),
                             ),
                           ),

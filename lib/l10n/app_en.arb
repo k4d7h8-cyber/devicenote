@@ -36,6 +36,47 @@
   "languageKorean": "Korean",
   "commonBackup": "Backup",
   "commonRestore": "Restore",
+  "settingsBackupSuccess": "Backup file {fileName} is ready to share.",
+  "@settingsBackupSuccess": {
+    "description": "Shown after a backup file has been created successfully.",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsBackupFailure": "Could not create a backup. Please try again.",
+  "settingsRestorePickerTitle": "Choose a backup file",
+  "settingsRestoreInvalid": "The selected file is not a valid DeviceNote backup.",
+  "settingsRestoreResult": "Restore complete. Added {added}, updated {updated}.",
+  "@settingsRestoreResult": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "updated": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsRestorePartial": "Restore partially completed. Added {added}, updated {updated}, failed {failed}.",
+  "@settingsRestorePartial": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "updated": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsRestoreFailure": "Restore failed. Please try again.",
+  "settingsRestoreRestartPrompt": "Restart the app to apply the restored data.",
+  "settingsRestoreRestartNow": "Restart now",
+  "settingsRestoreLater": "Later",
   "commonVersion": "Version",
   "commonSave": "Save",
   "commonCancel": "Cancel",

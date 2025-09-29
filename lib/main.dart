@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
+import 'package:devicenote/data/sources/hive_boxes.dart';
 import 'package:devicenote/features/device/add_device_page.dart';
 import 'package:devicenote/features/device/device_detail_page.dart';
 import 'package:devicenote/features/home/home_page.dart';
@@ -18,6 +19,7 @@ import 'package:devicenote/features/settings/settings_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await HiveBoxes.init();
   final preferences = await NotificationPreferences.create();
   final localizationController = await LocalizationController.create();
   final notificationService = LocalNotificationService();
