@@ -79,10 +79,12 @@ class DeviceDetailPage extends StatelessWidget {
       builder: (context, layout) {
         final cardWidth = layout.columnWidth();
 
+        final theme = Theme.of(context);
+
         final customerCenter = device.asContact?.trim() ?? '';
         final hasCustomerCenter = customerCenter.isNotEmpty;
 
-        final cards = [
+        final cards = <Widget>[
           _InfoCard(
             title: l10n.deviceDetailCategoryLabel,
 
@@ -133,17 +135,25 @@ class DeviceDetailPage extends StatelessWidget {
 
             icon: Icons.verified_user,
           ),
-
-          _InfoCard(
-            title: l10n.deviceDetailCustomerCenterLabel,
-
-            value: hasCustomerCenter
-                ? customerCenter
-                : l10n.deviceDetailNoContact,
-
-            icon: Icons.phone,
-          ),
         ];
+
+        if (hasCustomerCenter) {
+          final colors = theme.colorScheme;
+          cards.add(
+            _InfoCard(
+              title: l10n.deviceDetailCustomerCenterLabel,
+
+              value: customerCenter,
+
+              icon: Icons.phone,
+              onTap: () => _callCustomerCenter(context, customerCenter),
+
+              backgroundColor: colors.primary,
+
+              foregroundColor: colors.onPrimary,
+            ),
+          );
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,23 +168,6 @@ class DeviceDetailPage extends StatelessWidget {
                 for (final card in cards)
                   SizedBox(width: cardWidth, child: card),
               ],
-            ),
-
-            const SizedBox(height: 16),
-
-            Align(
-              alignment: Alignment.centerLeft,
-              child: FilledButton.icon(
-                onPressed: hasCustomerCenter
-                    ? () => _callCustomerCenter(context, customerCenter)
-                    : null,
-                icon: const Icon(Icons.call),
-                label: Text(
-                  hasCustomerCenter
-                      ? l10n.deviceDetailCallButton(customerCenter)
-                      : l10n.deviceDetailNoContact,
-                ),
-              ),
             ),
 
             const SizedBox(height: 24),
@@ -357,47 +350,87 @@ class _InfoCard extends StatelessWidget {
 
   final IconData icon;
 
+  final VoidCallback? onTap;
+
+  final Color? backgroundColor;
+
+  final Color? foregroundColor;
+
   const _InfoCard({
     required this.title,
 
     required this.value,
 
     required this.icon,
+
+    this.onTap,
+
+    this.backgroundColor,
+
+    this.foregroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    final effectiveForeground = foregroundColor;
+
+    final titleStyle = effectiveForeground != null
+        ? textTheme.labelMedium?.copyWith(color: effectiveForeground)
+        : textTheme.labelMedium;
+
+    final valueStyle = effectiveForeground != null
+        ? textTheme.titleMedium?.copyWith(color: effectiveForeground)
+        : textTheme.titleMedium;
+
+    final iconColor =
+        effectiveForeground ??
+        theme.iconTheme.color ??
+        theme.colorScheme.onSurface;
+
     return SizedBox(
       height: _menuItemExtent,
 
       child: Card(
+        color: backgroundColor,
+
         clipBehavior: Clip.antiAlias,
 
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+        child: InkWell(
+          onTap: onTap,
 
-          child: Row(
-            children: [
-              Icon(icon),
+          mouseCursor: onTap != null
+              ? SystemMouseCursors.click
+              : SystemMouseCursors.basic,
 
-              const SizedBox(width: 12),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
 
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              children: [
+                Icon(icon, color: iconColor),
 
-                  mainAxisAlignment: MainAxisAlignment.center,
+                const SizedBox(width: 12),
 
-                  children: [
-                    Text(title, style: Theme.of(context).textTheme.labelMedium),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
-                    const SizedBox(height: 4),
+                    mainAxisAlignment: MainAxisAlignment.center,
 
-                    Text(value, style: Theme.of(context).textTheme.titleMedium),
-                  ],
+                    children: [
+                      Text(title, style: titleStyle),
+
+                      const SizedBox(height: 4),
+
+                      Text(value, style: valueStyle),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
