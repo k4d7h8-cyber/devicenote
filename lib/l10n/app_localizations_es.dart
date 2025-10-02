@@ -396,6 +396,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => 'Chino (simplificado)';
+
+  @override
+  String get homeSearchNoResults => 'No devices match your search.';
 }
 
 /// The translations for Spanish Castilian, as used in Mexico (`es_MX`).

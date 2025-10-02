@@ -1,22 +1,29 @@
+import 'dart:async';
 import 'dart:io';
 
-import 'package:devicenote/data/repositories/device_repository.dart';
-import 'package:devicenote/features/camera/camera_capture_page.dart';
 import 'package:devicenote/core/utils/date_utils.dart';
-import 'package:devicenote/responsive_layout.dart';
-import 'package:devicenote/services/notifications/notification_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
 import 'package:devicenote/l10n/app_localizations_extensions.dart';
+import 'package:devicenote/responsive_layout.dart';
+import 'package:devicenote/services/barcode_service.dart';
+import 'package:devicenote/services/notifications/notification_controller.dart';
+import 'package:devicenote/services/ocr_service.dart';
+import 'package:devicenote/utils/model_number_extract.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class AddDevicePage extends StatefulWidget {
   final Device? existing;
-  const AddDevicePage({super.key, this.existing});
+  final DeviceCategory? initialCategory;
+  const AddDevicePage({super.key, this.existing, this.initialCategory});
 
   @override
   State<AddDevicePage> createState() => _AddDevicePageState();
@@ -32,11 +39,20 @@ class _AddDevicePageState extends State<AddDevicePage> {
   final _warrantyCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
 
-  DeviceCategory? _category;
+  final ImagePicker _picker = ImagePicker();
+  final OcrService _ocrService = OcrService();
+  final BarcodeService _barcodeService = BarcodeService();
+
   DateTime? _purchaseDate;
   final List<String> _photos = [];
 
+  bool _isProcessingImage = false;
+  List<ScoredCandidate> _lastCandidates = const [];
+
   String? _lastLocaleName;
+
+  bool get _isMobilePlatform =>
+      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   @override
   void initState() {
@@ -46,7 +62,6 @@ class _AddDevicePageState extends State<AddDevicePage> {
       _nameCtrl.text = d.name;
       _brandCtrl.text = d.brand;
       _modelCtrl.text = d.model;
-      _category = d.category;
       _purchaseDate = d.purchaseDate;
       _purchaseDateCtrl.text = DateUtilsX.formatForLocale(d.purchaseDate);
       _warrantyCtrl.text = d.warrantyMonths.toString();
@@ -63,6 +78,8 @@ class _AddDevicePageState extends State<AddDevicePage> {
     _purchaseDateCtrl.dispose();
     _warrantyCtrl.dispose();
     _phoneCtrl.dispose();
+    unawaited(_ocrService.dispose());
+    unawaited(_barcodeService.dispose());
     super.dispose();
   }
 
@@ -121,6 +138,8 @@ class _AddDevicePageState extends State<AddDevicePage> {
     final repo = context.read<DeviceRepository>();
     final notifications = context.read<NotificationController>();
     final warranty = int.parse(_warrantyCtrl.text);
+    final category =
+        widget.existing?.category ?? widget.initialCategory ?? DeviceCategory.etc;
 
     if (widget.existing == null) {
       final id = const Uuid().v4();
@@ -129,15 +148,15 @@ class _AddDevicePageState extends State<AddDevicePage> {
         name: _nameCtrl.text.trim(),
         brand: _brandCtrl.text.trim(),
         model: _modelCtrl.text.trim(),
-        category: _category!,
+        category: category,
         purchaseDate: DateUtilsX.normalizeToUtcDate(_purchaseDate!),
         warrantyMonths: warranty,
         asContact: _phoneCtrl.text.trim().isEmpty
             ? null
             : _phoneCtrl.text.trim(),
-        imagePaths: List.unmodifiable(_photos),
+        photoFileNames: List.unmodifiable(_photos),
       );
-      repo.add(device);
+      await repo.add(device);
       await notifications.onDeviceSaved(device);
       if (!mounted) return;
     } else {
@@ -145,15 +164,14 @@ class _AddDevicePageState extends State<AddDevicePage> {
         name: _nameCtrl.text.trim(),
         brand: _brandCtrl.text.trim(),
         model: _modelCtrl.text.trim(),
-        category: _category!,
         purchaseDate: DateUtilsX.normalizeToUtcDate(_purchaseDate!),
         warrantyMonths: warranty,
         asContact: _phoneCtrl.text.trim().isEmpty
             ? null
             : _phoneCtrl.text.trim(),
-        imagePaths: List.unmodifiable(_photos),
+        photoFileNames: List.unmodifiable(_photos),
       );
-      repo.update(updated);
+      await repo.update(updated);
       await notifications.onDeviceSaved(updated);
       if (!mounted) return;
     }
@@ -171,51 +189,339 @@ class _AddDevicePageState extends State<AddDevicePage> {
     Navigator.of(context).pop();
   }
 
-  Future<void> _capturePhoto() async {
-    final path = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (_) => const CameraCapturePage()),
-    );
-    if (path == null || !mounted) return;
-    setState(() {
-      if (!_photos.contains(path)) {
-        _photos.add(path);
-      }
-    });
+  Future<void> _handleTakePhoto() async {
+    if (!_isMobilePlatform) {
+      _showMessage('Image scanning is available on Android/iOS only.');
+      return;
+    }
+
+    final source = await _showImageSourceSelector();
+    if (source == null) {
+      return;
+    }
+
+    final granted = await _ensurePermission(source);
+    if (!granted) {
+      return;
+    }
+
+    XFile? image;
+    try {
+      image = await _picker.pickImage(source: source);
+    } catch (e) {
+      _showMessage('Failed to pick image: $e');
+      return;
+    }
+
+    if (image == null) {
+      _showMessage('No image selected.');
+      return;
+    }
+
+    await _processImageForModelNumber(image);
+    await _cacheImage(image);
   }
 
-  Future<void> _pickFromGallery() async {
-    final picker = ImagePicker();
+
+  Future<void> _handleImportPhoto() async {
     try {
-      var selections = await picker.pickMultiImage();
-      if (selections.isEmpty) {
-        final single = await picker.pickImage(source: ImageSource.gallery);
-        if (single == null) return;
-        selections = [single];
+      if (_isMobilePlatform) {
+        final granted = await _ensurePermission(ImageSource.gallery);
+        if (!granted) {
+          return;
+        }
+        final images = await _picker.pickMultiImage();
+        if (images.isEmpty) {
+          return;
+        }
+        for (final image in images) {
+          await _cacheImage(image);
+        }
+        return;
       }
 
-      final photosDir = await _ensurePhotosDirectory();
-      final added = <String>[];
+      final result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.image,
+      );
+      if (result == null || result.files.isEmpty) {
+        return;
+      }
+      for (final file in result.files) {
+        final path = file.path;
+        if (path == null) {
+          continue;
+        }
+        await _cacheImageFromPath(path, originalName: file.name);
+      }
+    } catch (e) {
+      final l10n = AppLocalizations.of(context);
+      final message = l10n != null
+          ? l10n.addDevicePickImagesError('$e')
+          : 'Failed to pick images: $e';
+      _showMessage(message);
+    }
+  }
 
-      for (final file in selections) {
-        final saved = await _savePickedImage(file, photosDir);
-        if (!_photos.contains(saved)) {
-          added.add(saved);
+  Future<void> _processImageForModelNumber(XFile image) async {
+    if (!mounted) return;
+    setState(() {
+      _isProcessingImage = true;
+    });
+
+    try {
+      final ocrFuture = _ocrService.recognizeCandidatesFromImage(image);
+      final barcodeFuture = _barcodeService.scanFromImage(image);
+
+      final recognizedLines = await ocrFuture;
+      final barcodeResult = await barcodeFuture;
+
+      final ocrCandidates = extractAndScore(recognizedLines.join('\n'));
+      final merged = _mergeCandidates(
+        barcodeResult.toScoredCandidates(),
+        ocrCandidates,
+      );
+
+      if (!mounted) return;
+
+      if (merged.isEmpty) {
+        _showMessage(
+          'Could not detect a model number. Please enter it manually.',
+        );
+        setState(() {
+          _lastCandidates = const [];
+        });
+        return;
+      }
+
+      setState(() {
+        _lastCandidates = merged;
+      });
+
+      _updateModelField(merged.first.value);
+
+      if (merged.length > 1 && mounted) {
+        final selected = await _showCandidatePicker(merged);
+        if (selected != null) {
+          _updateModelField(selected.value);
         }
       }
-
-      if (added.isEmpty || !mounted) return;
-      setState(() => _photos.addAll(added));
     } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(
-              context,
-            )!.addDevicePickImagesError(e.toString()),
+      _showMessage('Failed to process image: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessingImage = false;
+        });
+      }
+    }
+  }
+
+  List<ScoredCandidate> _mergeCandidates(
+    List<ScoredCandidate> barcodeCandidates,
+    List<ScoredCandidate> ocrCandidates,
+  ) {
+    final seen = <String, ScoredCandidate>{};
+
+    void addAll(Iterable<ScoredCandidate> source) {
+      for (final candidate in source) {
+        final key = candidate.value;
+        final existing = seen[key];
+        if (existing == null) {
+          seen[key] = candidate;
+        } else {
+          final higherScore = existing.score >= candidate.score
+              ? existing.score
+              : candidate.score;
+          final preferredSource =
+              existing.source == CandidateSource.ocr &&
+                  candidate.source != CandidateSource.ocr
+              ? candidate.source
+              : existing.source;
+          seen[key] = existing.copyWith(
+            score: higherScore,
+            source: preferredSource,
+          );
+        }
+      }
+    }
+
+    addAll(barcodeCandidates);
+    addAll(ocrCandidates);
+
+    final merged = seen.values.toList()
+      ..sort((a, b) => b.score.compareTo(a.score));
+    return merged;
+  }
+
+  Future<ImageSource?> _showImageSourceSelector() {
+    return showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera_outlined),
+                title: const Text('Use camera'),
+                onTap: () => Navigator.of(context).pop(ImageSource.camera),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined),
+                title: const Text('Pick from gallery'),
+                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+              ),
+              ListTile(
+                leading: const Icon(Icons.close),
+                title: Text(AppLocalizations.of(context)!.commonCancel),
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            ],
           ),
-        ),
+        );
+      },
+    );
+  }
+
+  Future<bool> _ensurePermission(ImageSource source) async {
+    if (!_isMobilePlatform) return false;
+
+    if (source == ImageSource.camera) {
+      return _requestPermission(
+        Permission.camera,
+        deniedMessage: 'Camera permission is required to capture a photo.',
       );
+    }
+
+    if (Platform.isIOS) {
+      return _requestPermission(
+        Permission.photos,
+        deniedMessage: 'Photo library permission is required to pick an image.',
+      );
+    }
+
+    // Android gallery access
+    final photosGranted = await _requestPermission(
+      Permission.photos,
+      deniedMessage: 'Photo access is required to choose an image.',
+      suppressMessage: true,
+    );
+    if (photosGranted) {
+      return true;
+    }
+
+    return _requestPermission(
+      Permission.storage,
+      deniedMessage: 'Storage permission is required to choose an image.',
+    );
+  }
+
+  Future<bool> _requestPermission(
+    Permission permission, {
+    required String deniedMessage,
+    bool suppressMessage = false,
+  }) async {
+    final status = await permission.request();
+    if (status.isGranted || status.isLimited) {
+      return true;
+    }
+
+    if (!suppressMessage) {
+      if (status.isPermanentlyDenied) {
+        _showMessage('$deniedMessage Please enable it in system settings.');
+        await openAppSettings();
+      } else {
+        _showMessage(deniedMessage);
+      }
+    }
+    return false;
+  }
+
+  Future<ScoredCandidate?> _showCandidatePicker(
+    List<ScoredCandidate> candidates,
+  ) {
+    return showModalBottomSheet<ScoredCandidate>(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  'Choose detected model number',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              for (final candidate in candidates)
+                ListTile(
+                  title: Text(candidate.value),
+                  subtitle: Text(_sourceLabel(candidate.source)),
+                  onTap: () => Navigator.of(context).pop(candidate),
+                ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.close),
+                title: const Text('Dismiss'),
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  String _sourceLabel(CandidateSource source) {
+    switch (source) {
+      case CandidateSource.qr:
+        return 'QR code';
+      case CandidateSource.barcode:
+        return 'Barcode';
+      case CandidateSource.ocr:
+        return 'OCR text';
+    }
+  }
+
+  void _updateModelField(String value) {
+    final normalized = normalizeModelNumber(value);
+    _modelCtrl.text = normalized;
+    _modelCtrl.selection = TextSelection.collapsed(offset: normalized.length);
+  }
+
+  void _showMessage(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _cacheImage(XFile file) async {
+    await _cacheImageFromPath(file.path, originalName: file.name);
+  }
+
+  Future<void> _cacheImageFromPath(String path, {String? originalName}) async {
+    await _storeAndAddImage(path, originalName: originalName);
+  }
+
+  Future<void> _storeAndAddImage(String sourcePath, {String? originalName}) async {
+    try {
+      final photosDir = await _ensurePhotosDirectory();
+      final saved = await _saveImageFromPath(
+        sourcePath,
+        photosDir,
+        originalName: originalName,
+      );
+      if (!mounted) return;
+      if (!_photos.contains(saved)) {
+        setState(() {
+          _photos.add(saved);
+        });
+      }
+    } catch (e) {
+      _showMessage('Failed to store image: $e');
     }
   }
 
@@ -228,14 +534,25 @@ class _AddDevicePageState extends State<AddDevicePage> {
     return photosDir;
   }
 
-  Future<String> _savePickedImage(XFile file, Directory targetDir) async {
-    final extIndex = file.name.lastIndexOf('.');
-    final ext = extIndex >= 0 ? file.name.substring(extIndex) : '';
+  Future<String> _saveImageFromPath(
+    String sourcePath,
+    Directory targetDir, {
+    String? originalName,
+  }) async {
+    final ext = _extensionOf(originalName ?? sourcePath);
     final filename =
-        'gallery_${DateTime.now().toUtc().millisecondsSinceEpoch}_${const Uuid().v4()}$ext';
+        'capture_${DateTime.now().toUtc().millisecondsSinceEpoch}_${const Uuid().v4()}$ext';
     final destination = File('${targetDir.path}/$filename');
-    final saved = await File(file.path).copy(destination.path);
+    final saved = await File(sourcePath).copy(destination.path);
     return saved.path;
+  }
+
+  String _extensionOf(String value) {
+    final dotIndex = value.lastIndexOf('.');
+    if (dotIndex == -1 || dotIndex == value.length - 1) {
+      return '';
+    }
+    return value.substring(dotIndex);
   }
 
   @override
@@ -263,27 +580,6 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 spacing: layout.gutter,
                 runSpacing: fieldSpacing,
                 children: [
-                  SizedBox(
-                    width: fullWidth,
-                    child: DropdownButtonFormField<DeviceCategory>(
-                      value: _category,
-                      decoration: InputDecoration(
-                        labelText: _requiredLabel(l10n.addDeviceCategoryLabel),
-                        border: const OutlineInputBorder(),
-                      ),
-                      items: DeviceCategory.values
-                          .map(
-                            (c) => DropdownMenuItem(
-                              value: c,
-                              child: Text(_categoryLabel(l10n, c)),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) => setState(() => _category = value),
-                      validator: (value) =>
-                          value == null ? l10n.addDeviceCategoryRequired : null,
-                    ),
-                  ),
                   SizedBox(
                     width: fullWidth,
                     child: TextFormField(
@@ -318,20 +614,104 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   ),
                   SizedBox(
                     width: singleWidth,
-                    child: TextFormField(
-                      controller: _modelCtrl,
-                      decoration: InputDecoration(
-                        labelText: _requiredLabel(
-                          l10n.addDeviceModelNumberLabel,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextFormField(
+                          controller: _modelCtrl,
+                          decoration: InputDecoration(
+                            labelText: _requiredLabel(
+                              l10n.addDeviceModelNumberLabel,
+                            ),
+                            border: const OutlineInputBorder(),
+                          ),
+                          validator: (v) {
+                            if (v == null || v.trim().isEmpty) {
+                              return l10n.addDeviceModelNumberRequired;
+                            }
+                            if (!isLikelyModelNumber(v)) {
+                              return 'Enter a valid model number (A-Z, 0-9, -_/ only).';
+                            }
+                            return null;
+                          },
                         ),
-                        border: const OutlineInputBorder(),
-                      ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return l10n.addDeviceModelNumberRequired;
-                        }
-                        return null;
-                      },
+                        const SizedBox(height: 8),
+                        ElevatedButton.icon(
+                          onPressed: _isMobilePlatform && !_isProcessingImage
+                              ? _handleTakePhoto
+                              : (_isMobilePlatform
+                                    ? null
+                                    : () => _showMessage(
+                                        'Image scanning is available on Android/iOS only.',
+                                      )),
+                          icon: _isProcessingImage
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.camera_alt_outlined),
+                          label: Text(
+                            _isProcessingImage
+                                ? 'Processing...'
+                                : l10n.addDeviceTakePhoto,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        OutlinedButton.icon(
+                          onPressed: _isProcessingImage ? null : _handleImportPhoto,
+                          icon: const Icon(Icons.photo_library_outlined),
+                          label: Text(l10n.addDeviceSelectFromGallery),
+                        ),
+                        if (!_isMobilePlatform)
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: Text(
+                              'Model number scanning is supported on mobile apps only.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        if (_lastCandidates.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.check_circle,
+                                  size: 16,
+                                  color: Colors.green,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    'Auto-filled from ${_sourceLabel(_lastCandidates.first.source)}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        if (_lastCandidates.length > 1)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton(
+                              onPressed: () async {
+                                final selected = await _showCandidatePicker(
+                                  _lastCandidates,
+                                );
+                                if (selected != null) {
+                                  _updateModelField(selected.value);
+                                }
+                              },
+                              child: const Text('See other matches'),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -344,21 +724,22 @@ class _AddDevicePageState extends State<AddDevicePage> {
                           l10n.addDevicePurchaseDateLabel,
                         ),
                         hintText: l10n.addDevicePurchaseDateHint,
-                        suffixIcon: const Icon(Icons.calendar_today),
                         border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: _pickDate,
+                        ),
                       ),
-                      onTap: _pickDate,
-                      validator: (_) {
-                        if (_purchaseDate == null) {
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
                           return l10n.addDevicePurchaseDateRequired;
                         }
-                        final nowUtc = DateTime.now().toUtc();
-                        final todayUtc = DateTime.utc(
-                          nowUtc.year,
-                          nowUtc.month,
-                          nowUtc.day,
-                        );
-                        if (_purchaseDate!.isAfter(todayUtc)) {
+                        final parsed = _purchaseDate;
+                        if (parsed == null) {
+                          return l10n.addDevicePurchaseDateRequired;
+                        }
+                        final now = DateTime.now().toUtc();
+                        if (parsed.isAfter(now)) {
                           return l10n.addDevicePurchaseDateFutureError;
                         }
                         return null;
@@ -370,10 +751,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: TextFormField(
                       controller: _warrantyCtrl,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(3),
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
                         labelText: _requiredLabel(l10n.addDeviceWarrantyLabel),
                         hintText: l10n.addDeviceWarrantyHint,
@@ -403,7 +781,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                       decoration: InputDecoration(
                         labelText: l10n.addDeviceCustomerCenterLabel,
                         hintText: l10n.addDeviceCustomerCenterHint,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) return null;
@@ -415,30 +793,13 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Text(
-                l10n.addDeviceOthersSectionTitle,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: _capturePhoto,
-                    icon: const Icon(Icons.photo_camera),
-                    label: Text(l10n.addDeviceTakePhoto),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: _pickFromGallery,
-                    icon: const Icon(Icons.photo_library),
-                    label: Text(l10n.addDeviceSelectFromGallery),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              if (_photos.isNotEmpty)
+              if (_photos.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                Text(
+                  l10n.addDeviceOthersSectionTitle,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -458,6 +819,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                       )
                       .toList(),
                 ),
+              ],
               const SizedBox(height: 20),
               Row(
                 children: [
@@ -483,22 +845,4 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  String _categoryLabel(AppLocalizations l10n, DeviceCategory c) {
-    switch (c) {
-      case DeviceCategory.tv:
-        return l10n.categoryTv;
-      case DeviceCategory.washer:
-        return l10n.categoryWasher;
-      case DeviceCategory.computer:
-        return l10n.categoryComputer;
-      case DeviceCategory.refrigerator:
-        return l10n.categoryRefrigerator;
-      case DeviceCategory.aircon:
-        return l10n.categoryAirConditioner;
-      case DeviceCategory.car:
-        return l10n.categoryCar;
-      case DeviceCategory.etc:
-        return l10n.categoryOthers;
-    }
-  }
 }

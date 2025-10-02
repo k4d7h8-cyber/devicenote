@@ -51,7 +51,7 @@
     }
   },
   "addDeviceEditTitle": "Edit device",
-  "addDeviceCreateTitle": "Add device",
+  "addDeviceCreateTitle": "ডিভাইস নিবন্ধন",
   "addDeviceCategoryLabel": "Category",
   "addDeviceCategoryRequired": "Category is required",
   "addDeviceModelNameLabel": "Model name",
@@ -167,5 +167,9 @@
   "languageRussian": "রুশ",
   "languageUrdu": "উর্দু",
   "languageChinese": "চীনা",
-  "languageChineseSimplified": "চীনা (সরলীকৃত)"
+  "languageChineseSimplified": "চীনা (সরলীকৃত)",
+  "homeSearchNoResults": "আপনার অনুসন্ধানের সাথে কোনো ডিভাইস মেলেনি।",
+  "@homeSearchNoResults": {
+    "description": "Displayed when a search yields no matching devices."
+  }
 }

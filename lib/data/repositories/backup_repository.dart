@@ -1,9 +1,9 @@
-import 'dart:convert';
-import 'package:devicenote/data/models/device.dart';
+﻿import 'dart:convert';
+import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/data/sources/hive_boxes.dart';
 
 class BackupRepository {
-  /// 모든 데이터를 JSON 문자열로 내보내기
+  /// 紐⑤뱺 ?곗씠?곕? JSON 臾몄옄?대줈 ?대낫?닿린
   String exportToJson() {
     final devices = HiveBoxes.devices.values.map((e) => e.toMap()).toList();
     final map = {
@@ -14,7 +14,7 @@ class BackupRepository {
     return const JsonEncoder.withIndent('  ').convert(map);
   }
 
-  /// JSON 문자열에서 복원(병합: id 기준 덮어쓰기)
+  /// JSON 臾몄옄?댁뿉??蹂듭썝(蹂묓빀: id 湲곗? ??뼱?곌린)
   /// return: (added, updated, failed)
   Future<(int added, int updated, int failed)> importFromJson(String jsonStr) async {
     int added = 0, updated = 0, failed = 0;

@@ -387,4 +387,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => 'Tionghoa (Sederhana)';
+
+  @override
+  String get homeSearchNoResults => 'No devices match your search.';
 }

@@ -92,7 +92,7 @@
     }
   },
   "addDeviceEditTitle": "Edit device",
-  "addDeviceCreateTitle": "Add device",
+  "addDeviceCreateTitle": "Register device",
   "addDeviceCategoryLabel": "Category",
   "addDeviceCategoryRequired": "Category is required",
   "addDeviceModelNameLabel": "Model name",
@@ -208,5 +208,9 @@
   "languageRussian": "Russian",
   "languageUrdu": "Urdu",
   "languageChinese": "Chinese",
-  "languageChineseSimplified": "Chinese (Simplified)"
+  "languageChineseSimplified": "Chinese (Simplified)",
+  "homeSearchNoResults": "No devices match your search.",
+  "@homeSearchNoResults": {
+    "description": "Label shown when no devices match the current search query."
+  }
 }

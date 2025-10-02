@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
 
@@ -311,7 +311,7 @@ class DeviceDetailPage extends StatelessWidget {
 
       await notifications.onDeviceRemoved(id);
 
-      repo.remove(id);
+      await repo.remove(id);
 
       if (navigator.mounted) navigator.pop();
     }

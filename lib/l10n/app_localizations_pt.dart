@@ -393,6 +393,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => 'Chinês (simplificado)';
+
+  @override
+  String get homeSearchNoResults => 'No devices match your search.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

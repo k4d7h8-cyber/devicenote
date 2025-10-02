@@ -391,4 +391,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => 'चीनी (सरलीकृत)';
+
+  @override
+  String get homeSearchNoResults => 'No devices match your search.';
 }

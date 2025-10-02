@@ -380,6 +380,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => '中文（簡體）';
+
+  @override
+  String get homeSearchNoResults => 'No devices match your search.';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).

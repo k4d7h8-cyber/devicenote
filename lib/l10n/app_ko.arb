@@ -51,7 +51,7 @@
     }
   },
   "addDeviceEditTitle": "기기 수정",
-  "addDeviceCreateTitle": "기기 추가",
+  "addDeviceCreateTitle": "기기 등록",
   "addDeviceCategoryLabel": "카테고리",
   "addDeviceCategoryRequired": "카테고리는 필수 항목입니다",
   "addDeviceModelNameLabel": "모델명",
@@ -167,5 +167,9 @@
   "languageRussian": "러시아어",
   "languageUrdu": "우르두어",
   "languageChinese": "중국어",
-  "languageChineseSimplified": "중국어(간체)"
+  "languageChineseSimplified": "중국어(간체)",
+  "homeSearchNoResults": "검색과 일치하는 기기가 없습니다.",
+  "@homeSearchNoResults": {
+    "description": "검색 결과가 없을 때 표시되는 문구"
+  }
 }

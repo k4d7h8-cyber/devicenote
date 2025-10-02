@@ -141,7 +141,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get addDeviceEditTitle => '기기 수정';
 
   @override
-  String get addDeviceCreateTitle => '기기 추가';
+  String get addDeviceCreateTitle => '기기 등록';
 
   @override
   String get addDeviceCategoryLabel => '카테고리';
@@ -381,4 +381,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => '중국어(간체)';
+
+  @override
+  String get homeSearchNoResults => '검색과 일치하는 기기가 없습니다.';
 }

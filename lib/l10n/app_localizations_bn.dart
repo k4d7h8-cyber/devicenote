@@ -144,7 +144,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get addDeviceEditTitle => 'Edit device';
 
   @override
-  String get addDeviceCreateTitle => 'Add device';
+  String get addDeviceCreateTitle => 'ডিভাইস নিবন্ধন';
 
   @override
   String get addDeviceCategoryLabel => 'Category';
@@ -387,4 +387,8 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => 'চীনা (সরলীকৃত)';
+
+  @override
+  String get homeSearchNoResults =>
+      'আপনার অনুসন্ধানের সাথে কোনো ডিভাইস মেলেনি।';
 }

@@ -392,4 +392,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => 'Китайский (упрощённый)';
+
+  @override
+  String get homeSearchNoResults => 'No devices match your search.';
 }

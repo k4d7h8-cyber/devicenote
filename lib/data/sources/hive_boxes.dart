@@ -1,15 +1,21 @@
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:devicenote/data/models/device.dart';
-import 'package:devicenote/data/sources/hive_adapters.dart';
-
-const _deviceBoxName = 'devices';
+import 'package:devicenote/data/repositories/device_repository.dart';
+import 'package:hive/hive.dart';
 
 class HiveBoxes {
+  static const String deviceBoxName = 'devices';
+
   static late Box<Device> devices;
 
-  static Future<void> init() async {
-    await Hive.initFlutter();
-    registerHiveAdapters();
-    devices = await Hive.openBox<Device>(_deviceBoxName);
+  static Future<void> init({Box<Device>? preOpened}) async {
+    if (preOpened != null) {
+      devices = preOpened;
+      return;
+    }
+
+    if (Hive.isBoxOpen(deviceBoxName)) {
+      devices = Hive.box<Device>(deviceBoxName);
+    } else {
+      devices = await Hive.openBox<Device>(deviceBoxName);
+    }
   }
 }

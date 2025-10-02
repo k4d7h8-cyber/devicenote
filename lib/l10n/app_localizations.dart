@@ -354,7 +354,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceCreateTitle.
   ///
   /// In en, this message translates to:
-  /// **'Add device'**
+  /// **'Register device'**
   String get addDeviceCreateTitle;
 
   /// No description provided for @addDeviceCategoryLabel.
@@ -812,6 +812,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chinese (Simplified)'**
   String get languageChineseSimplified;
+
+  /// Label shown when no devices match the current search query.
+  ///
+  /// In en, this message translates to:
+  /// **'No devices match your search.'**
+  String get homeSearchNoResults;
 }
 
 class _AppLocalizationsDelegate

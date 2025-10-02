@@ -144,7 +144,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addDeviceEditTitle => 'Edit device';
 
   @override
-  String get addDeviceCreateTitle => 'Add device';
+  String get addDeviceCreateTitle => 'Register device';
 
   @override
   String get addDeviceCategoryLabel => 'Category';
@@ -387,4 +387,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageChineseSimplified => 'Chinese (Simplified)';
+
+  @override
+  String get homeSearchNoResults => 'No devices match your search.';
 }
