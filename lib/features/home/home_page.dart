@@ -211,20 +211,15 @@ class _CategoryGrid extends StatelessWidget {
 }
 
 class _CategoryDefinition {
-  const _CategoryDefinition(this.category, this.icon);
+  const _CategoryDefinition(this.category);
 
   final DeviceCategory category;
-  final IconData icon;
 
-  static List<_CategoryDefinition> get values => const [
-        _CategoryDefinition(DeviceCategory.tv, Icons.tv),
-        _CategoryDefinition(DeviceCategory.washer, Icons.local_laundry_service),
-        _CategoryDefinition(DeviceCategory.computer, Icons.computer),
-        _CategoryDefinition(DeviceCategory.refrigerator, Icons.kitchen),
-        _CategoryDefinition(DeviceCategory.aircon, Icons.ac_unit),
-        _CategoryDefinition(DeviceCategory.car, Icons.directions_car),
-        _CategoryDefinition(DeviceCategory.etc, Icons.devices_other),
-      ];
+  IconData get icon => categoryIcon(category);
+
+  static List<_CategoryDefinition> get values => DeviceCategory.values
+      .map((category) => _CategoryDefinition(category))
+      .toList(growable: false);
 }
 
 class _DeviceSearchDelegate extends SearchDelegate<Device?> {

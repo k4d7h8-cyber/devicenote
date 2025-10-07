@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:provider/provider.dart';
+import 'package:devicenote/utils/category_display.dart';
 
 const double _menuItemExtent = 104;
 
@@ -56,24 +57,6 @@ class DeviceDetailPage extends StatelessWidget {
     return ResponsiveScaffold(
       appBar: AppBar(
         title: Text(device.name),
-
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-
-            tooltip: l10n.commonDelete,
-
-            onPressed: () => _confirmDelete(
-              context,
-
-              repo,
-
-              context.read<NotificationController>(),
-
-              device.id,
-            ),
-          ),
-        ],
       ),
 
       builder: (context, layout) {
@@ -90,7 +73,7 @@ class DeviceDetailPage extends StatelessWidget {
 
             value: _categoryLabel(l10n, device.category),
 
-            icon: Icons.category,
+            icon: categoryIcon(device.category),
           ),
 
           _InfoCard(
@@ -106,7 +89,7 @@ class DeviceDetailPage extends StatelessWidget {
 
             value: device.name,
 
-            icon: Icons.devices,
+            icon: categoryIcon(device.category),
           ),
 
           _InfoCard(

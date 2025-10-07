@@ -1,5 +1,6 @@
 ﻿import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
+import 'package:devicenote/utils/category_display.dart';
 import 'package:flutter/material.dart';
 
 class DeviceGridCard extends StatelessWidget {
@@ -33,7 +34,10 @@ class DeviceGridCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(Icons.devices, color: theme.colorScheme.primary),
+                  Icon(
+                    categoryIcon(device.category),
+                    color: theme.colorScheme.primary,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(

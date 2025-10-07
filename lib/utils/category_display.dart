@@ -1,5 +1,6 @@
 import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 String categoryDisplayName(AppLocalizations l10n, DeviceCategory category) {
   switch (category) {
@@ -17,6 +18,25 @@ String categoryDisplayName(AppLocalizations l10n, DeviceCategory category) {
       return l10n.categoryCar;
     case DeviceCategory.etc:
       return l10n.categoryOthers;
+  }
+}
+
+IconData categoryIcon(DeviceCategory category) {
+  switch (category) {
+    case DeviceCategory.tv:
+      return Icons.tv;
+    case DeviceCategory.washer:
+      return Icons.local_laundry_service;
+    case DeviceCategory.computer:
+      return Icons.computer;
+    case DeviceCategory.refrigerator:
+      return Icons.kitchen;
+    case DeviceCategory.aircon:
+      return Icons.ac_unit;
+    case DeviceCategory.car:
+      return Icons.directions_car;
+    case DeviceCategory.etc:
+      return Icons.devices_other;
   }
 }
 

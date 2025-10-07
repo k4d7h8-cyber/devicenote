@@ -28,13 +28,11 @@ class CategoryDeviceListPage extends StatelessWidget {
       appBar: AppBar(
         title: filteredDevices.isEmpty ? null : Text(title),
       ),
-      floatingActionButton: filteredDevices.isEmpty
-          ? FloatingActionButton(
-              onPressed: () => _openAddDevice(context),
-              tooltip: l10n.homeAddDeviceTooltip,
-              child: const Icon(Icons.add),
-            )
-          : null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _openAddDevice(context),
+        tooltip: l10n.homeAddDeviceTooltip,
+        child: const Icon(Icons.add),
+      ),
       builder: (context, layout) {
         if (filteredDevices.isEmpty) {
           final theme = Theme.of(context);

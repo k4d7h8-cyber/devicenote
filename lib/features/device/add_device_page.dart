@@ -719,6 +719,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: TextFormField(
                       controller: _purchaseDateCtrl,
                       readOnly: true,
+                      onTap: _pickDate,
                       decoration: InputDecoration(
                         labelText: _requiredLabel(
                           l10n.addDevicePurchaseDateLabel,
