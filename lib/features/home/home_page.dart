@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:devicenote/data/repositories/device_repository.dart';
 import 'package:devicenote/responsive_layout.dart';
 import 'package:devicenote/utils/category_display.dart';
@@ -166,13 +168,25 @@ class _CategoryGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final iconBackground = theme.colorScheme.primary.withValues(alpha: 0.08);
-    final iconColor = theme.colorScheme.primary.withValues(alpha: 0.55);
+    const iconBackground = Color(0xFF4A90E2);
+    const iconColor = Colors.white;
+    final columnCount = layout.isDesktop ? 4 : layout.isTablet ? 3 : 2;
+    final spacing = layout.gutter;
+    final contentWidth = layout.contentWidth;
+    final rawTileWidth = columnCount > 1
+        ? (contentWidth - spacing * (columnCount - 1)) / columnCount
+        : contentWidth;
+    final fallbackWidth = contentWidth > 0 ? contentWidth : 160.0;
+    final effectiveTileWidth = rawTileWidth.isFinite && rawTileWidth > 0
+        ? rawTileWidth
+        : fallbackWidth;
+    final avatarExtent = math.min(effectiveTileWidth, 160.0);
+    final iconSize = math.min(90.0, avatarExtent * 0.6);
 
     return Wrap(
       alignment: WrapAlignment.center,
-      spacing: layout.gutter,
-      runSpacing: layout.gutter,
+      spacing: spacing,
+      runSpacing: spacing,
       children: [
         for (final item in categories)
           Material(
@@ -181,19 +195,19 @@ class _CategoryGrid extends StatelessWidget {
               borderRadius: BorderRadius.circular(28),
               onTap: () => onTap(item.category),
               child: SizedBox(
-                width: 120,
+                width: effectiveTileWidth,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      width: 88,
-                      height: 88,
+                      width: avatarExtent,
+                      height: avatarExtent,
                       decoration: BoxDecoration(
                         color: iconBackground,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       alignment: Alignment.center,
-                      child: Icon(item.icon, size: 40, color: iconColor),
+                      child: Icon(item.icon, size: iconSize, color: iconColor),
                     ),
                     const SizedBox(height: 8),
                     Text(

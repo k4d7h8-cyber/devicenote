@@ -12,6 +12,20 @@ class DeviceNoteApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.indigo,
+        scaffoldBackgroundColor: Colors.transparent,
+      ),
+      builder: (context, child) => Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFBEE3F8),
+              Color(0xFFC6F6D5),
+            ],
+          ),
+        ),
+        child: child ?? const SizedBox.shrink(),
       ),
       initialRoute: '/',
       onGenerateRoute: AppRouter.onGenerateRoute,
