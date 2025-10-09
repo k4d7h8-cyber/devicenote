@@ -468,7 +468,11 @@ class _InfoCard extends StatelessWidget {
 
               child: Row(
                 children: [
-                  Icon(icon, color: iconColor),
+                  Icon(
+                    icon,
+                    color: iconColor,
+                    size: _menuItemExtent * 0.5,
+                  ),
 
                   const SizedBox(width: 12),
 

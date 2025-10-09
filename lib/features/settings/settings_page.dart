@@ -178,54 +178,85 @@ class SettingsPage extends riverpod.ConsumerWidget {
             SizedBox(
               width: sectionWidth,
               child: Card(
+                clipBehavior: Clip.antiAlias,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SwitchListTile(
-                      title: Text(l10n.settingsNotificationsToggleTitle),
-                      subtitle: Text(
-                        notifications.notificationsEnabled
-                            ? l10n.settingsNotificationsToggleEnabled
-                            : l10n.settingsNotificationsToggleDisabled,
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFFBEE3F8),
+                            Color(0xFFC6F6D5),
+                          ],
+                        ),
                       ),
-                      value: notifications.notificationsEnabled,
-                      onChanged: (value) async {
-                        await notifications.setGlobalEnabled(
-                          context: context,
-                          enabled: value,
-                        );
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
+                      child: SwitchListTile(
+                        title: Text(l10n.settingsNotificationsToggleTitle),
+                        subtitle: Text(
+                          notifications.notificationsEnabled
+                              ? l10n.settingsNotificationsToggleEnabled
+                              : l10n.settingsNotificationsToggleDisabled,
+                        ),
+                        value: notifications.notificationsEnabled,
+                        onChanged: (value) async {
+                          await notifications.setGlobalEnabled(
+                            context: context,
+                            enabled: value,
+                          );
+                        },
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
                       ),
                     ),
                     const Divider(height: 0),
-                    ListTile(
-                      leading: const Icon(Icons.schedule),
-                      title: Text(l10n.settingsReminderTimeLabel),
-                      subtitle: Text(timeLabel),
-                      onTap: () async {
-                        final picked = await showTimePicker(
-                          context: context,
-                          initialTime: notifications.notificationTime,
-                          builder: (pickerContext, child) =>
-                              Localizations.override(
-                                context: pickerContext,
-                                locale: l10n.locale,
-                                child: child,
-                              ),
-                        );
-                        if (picked != null) {
-                          await notifications.setNotificationTime(picked);
-                        }
-                      },
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFFBEE3F8),
+                            Color(0xFFC6F6D5),
+                          ],
+                        ),
+                      ),
+                      child: ListTile(
+                        leading: const Icon(Icons.schedule),
+                        title: Text(l10n.settingsReminderTimeLabel),
+                        subtitle: Text(timeLabel),
+                        onTap: () async {
+                          final picked = await showTimePicker(
+                            context: context,
+                            initialTime: notifications.notificationTime,
+                            builder: (pickerContext, child) =>
+                                Localizations.override(
+                                  context: pickerContext,
+                                  locale: l10n.locale,
+                                  child: child,
+                                ),
+                          );
+                          if (picked != null) {
+                            await notifications.setNotificationTime(picked);
+                          }
+                        },
+                      ),
                     ),
                     const Divider(height: 0),
-                    ListTile(
-                      leading: const Icon(Icons.language),
-                      title: Text(l10n.settingsLanguageTitle),
-                      subtitle: Text(languageLabel),
-                      onTap: () => _showLanguageDialog(context, ref),
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFFBEE3F8),
+                            Color(0xFFC6F6D5),
+                          ],
+                        ),
+                      ),
+                      child: ListTile(
+                        leading: const Icon(Icons.language),
+                        title: Text(l10n.settingsLanguageTitle),
+                        subtitle: Text(languageLabel),
+                        onTap: () => _showLanguageDialog(context, ref),
+                      ),
                     ),
                   ],
                 ),
@@ -234,14 +265,23 @@ class SettingsPage extends riverpod.ConsumerWidget {
             SizedBox(
               width: sectionWidth,
               child: Card(
-                child: Padding(
+                clipBehavior: Clip.antiAlias,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFFBEE3F8),
+                        Color(0xFFC6F6D5),
+                      ],
+                    ),
+                  ),
                   padding: const EdgeInsets.all(16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l10n.settingsBackupSectionTitle,
-                        style: Theme.of(context).textTheme.titleMedium,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          l10n.settingsBackupSectionTitle,
+                          style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -269,15 +309,26 @@ class SettingsPage extends riverpod.ConsumerWidget {
             SizedBox(
               width: fullWidth,
               child: Card(
-                child: ListTile(
-                  leading: const Icon(Icons.info_outline),
-                  title: Text(l10n.commonVersion),
-                  subtitle: Text(
-                    l10n.settingsVersionValue(l10n.settingsVersionPlaceholder),
+                clipBehavior: Clip.antiAlias,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFFBEE3F8),
+                        Color(0xFFC6F6D5),
+                      ],
+                    ),
                   ),
-                ),
+                  child: ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: Text(l10n.commonVersion),
+                    subtitle: Text(
+                      l10n.settingsVersionValue(l10n.settingsVersionPlaceholder),
+                    ),
+                  ),
               ),
             ),
+          ),
           ],
         );
       },
