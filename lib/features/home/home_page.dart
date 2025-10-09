@@ -91,11 +91,14 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   for (final device in filteredDevices)
                     SizedBox(
-                      width: layout.columnWidth(),
-                      child: DeviceGridCard(
-                        device: device,
-                        monthsRemaining: repo.monthsRemaining(device),
-                        onTap: () => context.push('/device/${device.id}'),
+                      width: DeviceGridCard.widthForLayout(layout),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: DeviceGridCard(
+                          device: device,
+                          monthsRemaining: repo.monthsRemaining(device),
+                          onTap: () => context.push('/device/${device.id}'),
+                        ),
                       ),
                     ),
                 ],
@@ -168,7 +171,14 @@ class _CategoryGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    const iconBackground = Color(0xFF4A90E2);
+    const iconGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Color(0xFF5CA7E3),
+        Color(0xFF6AC48A),
+      ],
+    );
     const iconColor = Colors.white;
     final columnCount = layout.isDesktop ? 4 : layout.isTablet ? 3 : 2;
     final spacing = layout.gutter;
@@ -181,7 +191,7 @@ class _CategoryGrid extends StatelessWidget {
         ? rawTileWidth
         : fallbackWidth;
     final avatarExtent = math.min(effectiveTileWidth, 160.0);
-    final iconSize = math.min(90.0, avatarExtent * 0.6);
+    final iconSize = (avatarExtent * 0.69).clamp(0, avatarExtent).toDouble();
 
     return Wrap(
       alignment: WrapAlignment.center,
@@ -203,7 +213,7 @@ class _CategoryGrid extends StatelessWidget {
                       width: avatarExtent,
                       height: avatarExtent,
                       decoration: BoxDecoration(
-                        color: iconBackground,
+                        gradient: iconGradient,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       alignment: Alignment.center,

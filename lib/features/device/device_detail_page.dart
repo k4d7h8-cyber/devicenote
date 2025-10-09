@@ -130,10 +130,6 @@ class DeviceDetailPage extends StatelessWidget {
 
               icon: Icons.phone,
               onTap: () => _callCustomerCenter(context, customerCenter),
-
-              backgroundColor: colors.primary,
-
-              foregroundColor: colors.onPrimary,
             ),
           );
         }
@@ -156,24 +152,38 @@ class DeviceDetailPage extends StatelessWidget {
             const SizedBox(height: 24),
 
             Card(
-              child: SwitchListTile.adaptive(
-                title: Text(l10n.deviceDetailNotificationsTitle),
-                subtitle: Text(
-                  notifications.notificationsEnabled
-                      ? l10n.deviceDetailNotificationsEnabled(expiryLabel)
-                      : l10n.deviceDetailNotificationsDisabled,
+              color: Colors.transparent,
+              clipBehavior: Clip.antiAlias,
+              child: Ink(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFFBEE3F8),
+                      Color(0xFFC6F6D5),
+                    ],
+                  ),
                 ),
-                value: notificationPreference,
+                child: SwitchListTile.adaptive(
+                  title: Text(l10n.deviceDetailNotificationsTitle),
+                  subtitle: Text(
+                    notifications.notificationsEnabled
+                        ? l10n.deviceDetailNotificationsEnabled(expiryLabel)
+                        : l10n.deviceDetailNotificationsDisabled,
+                  ),
+                  value: notificationPreference,
 
-                onChanged: (value) async {
-                  await notifications.setDevicePreference(
-                    context: context,
+                  onChanged: (value) async {
+                    await notifications.setDevicePreference(
+                      context: context,
 
-                    device: device,
+                      device: device,
 
-                    enabled: value,
-                  );
-                },
+                      enabled: value,
+                    );
+                  },
+                ),
               ),
             ),
 
@@ -182,32 +192,75 @@ class DeviceDetailPage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => context.push('/device/${device.id}/edit'),
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFFBEE3F8),
+                          Color(0xFFC6F6D5),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        surfaceTintColor: Colors.transparent,
+                        side: BorderSide.none,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      ),
+                      onPressed: () => context.push('/device/${device.id}/edit'),
 
-                    icon: const Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
 
-                    label: Text(l10n.commonEdit),
+                      label: Text(l10n.commonEdit),
+                    ),
                   ),
                 ),
 
                 const SizedBox(width: 12),
 
                 Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => _confirmDelete(
-                      context,
-
-                      repo,
-
-                      context.read<NotificationController>(),
-
-                      device.id,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFFBEE3F8),
+                          Color(0xFFC6F6D5),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        surfaceTintColor: Colors.transparent,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      ),
+                      onPressed: () => _confirmDelete(
+                        context,
 
-                    icon: const Icon(Icons.delete_outline),
+                        repo,
 
-                    label: Text(l10n.commonDelete),
+                        context.read<NotificationController>(),
+
+                        device.id,
+                      ),
+
+                      icon: const Icon(Icons.delete_outline),
+
+                      label: Text(l10n.commonDelete),
+                    ),
                   ),
                 ),
               ],
@@ -339,6 +392,17 @@ class _InfoCard extends StatelessWidget {
 
   final Color? foregroundColor;
 
+  final Gradient? backgroundGradient;
+
+  static const Gradient _defaultGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFFBEE3F8),
+      Color(0xFFC6F6D5),
+    ],
+  );
+
   const _InfoCard({
     required this.title,
 
@@ -351,6 +415,8 @@ class _InfoCard extends StatelessWidget {
     this.backgroundColor,
 
     this.foregroundColor,
+
+    this.backgroundGradient,
   });
 
   @override
@@ -373,11 +439,18 @@ class _InfoCard extends StatelessWidget {
         theme.iconTheme.color ??
         theme.colorScheme.onSurface;
 
+    final gradient =
+        backgroundGradient ?? (backgroundColor == null ? _defaultGradient : null);
+    final decoration = BoxDecoration(
+      gradient: gradient,
+      color: gradient == null ? backgroundColor ?? theme.cardColor : null,
+    );
+
     return SizedBox(
       height: _menuItemExtent,
 
       child: Card(
-        color: backgroundColor,
+        color: Colors.transparent,
 
         clipBehavior: Clip.antiAlias,
 
@@ -388,31 +461,34 @@ class _InfoCard extends StatelessWidget {
               ? SystemMouseCursors.click
               : SystemMouseCursors.basic,
 
-          child: Padding(
-            padding: const EdgeInsets.all(16),
+          child: Ink(
+            decoration: decoration,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
 
-            child: Row(
-              children: [
-                Icon(icon, color: iconColor),
+              child: Row(
+                children: [
+                  Icon(icon, color: iconColor),
 
-                const SizedBox(width: 12),
+                  const SizedBox(width: 12),
 
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
-                    mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
 
-                    children: [
-                      Text(title, style: titleStyle),
+                      children: [
+                        Text(title, style: titleStyle),
 
-                      const SizedBox(height: 4),
+                        const SizedBox(height: 4),
 
-                      Text(value, style: valueStyle),
-                    ],
+                        Text(value, style: valueStyle),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -31,7 +31,31 @@ class CategoryDeviceListPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openAddDevice(context),
         tooltip: l10n.homeAddDeviceTooltip,
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        clipBehavior: Clip.antiAlias,
+        shape: const CircleBorder(),
+        child: Ink(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFBEE3F8),
+                Color(0xFFC6F6D5),
+              ],
+            ),
+            shape: BoxShape.circle,
+          ),
+          child: const SizedBox.expand(
+            child: Center(
+              child: Icon(
+                Icons.add,
+                size: 36,
+              ),
+            ),
+          ),
+        ),
       ),
       builder: (context, layout) {
         if (filteredDevices.isEmpty) {
@@ -67,11 +91,14 @@ class CategoryDeviceListPage extends StatelessWidget {
               children: [
                 for (final device in filteredDevices)
                   SizedBox(
-                    width: layout.columnWidth(),
-                    child: DeviceGridCard(
-                      device: device,
-                      monthsRemaining: repo.monthsRemaining(device),
-                      onTap: () => context.push('/device/${device.id}'),
+                    width: DeviceGridCard.widthForLayout(layout),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: DeviceGridCard(
+                        device: device,
+                        monthsRemaining: repo.monthsRemaining(device),
+                        onTap: () => context.push('/device/${device.id}'),
+                      ),
                     ),
                   ),
               ],
