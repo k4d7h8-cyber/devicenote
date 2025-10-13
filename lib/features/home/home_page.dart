@@ -29,24 +29,29 @@ class _HomePageState extends State<HomePage> {
         _searchQuery.isEmpty ? const <Device>[] : _filterDevices(devices, _searchQuery);
 
     return ResponsiveScaffold(
-      appBar: AppBar(
-        title: Text(l10n.appTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: l10n.homeSearchHint,
-            onPressed: devices.isEmpty ? null : () => _startSearch(l10n, devices),
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => context.push('/settings'),
-            tooltip: l10n.homeSettingsTooltip,
-          ),
-        ],
-      ),
       builder: (context, layout) {
         final children = <Widget>[
-          const SizedBox(height: 24),
+          // Top action row to replace removed AppBar actions
+          Align(
+            alignment: Alignment.topRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  tooltip: l10n.homeSearchHint,
+                  onPressed:
+                      devices.isEmpty ? null : () => _startSearch(l10n, devices),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => context.push('/settings'),
+                  tooltip: l10n.homeSettingsTooltip,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
           _CategoryGrid(
             categories: categories,
             layout: layout,

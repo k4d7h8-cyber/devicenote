@@ -35,8 +35,7 @@ class DeviceDetailPage extends StatelessWidget {
 
     if (device == null) {
       return ResponsiveScaffold(
-        appBar: AppBar(title: Text(l10n.deviceDetailTitle)),
-
+        contentAlignment: Alignment.center,
         builder: (context, layout) =>
             Center(child: Text(l10n.deviceDetailNotFound)),
       );
@@ -55,10 +54,7 @@ class DeviceDetailPage extends StatelessWidget {
     );
 
     return ResponsiveScaffold(
-      appBar: AppBar(
-        title: Text(device.name),
-      ),
-
+      contentAlignment: Alignment.center,
       builder: (context, layout) {
         final cardWidth = layout.columnWidth();
 
@@ -210,6 +206,7 @@ class DeviceDetailPage extends StatelessWidget {
                         shadowColor: Colors.transparent,
                         surfaceTintColor: Colors.transparent,
                         side: BorderSide.none,
+                        minimumSize: const Size.fromHeight(60), // 1.5x taller
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
@@ -243,6 +240,7 @@ class DeviceDetailPage extends StatelessWidget {
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                         surfaceTintColor: Colors.transparent,
+                        minimumSize: const Size.fromHeight(60), // 1.5x taller
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
@@ -734,20 +732,8 @@ class _FullScreenGalleryState extends State<_FullScreenGallery> {
     return Scaffold(
       backgroundColor: Colors.black,
 
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-
-        foregroundColor: Colors.white,
-
-        title: Text(
-          l10n.deviceDetailPhotoCounter(
-            _currentIndex + 1,
-            widget.photos.length,
-          ),
-        ),
-      ),
-
-      body: PageView.builder(
+      body: SafeArea(
+        child: PageView.builder(
         controller: _controller,
 
         onPageChanged: (index) => setState(() => _currentIndex = index),
@@ -783,6 +769,7 @@ class _FullScreenGalleryState extends State<_FullScreenGallery> {
             ),
           );
         },
+        ),
       ),
     );
   }

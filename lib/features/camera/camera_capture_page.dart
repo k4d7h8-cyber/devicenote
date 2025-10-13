@@ -80,9 +80,9 @@ class _CameraCapturePageState extends State<CameraCapturePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.cameraTitle)),
       backgroundColor: Colors.black,
-      body: FutureBuilder<void>(
+      body: SafeArea(
+        child: FutureBuilder<void>(
         future: _initFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -118,6 +118,7 @@ class _CameraCapturePageState extends State<CameraCapturePage> {
             ],
           );
         },
+        ),
       ),
     );
   }

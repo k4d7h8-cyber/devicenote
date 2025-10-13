@@ -54,6 +54,25 @@ class _AddDevicePageState extends State<AddDevicePage> {
   bool get _isMobilePlatform =>
       !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
+  // Match the menu/card height used in Device Detail page
+  static const double _menuItemExtent = 104;
+
+  InputDecoration _bigFieldDecoration({
+    required String label,
+    String? hint,
+    Widget? suffixIcon,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 28),
+      suffixIcon: suffixIcon,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -560,11 +579,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     final isEditing = widget.existing != null;
     final l10n = AppLocalizations.of(context)!;
     return ResponsiveScaffold(
-      appBar: AppBar(
-        title: Text(
-          isEditing ? l10n.addDeviceEditTitle : l10n.addDeviceCreateTitle,
-        ),
-      ),
+      contentAlignment: Alignment.center,
       builder: (context, layout) {
         final fullWidth = layout.columnWidth(span: layout.columns);
         final twoSpanWidth = layout.columnWidth(span: 2);
@@ -580,36 +595,44 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 spacing: layout.gutter,
                 runSpacing: fieldSpacing,
                 children: [
-                  SizedBox(
-                    width: fullWidth,
-                    child: TextFormField(
-                      controller: _nameCtrl,
-                      decoration: InputDecoration(
-                        labelText: _requiredLabel(l10n.addDeviceModelNameLabel),
-                        border: const OutlineInputBorder(),
-                      ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return l10n.addDeviceModelNameRequired;
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
+                  // 1st row: 브랜드
                   SizedBox(
                     width: singleWidth,
-                    child: TextFormField(
-                      controller: _brandCtrl,
-                      decoration: InputDecoration(
-                        labelText: _requiredLabel(l10n.addDeviceBrandLabel),
-                        border: const OutlineInputBorder(),
+                    height: _menuItemExtent,
+                    child: Center(
+                      child: TextFormField(
+                        controller: _brandCtrl,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: _bigFieldDecoration(
+                          label: _requiredLabel(l10n.addDeviceBrandLabel),
+                        ),
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) {
+                            return l10n.addDeviceBrandRequired;
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return l10n.addDeviceBrandRequired;
-                        }
-                        return null;
-                      },
+                    ),
+                  ),
+                  // 1st row: 모델명
+                  SizedBox(
+                    width: singleWidth,
+                    height: _menuItemExtent,
+                    child: Center(
+                      child: TextFormField(
+                        controller: _nameCtrl,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: _bigFieldDecoration(
+                          label: _requiredLabel(l10n.addDeviceModelNameLabel),
+                        ),
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) {
+                            return l10n.addDeviceModelNameRequired;
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -617,65 +640,32 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        TextFormField(
-                          controller: _modelCtrl,
-                          decoration: InputDecoration(
-                            labelText: _requiredLabel(
-                              l10n.addDeviceModelNumberLabel,
-                            ),
-                            border: const OutlineInputBorder(),
-                          ),
-                          validator: (v) {
-                            if (v == null || v.trim().isEmpty) {
-                              return l10n.addDeviceModelNumberRequired;
-                            }
-                            if (!isLikelyModelNumber(v)) {
-                              return 'Enter a valid model number (A-Z, 0-9, -_/ only).';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        ElevatedButton.icon(
-                          onPressed: _isMobilePlatform && !_isProcessingImage
-                              ? _handleTakePhoto
-                              : (_isMobilePlatform
-                                    ? null
-                                    : () => _showMessage(
-                                        'Image scanning is available on Android/iOS only.',
-                                      )),
-                          icon: _isProcessingImage
-                              ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Icon(Icons.camera_alt_outlined),
-                          label: Text(
-                            _isProcessingImage
-                                ? 'Processing...'
-                                : l10n.addDeviceTakePhoto,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        OutlinedButton.icon(
-                          onPressed: _isProcessingImage ? null : _handleImportPhoto,
-                          icon: const Icon(Icons.photo_library_outlined),
-                          label: Text(l10n.addDeviceSelectFromGallery),
-                        ),
-                        if (!_isMobilePlatform)
-                          const Padding(
-                            padding: EdgeInsets.only(top: 8),
-                            child: Text(
-                              'Model number scanning is supported on mobile apps only.',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
+                        // 1st row: 모델 번호
+                        SizedBox(
+                          height: _menuItemExtent,
+                          child: Center(
+                            child: TextFormField(
+                              controller: _modelCtrl,
+                              textAlignVertical: TextAlignVertical.center,
+                              decoration: _bigFieldDecoration(
+                                label: _requiredLabel(
+                                  l10n.addDeviceModelNumberLabel,
+                                ),
                               ),
+                              validator: (v) {
+                                if (v == null || v.trim().isEmpty) {
+                                  return l10n.addDeviceModelNumberRequired;
+                                }
+                                if (!isLikelyModelNumber(v)) {
+                                  return 'Enter a valid model number (A-Z, 0-9, -_/ only).';
+                                }
+                                return null;
+                              },
                             ),
                           ),
+                        ),
+                        const SizedBox(height: 8),
+                        // Removed desktop-only model scanning note per request
                         if (_lastCandidates.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
@@ -714,85 +704,153 @@ class _AddDevicePageState extends State<AddDevicePage> {
                       ],
                     ),
                   ),
+                  // 2nd row: 구매일
                   SizedBox(
                     width: singleWidth,
-                    child: TextFormField(
-                      controller: _purchaseDateCtrl,
-                      readOnly: true,
-                      onTap: _pickDate,
-                      decoration: InputDecoration(
-                        labelText: _requiredLabel(
-                          l10n.addDevicePurchaseDateLabel,
+                    height: _menuItemExtent,
+                    child: Center(
+                      child: TextFormField(
+                        controller: _purchaseDateCtrl,
+                        readOnly: true,
+                        onTap: _pickDate,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: _bigFieldDecoration(
+                          label: _requiredLabel(
+                            l10n.addDevicePurchaseDateLabel,
+                          ),
+                          hint: l10n.addDevicePurchaseDateHint,
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.calendar_today),
+                            onPressed: _pickDate,
+                          ),
                         ),
-                        hintText: l10n.addDevicePurchaseDateHint,
-                        border: const OutlineInputBorder(),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: _pickDate,
-                        ),
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) {
+                            return l10n.addDevicePurchaseDateRequired;
+                          }
+                          final parsed = _purchaseDate;
+                          if (parsed == null) {
+                            return l10n.addDevicePurchaseDateRequired;
+                          }
+                          final now = DateTime.now().toUtc();
+                          if (parsed.isAfter(now)) {
+                            return l10n.addDevicePurchaseDateFutureError;
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return l10n.addDevicePurchaseDateRequired;
-                        }
-                        final parsed = _purchaseDate;
-                        if (parsed == null) {
-                          return l10n.addDevicePurchaseDateRequired;
-                        }
-                        final now = DateTime.now().toUtc();
-                        if (parsed.isAfter(now)) {
-                          return l10n.addDevicePurchaseDateFutureError;
-                        }
-                        return null;
-                      },
                     ),
                   ),
+                  // 2nd row: 보증 기간
                   SizedBox(
                     width: singleWidth,
-                    child: TextFormField(
-                      controller: _warrantyCtrl,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        labelText: _requiredLabel(l10n.addDeviceWarrantyLabel),
-                        hintText: l10n.addDeviceWarrantyHint,
-                        border: const OutlineInputBorder(),
+                    height: _menuItemExtent,
+                    child: Center(
+                      child: TextFormField(
+                        controller: _warrantyCtrl,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: _bigFieldDecoration(
+                          label: _requiredLabel(l10n.addDeviceWarrantyLabel),
+                          hint: l10n.addDeviceWarrantyHint,
+                        ),
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) {
+                            return l10n.addDeviceWarrantyRequired;
+                          }
+                          final n = int.tryParse(v);
+                          if (n == null) return l10n.addDeviceDigitsOnly;
+                          if (n < 0 || n > 120) {
+                            return l10n.addDeviceWarrantyRange;
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return l10n.addDeviceWarrantyRequired;
-                        }
-                        final n = int.tryParse(v);
-                        if (n == null) return l10n.addDeviceDigitsOnly;
-                        if (n < 0 || n > 120) {
-                          return l10n.addDeviceWarrantyRange;
-                        }
-                        return null;
-                      },
                     ),
                   ),
+                  // 2nd row: 고객센터
                   SizedBox(
-                    width: twoSpanWidth,
-                    child: TextFormField(
-                      controller: _phoneCtrl,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9-]')),
-                      ],
-                      decoration: InputDecoration(
-                        labelText: l10n.addDeviceCustomerCenterLabel,
-                        hintText: l10n.addDeviceCustomerCenterHint,
-                        border: const OutlineInputBorder(),
+                    width: singleWidth,
+                    height: _menuItemExtent,
+                    child: Center(
+                      child: TextFormField(
+                        controller: _phoneCtrl,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9-]')),
+                        ],
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: _bigFieldDecoration(
+                          label: l10n.addDeviceCustomerCenterLabel,
+                          hint: l10n.addDeviceCustomerCenterHint,
+                        ),
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) return null;
+                          final ok = RegExp(r'^[0-9-]+$').hasMatch(v.trim());
+                          if (!ok) return l10n.addDeviceCustomerCenterInvalid;
+                          return null;
+                        },
                       ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) return null;
-                        final ok = RegExp(r'^[0-9-]+$').hasMatch(v.trim());
-                        if (!ok) return l10n.addDeviceCustomerCenterInvalid;
-                        return null;
-                      },
                     ),
                   ),
                 ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // 사진 촬영 / 갤러리에서 선택 (아래 배치)
+              SizedBox(
+                width: fullWidth,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _isMobilePlatform && !_isProcessingImage
+                            ? _handleTakePhoto
+                            : (_isMobilePlatform
+                                  ? null
+                                  : () => _showMessage(
+                                      'Image scanning is available on Android/iOS only.',
+                                    )),
+                        icon: _isProcessingImage
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.camera_alt_outlined),
+                        label: Text(
+                          _isProcessingImage
+                              ? 'Processing...'
+                              : l10n.addDeviceTakePhoto,
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(60),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _isProcessingImage ? null : _handleImportPhoto,
+                        icon: const Icon(Icons.photo_library_outlined),
+                        label: Text(l10n.addDeviceSelectFromGallery),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(60),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               if (_photos.isNotEmpty) ...[
                 const SizedBox(height: 20),
@@ -825,9 +883,15 @@ class _AddDevicePageState extends State<AddDevicePage> {
               Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
+                    child: OutlinedButton(
                       onPressed: _onSave,
                       child: Text(l10n.commonSave),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(60),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -835,6 +899,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     child: OutlinedButton(
                       onPressed: _onCancel,
                       child: Text(l10n.commonCancel),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(60),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      ),
                     ),
                   ),
                 ],

@@ -159,7 +159,6 @@ class SettingsPage extends riverpod.ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return ResponsiveScaffold(
-      appBar: AppBar(title: Text(l10n.settingsTitle)),
       builder: (context, layout) {
         final sectionWidth = layout.columns > 1
             ? layout.columnWidth(span: 2)

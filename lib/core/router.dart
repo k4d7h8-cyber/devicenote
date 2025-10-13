@@ -22,7 +22,6 @@ class _BootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return ResponsiveScaffold(
-      appBar: AppBar(title: Text(l10n.appTitle)),
       builder: (context, layout) => Center(
         child: Text(l10n.bootPlaceholderMessage, textAlign: TextAlign.center),
       ),

@@ -197,6 +197,12 @@ class DeviceNoteApp extends StatelessWidget {
               colorSchemeSeed: Colors.blue,
               brightness: Brightness.light,
               scaffoldBackgroundColor: const Color(0xFFFFFFFF),
+              floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                // 3x current 28dp size -> 84dp
+                sizeConstraints:
+                    BoxConstraints.tightFor(width: 84, height: 84),
+                shape: CircleBorder(),
+              ),
             ),
             routerConfig: router,
           );

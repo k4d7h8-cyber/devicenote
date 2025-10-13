@@ -65,6 +65,7 @@ class ResponsiveScaffold extends StatelessWidget {
       vertical: 32,
     ),
     this.gutter = 16,
+    this.contentAlignment = Alignment.topCenter,
   });
 
   final ResponsiveBodyBuilder builder;
@@ -79,6 +80,7 @@ class ResponsiveScaffold extends StatelessWidget {
   final EdgeInsets tabletPadding;
   final EdgeInsets desktopPadding;
   final double gutter;
+  final Alignment contentAlignment;
 
   static const double _tabletBreakpoint = 600;
   static const double _desktopBreakpoint = 1024;
@@ -87,7 +89,13 @@ class ResponsiveScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      floatingActionButton: floatingActionButton,
+      floatingActionButton: floatingActionButton == null
+          ? null
+          : Padding(
+              // Move left (increase right margin) and up (increase bottom margin)
+              padding: const EdgeInsets.only(right: 50, bottom: 50),
+              child: floatingActionButton,
+            ),
       floatingActionButtonLocation: floatingActionButtonLocation,
       floatingActionButtonAnimator: floatingActionButtonAnimator,
       bottomNavigationBar: bottomNavigationBar,
@@ -125,7 +133,7 @@ class ResponsiveScaffold extends StatelessWidget {
               curve: Curves.easeOut,
               padding: EdgeInsets.only(bottom: viewInsetBottom),
               child: Align(
-                alignment: Alignment.topCenter,
+                alignment: contentAlignment,
                 child: SingleChildScrollView(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: info.availableWidth),
