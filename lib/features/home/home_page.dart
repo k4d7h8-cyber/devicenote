@@ -18,6 +18,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _searchQuery = '';
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(text: _searchQuery);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,32 +38,21 @@ class _HomePageState extends State<HomePage> {
     final repo = context.watch<DeviceRepository>();
     final categories = _CategoryDefinition.values;
     final devices = repo.devices.toList(growable: false);
-    final filteredDevices =
-        _searchQuery.isEmpty ? const <Device>[] : _filterDevices(devices, _searchQuery);
+    final filteredDevices = _searchQuery.isEmpty
+        ? const <Device>[]
+        : _filterDevices(devices, _searchQuery);
 
     return ResponsiveScaffold(
+      bottomNavigationBar: _BottomSearchBar(
+        controller: _searchController,
+        hintText: l10n.homeSearchHint,
+        onChanged: _onSearchChanged,
+        onVoiceInput: () => _startVoiceInput(context),
+      ),
       builder: (context, layout) {
-        final children = <Widget>[
-          // Top action row to replace removed AppBar actions
-          Align(
-            alignment: Alignment.topRight,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  tooltip: l10n.homeSearchHint,
-                  onPressed:
-                      devices.isEmpty ? null : () => _startSearch(l10n, devices),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => context.push('/settings'),
-                  tooltip: l10n.homeSettingsTooltip,
-                ),
-              ],
-            ),
-          ),
+        final topInset = MediaQuery.of(context).padding.top;
+
+        final contentChildren = <Widget>[
           const SizedBox(height: 12),
           _CategoryGrid(
             categories: categories,
@@ -69,13 +71,16 @@ class _HomePageState extends State<HomePage> {
         ];
 
         if (_searchQuery.isNotEmpty) {
-          children.addAll([
+          contentChildren.addAll([
             Align(
               alignment: Alignment.centerLeft,
               child: InputChip(
                 avatar: const Icon(Icons.search, size: 18),
                 label: Text('${l10n.homeSearchHint}: $_searchQuery'),
-                onDeleted: () => setState(() => _searchQuery = ''),
+                onDeleted: () => setState(() {
+                  _searchQuery = '';
+                  _searchController.clear();
+                }),
               ),
             ),
             const SizedBox(height: 12),
@@ -114,30 +119,39 @@ class _HomePageState extends State<HomePage> {
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: children,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                icon: const Icon(Icons.settings),
+                onPressed: () => context.push('/settings'),
+                tooltip: l10n.homeSettingsTooltip,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: topInset),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: contentChildren,
+              ),
+            ),
+          ],
         );
       },
     );
   }
 
-  Future<void> _startSearch(AppLocalizations l10n, List<Device> devices) async {
-    final delegate = _DeviceSearchDelegate(
-      devices: devices,
-      l10n: l10n,
-      initialQuery: _searchQuery,
-    );
-    final selected = await showSearch<Device?>(
-      context: context,
-      delegate: delegate,
-    );
-    if (!mounted) return;
+  void _onSearchChanged(String value) {
     setState(() {
-      _searchQuery = delegate.query.trim();
+      _searchQuery = value;
     });
-    if (selected != null) {
-      if (!mounted) return;
-      context.push('/device/${selected.id}');
-    }
+  }
+
+  void _startVoiceInput(BuildContext context) {
+    // TODO(voice): integrate voice input handler when available.
+    FocusScope.of(context).unfocus();
   }
 
   void _openCategory(DeviceCategory category) {
@@ -179,13 +193,14 @@ class _CategoryGrid extends StatelessWidget {
     const iconGradient = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: [
-        Color(0xFF5CA7E3),
-        Color(0xFF6AC48A),
-      ],
+      colors: [Color(0xFF5CA7E3), Color(0xFF6AC48A)],
     );
     const iconColor = Colors.white;
-    final columnCount = layout.isDesktop ? 4 : layout.isTablet ? 3 : 2;
+    final columnCount = layout.isDesktop
+        ? 4
+        : layout.isTablet
+        ? 3
+        : 2;
     final spacing = layout.gutter;
     final contentWidth = layout.contentWidth;
     final rawTileWidth = columnCount > 1
@@ -251,79 +266,81 @@ class _CategoryDefinition {
       .toList(growable: false);
 }
 
-class _DeviceSearchDelegate extends SearchDelegate<Device?> {
-  _DeviceSearchDelegate({
-    required this.devices,
-    required this.l10n,
-    String initialQuery = '',
-  }) : super(searchFieldLabel: l10n.homeSearchHint) {
-    query = initialQuery;
-  }
+class _BottomSearchBar extends StatelessWidget {
+  const _BottomSearchBar({
+    required this.controller,
+    required this.hintText,
+    required this.onChanged,
+    required this.onVoiceInput,
+  });
 
-  final List<Device> devices;
-  final AppLocalizations l10n;
+  final TextEditingController controller;
+  final String hintText;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onVoiceInput;
 
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    if (query.isEmpty) {
-      return null;
-    }
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () => query = '',
-      ),
-    ];
-  }
+  static const double _tabletBreakpoint = 600;
+  static const double _desktopBreakpoint = 1024;
 
   @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () => close(context, null),
-    );
-  }
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final media = MediaQuery.of(context);
+    final width = media.size.width;
+    final horizontalPadding = width >= _desktopBreakpoint
+        ? 32.0
+        : width >= _tabletBreakpoint
+        ? 24.0
+        : 16.0;
 
-  @override
-  Widget buildResults(BuildContext context) => _buildList(context);
-
-  @override
-  Widget buildSuggestions(BuildContext context) => _buildList(context);
-
-  Widget _buildList(BuildContext context) {
-    final results = _filter(query);
-    if (results.isEmpty) {
-      return Center(
-        child: Text(
-          searchNoResultsMessage(l10n),
-          style: const TextStyle(fontSize: 16),
+    return SafeArea(
+      top: false,
+      child: Material(
+        color: Colors.white,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            horizontalPadding,
+            12,
+            horizontalPadding,
+            12,
+          ),
+          child: SizedBox(
+            height: 60,
+            child: TextField(
+              controller: controller,
+              onChanged: onChanged,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: hintText,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.mic),
+                  onPressed: onVoiceInput,
+                  tooltip: MaterialLocalizations.of(context).searchFieldLabel,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.black),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.black),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.black),
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 18),
+              ),
+            ),
+          ),
         ),
-      );
-    }
-    return ListView.separated(
-      itemCount: results.length,
-      separatorBuilder: (_, __) => const Divider(height: 0),
-      itemBuilder: (context, index) {
-        final device = results[index];
-        return ListTile(
-          leading: const Icon(Icons.devices_outlined),
-          title: Text(device.name),
-          subtitle: Text('${device.brand} · ${device.model}'),
-          onTap: () => close(context, device),
-        );
-      },
+      ),
     );
-  }
-
-  List<Device> _filter(String rawQuery) {
-    final needle = rawQuery.trim().toLowerCase();
-    if (needle.isEmpty) {
-      return devices;
-    }
-    return devices
-        .where((device) => device.name.toLowerCase().contains(needle) ||
-            device.brand.toLowerCase().contains(needle) ||
-            device.model.toLowerCase().contains(needle))
-        .toList(growable: false);
   }
 }

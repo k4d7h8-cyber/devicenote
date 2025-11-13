@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:devicenote/widgets/thin_plus_icon.dart';
+import 'package:devicenote/widgets/gradient_back_button.dart';
 
 class CategoryDeviceListPage extends StatelessWidget {
   const CategoryDeviceListPage({
@@ -93,7 +94,17 @@ class CategoryDeviceListPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Provide a lightweight top spacing since AppBar is removed
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GradientBackButton(
+                onPressed: () {
+                  final navigator = Navigator.of(context);
+                  if (navigator.canPop()) {
+                    navigator.pop();
+                  }
+                },
+              ),
+            ),
             const SizedBox(height: 16),
             // Optional title placement after removing AppBar is intentionally omitted
             Wrap(

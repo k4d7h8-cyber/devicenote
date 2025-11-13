@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class ResponsiveLayoutInfo {
   const ResponsiveLayoutInfo({
@@ -88,6 +88,7 @@ class ResponsiveScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: appBar,
       floatingActionButton: floatingActionButton == null
           ? null
@@ -128,6 +129,7 @@ class ResponsiveScaffold extends StatelessWidget {
           final viewInsetBottom = media.viewInsets.bottom;
 
           return SafeArea(
+            top: false,
             child: AnimatedPadding(
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeOut,

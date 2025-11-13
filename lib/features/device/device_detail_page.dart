@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:devicenote/data/repositories/device_repository.dart';
 
@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:provider/provider.dart';
 import 'package:devicenote/utils/category_display.dart';
+import 'package:devicenote/widgets/gradient_back_button.dart';
 
 const double _menuItemExtent = 104;
 
@@ -63,15 +64,7 @@ class DeviceDetailPage extends StatelessWidget {
         final customerCenter = device.asContact?.trim() ?? '';
         final hasCustomerCenter = customerCenter.isNotEmpty;
 
-        final cards = <Widget>[
-          _InfoCard(
-            title: l10n.deviceDetailCategoryLabel,
-
-            value: _categoryLabel(l10n, device.category),
-
-            icon: categoryIcon(device.category),
-          ),
-
+        final infoCards = <Widget>[
           _InfoCard(
             title: l10n.deviceDetailBrandLabel,
 
@@ -118,7 +111,7 @@ class DeviceDetailPage extends StatelessWidget {
 
         if (hasCustomerCenter) {
           final colors = theme.colorScheme;
-          cards.add(
+          infoCards.add(
             _InfoCard(
               title: l10n.deviceDetailCustomerCenterLabel,
 
@@ -134,13 +127,27 @@ class DeviceDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
 
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GradientBackButton(
+                onPressed: () {
+                  final navigator = Navigator.of(context);
+                  if (navigator.canPop()) {
+                    context.pop();
+                  }
+                },
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
             Wrap(
               spacing: layout.gutter,
 
               runSpacing: layout.gutter,
 
               children: [
-                for (final card in cards)
+                for (final card in infoCards)
                   SizedBox(width: cardWidth, child: card),
               ],
             ),
@@ -155,10 +162,7 @@ class DeviceDetailPage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFFBEE3F8),
-                      Color(0xFFC6F6D5),
-                    ],
+                    colors: [Color(0xFFBEE3F8), Color(0xFFC6F6D5)],
                   ),
                 ),
                 child: SwitchListTile.adaptive(
@@ -193,10 +197,7 @@ class DeviceDetailPage extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFFBEE3F8),
-                          Color(0xFFC6F6D5),
-                        ],
+                        colors: [Color(0xFFBEE3F8), Color(0xFFC6F6D5)],
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
@@ -211,7 +212,8 @@ class DeviceDetailPage extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                       ),
-                      onPressed: () => context.push('/device/${device.id}/edit'),
+                      onPressed: () =>
+                          context.push('/device/${device.id}/edit'),
 
                       icon: const Icon(Icons.edit),
 
@@ -228,10 +230,7 @@ class DeviceDetailPage extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFFBEE3F8),
-                          Color(0xFFC6F6D5),
-                        ],
+                        colors: [Color(0xFFBEE3F8), Color(0xFFC6F6D5)],
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
@@ -351,30 +350,6 @@ class DeviceDetailPage extends StatelessWidget {
     }
   }
 
-  String _categoryLabel(AppLocalizations l10n, DeviceCategory c) {
-    switch (c) {
-      case DeviceCategory.tv:
-        return l10n.categoryTv;
-
-      case DeviceCategory.washer:
-        return l10n.categoryWasher;
-
-      case DeviceCategory.computer:
-        return l10n.categoryComputer;
-
-      case DeviceCategory.refrigerator:
-        return l10n.categoryRefrigerator;
-
-      case DeviceCategory.aircon:
-        return l10n.categoryAirConditioner;
-
-      case DeviceCategory.car:
-        return l10n.categoryCar;
-
-      case DeviceCategory.etc:
-        return l10n.categoryOthers;
-    }
-  }
 }
 
 class _InfoCard extends StatelessWidget {
@@ -391,14 +366,14 @@ class _InfoCard extends StatelessWidget {
   final Color? foregroundColor;
 
   final Gradient? backgroundGradient;
+  final double? minHeight;
+  final EdgeInsetsGeometry padding;
+  final double? iconSize;
 
   static const Gradient _defaultGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [
-      Color(0xFFBEE3F8),
-      Color(0xFFC6F6D5),
-    ],
+    colors: [Color(0xFFBEE3F8), Color(0xFFC6F6D5)],
   );
 
   const _InfoCard({
@@ -415,6 +390,9 @@ class _InfoCard extends StatelessWidget {
     this.foregroundColor,
 
     this.backgroundGradient,
+    this.minHeight = _menuItemExtent,
+    this.padding = const EdgeInsets.all(16),
+    this.iconSize,
   });
 
   @override
@@ -438,64 +416,66 @@ class _InfoCard extends StatelessWidget {
         theme.colorScheme.onSurface;
 
     final gradient =
-        backgroundGradient ?? (backgroundColor == null ? _defaultGradient : null);
+        backgroundGradient ??
+        (backgroundColor == null ? _defaultGradient : null);
     final decoration = BoxDecoration(
       gradient: gradient,
       color: gradient == null ? backgroundColor ?? theme.cardColor : null,
     );
 
-    return SizedBox(
-      height: _menuItemExtent,
+    final resolvedIconSize =
+        iconSize ?? (minHeight != null ? minHeight! * 0.5 : 32.0);
 
-      child: Card(
-        color: Colors.transparent,
+    final card = Card(
+      color: Colors.transparent,
 
-        clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.antiAlias,
 
-        child: InkWell(
-          onTap: onTap,
+      child: InkWell(
+        onTap: onTap,
 
-          mouseCursor: onTap != null
-              ? SystemMouseCursors.click
-              : SystemMouseCursors.basic,
+        mouseCursor: onTap != null
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.basic,
 
-          child: Ink(
-            decoration: decoration,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+        child: Ink(
+          decoration: decoration,
+          child: Padding(
+            padding: padding,
 
-              child: Row(
-                children: [
-                  Icon(
-                    icon,
-                    color: iconColor,
-                    size: _menuItemExtent * 0.5,
+            child: Row(
+              children: [
+                Icon(icon, color: iconColor, size: resolvedIconSize),
+
+                const SizedBox(width: 12),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: [
+                      Text(title, style: titleStyle),
+
+                      const SizedBox(height: 4),
+
+                      Text(value, style: valueStyle),
+                    ],
                   ),
-
-                  const SizedBox(width: 12),
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-
-                      mainAxisAlignment: MainAxisAlignment.center,
-
-                      children: [
-                        Text(title, style: titleStyle),
-
-                        const SizedBox(height: 4),
-
-                        Text(value, style: valueStyle),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
+
+    if (minHeight != null) {
+      return SizedBox(height: minHeight, child: card);
+    }
+
+    return card;
   }
 }
 
@@ -734,41 +714,41 @@ class _FullScreenGalleryState extends State<_FullScreenGallery> {
 
       body: SafeArea(
         child: PageView.builder(
-        controller: _controller,
+          controller: _controller,
 
-        onPageChanged: (index) => setState(() => _currentIndex = index),
+          onPageChanged: (index) => setState(() => _currentIndex = index),
 
-        itemCount: widget.photos.length,
+          itemCount: widget.photos.length,
 
-        itemBuilder: (context, index) {
-          final path = widget.photos[index];
+          itemBuilder: (context, index) {
+            final path = widget.photos[index];
 
-          final file = File(path);
+            final file = File(path);
 
-          return Center(
-            child: Hero(
-              tag: _photoHeroTag(path, index),
+            return Center(
+              child: Hero(
+                tag: _photoHeroTag(path, index),
 
-              child: InteractiveViewer(
-                maxScale: 4,
+                child: InteractiveViewer(
+                  maxScale: 4,
 
-                child: Image.file(
-                  file,
+                  child: Image.file(
+                    file,
 
-                  fit: BoxFit.contain,
+                    fit: BoxFit.contain,
 
-                  errorBuilder: (context, error, stackTrace) => const Icon(
-                    Icons.broken_image_outlined,
+                    errorBuilder: (context, error, stackTrace) => const Icon(
+                      Icons.broken_image_outlined,
 
-                    size: 120,
+                      size: 120,
 
-                    color: Colors.white54,
+                      color: Colors.white54,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
         ),
       ),
     );
